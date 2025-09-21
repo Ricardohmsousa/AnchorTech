@@ -1,12 +1,13 @@
-# Frontend Dockerfile for Railway deployment
+# Frontend Dockerfile for Railway deployment - v2 (cache bust)
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy all frontend files first
+# Copy all frontend files
 COPY frontend/ ./
 
-# Install dependencies
+# Clean install to avoid cache issues
+RUN rm -rf node_modules package-lock.json 2>/dev/null || true
 RUN npm install
 
 # Build the application for production
