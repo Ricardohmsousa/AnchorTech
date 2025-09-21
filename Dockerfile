@@ -3,15 +3,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy frontend package files
-COPY frontend/package*.json ./
-RUN npm install
+# Copy all frontend files first
+COPY frontend/ ./
 
-# Copy frontend source code and public files
-COPY frontend/src ./src
-COPY frontend/public ./public
-COPY frontend/webpack.config.js ./
-COPY frontend/.babelrc ./
+# Install dependencies
+RUN npm install
 
 # Build the application for production
 RUN npm run build

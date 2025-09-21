@@ -1,0 +1,20 @@
+# Exclude everything except frontend
+*
+!frontend/
+
+# Exclude unnecessary files from frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.git/
+frontend/*.log
+
+# Exclude root level items we don't need
+.git/
+.venv/
+backend/
+node_modules/
+*.log
+.DS_Store
+*.swp
+*.swo
+*~
