@@ -1,32 +1,33 @@
-# Frontend Dockerfile for Railway deployment - v4 (explicit copy)
+# Frontend Dockerfile for Railway deployment - v5 (multi-stage)
+FROM node:18-alpine AS builder
+
+WORKDIR /build
+
+# Copy the entire repository
+COPY . .
+
+# Navigate to frontend and build
+WORKDIR /build/frontend
+
+# Install dependencies and build
+RUN npm install && npm run build
+
+# Production stage
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files first for better caching
-COPY frontend/package*.json ./
+# Copy built files from builder stage
+COPY --from=builder /build/frontend/build ./build
 
-# Copy specific directories and files explicitly
-COPY frontend/src ./src
-COPY frontend/public ./public
-COPY frontend/webpack.config.js ./webpack.config.js
-COPY frontend/.babelrc ./.babelrc
-
-# Debug: List files to see what was copied
-RUN echo "=== DEBUG: Files in /app ===" && ls -la && echo "=== DEBUG: Public dir ===" && ls -la public/ && echo "=== DEBUG: SRC dir ===" && ls -la src/
-
-# Clean install to avoid cache issues
-RUN rm -rf node_modules package-lock.json 2>/dev/null || true
-RUN npm install
-
-# Build the application for production
-RUN npm run build
-
-# Install serve globally
+# Install serve
 RUN npm install -g serve
+
+# Debug: Check what we have
+RUN echo "=== DEBUG: Build files ===" && ls -la build/
 
 # Expose port
 EXPOSE 3000
 
-# Start the production server with Railway's PORT
+# Start the production server
 CMD ["sh", "-c", "serve -s build -l ${PORT:-3000}"]
