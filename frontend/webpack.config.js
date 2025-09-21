@@ -1,6 +1,7 @@
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/index.jsx',
@@ -11,6 +12,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    fallback: {
+      "process": require.resolve("process/browser")
+    }
   },
   module: {
     rules: [
@@ -31,6 +35,14 @@ module.exports = {
       template: path.resolve(__dirname, 'public', 'index.html'),
       filename: 'index.html',
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL || 'http://localhost:8000')
+      }
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    })
   ],
   devServer: {
     static: './build',
