@@ -1,3 +1,4 @@
+# Force Docker usage for Railway deployment
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
