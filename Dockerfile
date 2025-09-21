@@ -7,8 +7,11 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm install
 
-# Copy frontend source code
-COPY frontend/ ./
+# Copy frontend source code and public files
+COPY frontend/src ./src
+COPY frontend/public ./public
+COPY frontend/webpack.config.js ./
+COPY frontend/.babelrc ./
 
 # Build the application for production
 RUN npm run build
