@@ -14,14 +14,14 @@ RUN npm install
 # Copy application code
 COPY . .
 
-# Expose port
-EXPOSE 3000
-
 # Build the application for production
 RUN npm run build
 
 # Install serve globally
 RUN npm install -g serve
 
-# Start the production server
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Expose port (Railway will set this dynamically)
+EXPOSE 3000
+
+# Start the production server with Railway's PORT
+CMD ["sh", "-c", "serve -s build -l ${PORT:-3000}"]

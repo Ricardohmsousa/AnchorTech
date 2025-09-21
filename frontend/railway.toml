@@ -7,3 +7,7 @@ healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
+
+# Ensure PORT is set for Railway
+[variables]
+PORT = "3000"
