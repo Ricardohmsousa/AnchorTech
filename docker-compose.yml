@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - JWT_SECRET=dev_secret_key_change_me
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/firebase_service_account.json
+    volumes:
+      - ./backend:/app
+      - ./backend/uploads:/app/uploads
+    networks:
+      - techanchor-network
+    restart: unless-stopped
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - techanchor-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+networks:
+  techanchor-network:
+    driver: bridge

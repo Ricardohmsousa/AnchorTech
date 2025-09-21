@@ -1,0 +1,10 @@
+{
+  "name": "backend",
+  "dependencies": [
+     "fastapi",
+     "uvicorn",
+  "firebase-admin",
+  "python-dotenv",
+  "PyJWT"
+  ]
+}
