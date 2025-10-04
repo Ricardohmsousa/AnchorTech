@@ -31,12 +31,28 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
   const [error, setError] = useState(null);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [collaboratorUsername, setCollaboratorUsername] = useState(null);
 
   const handlePassportChange = (e) => {
     setPassportFile(e.target.files && e.target.files[0] ? e.target.files[0] : null);
   };
   const handleAddressChange = (e) => {
     setAddressFile(e.target.files && e.target.files[0] ? e.target.files[0] : null);
+  };
+
+  // Function to fetch collaborator username by ID
+  const fetchCollaboratorUsername = async (collaboratorId) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users/${collaboratorId}`, {
+        headers: { ...getAuthHeaders() }
+      });
+      if (res.ok) {
+        const userData = await res.json();
+        setCollaboratorUsername(userData.username);
+      }
+    } catch (err) {
+      console.log("Could not fetch collaborator username:", err);
+    }
   };
 
   const handleNext = async () => {
@@ -63,6 +79,10 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
         setCaseCreated(true);
         setCaseStatus(data.status);
         setError(null);
+        // Fetch collaborator username if assigned
+        if (data.collaborator_id) {
+          fetchCollaboratorUsername(data.collaborator_id);
+        }
         // Upload both files only if case ID is present
         const formData = new FormData();
         formData.append("files", passportFile);
@@ -99,6 +119,10 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
         setCaseStatus(caseData.status);
         setFiles(filesData.files || []);
         setCaseCreated(true);
+        // Fetch collaborator username if assigned
+        if (caseData.collaborator_id) {
+          fetchCollaboratorUsername(caseData.collaborator_id);
+        }
         // Set step based on status
         if (caseData.status === "uploaded") setCurrentStep(1);
         else if (caseData.status === "reviewed") setCurrentStep(2);
@@ -169,7 +193,11 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
               )}
               {caseCreated && caseData && caseData.collaborator_id && (
                 <div style={{ marginTop: 12, color: '#0070f3' }}>
-                  Assigned Collaborator ID: <b>{caseData.collaborator_id}</b>
+                  {collaboratorUsername ? (
+                    <span>Assigned Collaborator: <b>{collaboratorUsername}</b></span>
+                  ) : (
+                    <span>Assigned Collaborator ID: <b>{caseData.collaborator_id}</b></span>
+                  )}
                 </div>
               )}
               {propCaseId && files.length > 0 && (
@@ -188,7 +216,11 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
           )}
           {currentStep === 1 && (
             <div style={{ color: '#0070f3', margin: '12px 0' }}>
-              Waiting for collaborator review...
+              {collaboratorUsername ? (
+                <span><b>{collaboratorUsername}</b> is reviewing your docs</span>
+              ) : (
+                <span>Waiting for collaborator review...</span>
+              )}
               {caseData && caseData.collaborator_id && (
                 <div style={{ marginTop: 8 }}>
                   Assigned Collaborator ID: <b>{caseData.collaborator_id}</b>
