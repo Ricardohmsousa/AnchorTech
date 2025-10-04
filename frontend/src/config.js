@@ -23,7 +23,6 @@ if (isDevelopment && window.location.hostname === 'localhost') {
     API_BASE_URL = API_BASE_URL.replace(/^http:\/\//, 'https://');
   }
 }
-}
 
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Hostname:', window.location.hostname);
