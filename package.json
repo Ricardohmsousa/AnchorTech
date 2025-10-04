@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start": "echo 'This is the root package. Please deploy frontend and backend services separately.'"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^13.0.1"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.1"
+  }
+}

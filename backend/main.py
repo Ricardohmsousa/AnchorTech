@@ -39,10 +39,12 @@ import os
 import shutil
 import jwt
 from datetime import datetime, timedelta
+import stripe
 
 app = FastAPI()
 
-
+# Stripe configuration
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 # JWT secret and config
 JWT_SECRET = os.environ.get("JWT_SECRET", "dev_secret_key_change_me")
@@ -146,8 +148,13 @@ class UserResponse(BaseModel):
     user_type: str
     token: str = None
 
+class PaymentIntentRequest(BaseModel):
+    amount: int  # Amount in cents
+    service_type: str
+
 class CaseCreateRequest(BaseModel):
     user_id: str
+    payment_intent_id: Optional[str] = None
 
 class CaseStatusUpdateRequest(BaseModel):
     status: str
@@ -159,6 +166,9 @@ class CaseResponse(BaseModel):
     status: str
     created_at: str = None
     updated_at: str = None
+    payment_verified: Optional[bool] = None
+    payment_intent_id: Optional[str] = None
+    payment_amount: Optional[int] = None
 
 @app.post("/login", response_model=UserResponse)
 def login(data: LoginRequest):
@@ -216,6 +226,49 @@ def get_user(user_id: str, token_data: dict = Depends(verify_jwt_token)):
     user = user_doc.to_dict()
     return {"username": user["username"], "id": user_doc.id, "user_type": user.get("user_type", "client")}
 
+# Payment endpoints
+@app.post("/create-payment-intent")
+def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dict = Depends(verify_jwt_token)):
+    try:
+        # Create a PaymentIntent with the order amount and currency
+        intent = stripe.PaymentIntent.create(
+            amount=payment_request.amount,
+            currency='eur',
+            metadata={
+                'service_type': payment_request.service_type,
+                'user_id': token_data["user_id"]
+            }
+        )
+        
+        return {"client_secret": intent.client_secret}
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"[PAYMENT] Error creating payment intent: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create payment intent")
+
+@app.post("/verify-payment")
+def verify_payment(payment_intent_id: str, token_data: dict = Depends(verify_jwt_token)):
+    try:
+        # Retrieve the payment intent from Stripe
+        intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+        
+        if intent.status == 'succeeded':
+            # Payment was successful
+            return {
+                "status": "succeeded",
+                "amount": intent.amount,
+                "currency": intent.currency,
+                "metadata": intent.metadata
+            }
+        else:
+            return {"status": intent.status}
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"[PAYMENT] Error verifying payment: {e}")
+        raise HTTPException(status_code=500, detail="Failed to verify payment")
+
 def _serialize_case(case: dict, id: str = None):
     # Helper to convert Firestore timestamps to ISO strings
     if "created_at" in case and case["created_at"] is not None:
@@ -240,6 +293,21 @@ def create_case(data: CaseCreateRequest, token_data: dict = Depends(verify_jwt_t
     # Only allow user to create their own case
     if token_data["user_id"] != data.user_id:
         raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Verify payment if payment_intent_id is provided
+    payment_verified = False
+    payment_amount = None
+    if data.payment_intent_id:
+        try:
+            intent = stripe.PaymentIntent.retrieve(data.payment_intent_id)
+            if intent.status == 'succeeded':
+                payment_verified = True
+                payment_amount = intent.amount
+            else:
+                raise HTTPException(status_code=400, detail="Payment not completed")
+        except stripe.error.StripeError as e:
+            raise HTTPException(status_code=400, detail=f"Payment verification failed: {str(e)}")
+    
     # Find a collaborator
     collab = next(db.collection("users").where("user_type", "==", "collaborator").limit(1).stream(), None)
     collaborator_id = collab.id if collab else None
@@ -249,7 +317,10 @@ def create_case(data: CaseCreateRequest, token_data: dict = Depends(verify_jwt_t
         "collaborator_id": collaborator_id,
         "status": "uploaded",
         "created_at": firestore.SERVER_TIMESTAMP,
-        "updated_at": firestore.SERVER_TIMESTAMP
+        "updated_at": firestore.SERVER_TIMESTAMP,
+        "payment_verified": payment_verified,
+        "payment_intent_id": data.payment_intent_id,
+        "payment_amount": payment_amount
     }
     case_ref.set(case_data)
     # Always return the case with its ID
