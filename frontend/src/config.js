@@ -4,8 +4,11 @@ let API_BASE_URL;
 
 // Check if we're in development or production
 const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === 'production' || 
+                    window.location.hostname.includes('railway.app') ||
+                    window.location.hostname !== 'localhost';
 
-if (isDevelopment) {
+if (isDevelopment && window.location.hostname === 'localhost') {
   // Development: use localhost
   API_BASE_URL = 'http://localhost:8000';
 } else {
