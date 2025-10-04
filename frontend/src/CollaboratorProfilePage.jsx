@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 // import Header from "./Header";
 import { layout, section, card, button as buttonStyle } from "./sharedStyles";
 import ChatTab from "./ChatTab";
+import { API_BASE_URL } from "./config";
 
 function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
   const [tab, setTab] = useState("cases");
@@ -13,7 +14,7 @@ function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
     const storedUser = JSON.parse(localStorage.getItem("user") || "null");
     const headers = storedUser && storedUser.token ? { Authorization: `Bearer ${storedUser.token}` } : {};
     
-    fetch(`http://localhost:8000/collaborators/${String(user.id)}/cases`, { headers })
+    fetch(`${API_BASE_URL}/collaborators/${String(user.id)}/cases`, { headers })
       .then(res => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

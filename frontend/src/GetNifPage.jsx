@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_BASE_URL } from "./config";
 
 // Helper to get JWT token from localStorage
 function getAuthHeaders() {
@@ -47,7 +48,7 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
       }
       // Create case in backend and assign collaborator
       try {
-        const res = await fetch("http://localhost:8000/cases", {
+        const res = await fetch(`${API_BASE_URL}/cases`, {
           method: "POST",
           headers: { "Content-Type": "application/json", ...getAuthHeaders() },
           body: JSON.stringify({ user_id: String(user.id) })
@@ -66,7 +67,7 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
         const formData = new FormData();
         formData.append("files", passportFile);
         formData.append("files", addressFile);
-        const uploadRes = await fetch(`http://localhost:8000/cases/${data.id}/upload`, {
+        const uploadRes = await fetch(`${API_BASE_URL}/cases/${data.id}/upload`, {
           method: "POST",
           headers: { ...getAuthHeaders() },
           body: formData
@@ -91,8 +92,8 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
     if (propCaseId) {
       setLoading(true);
       Promise.all([
-  fetch(`http://localhost:8000/cases/${propCaseId}`, { headers: getAuthHeaders() }).then(r => r.json()),
-  fetch(`http://localhost:8000/cases/${propCaseId}/files`, { headers: getAuthHeaders() }).then(r => r.json())
+  fetch(`${API_BASE_URL}/cases/${propCaseId}`, { headers: getAuthHeaders() }).then(r => r.json()),
+  fetch(`${API_BASE_URL}/cases/${propCaseId}/files`, { headers: getAuthHeaders() }).then(r => r.json())
       ]).then(([caseData, filesData]) => {
         setCaseData(caseData);
         setCaseStatus(caseData.status);
@@ -177,7 +178,7 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
                   <ul style={{ paddingLeft: 16 }}>
                     {files.map(fname => (
                       <li key={fname}>
-                        <a href={`http://localhost:8000/cases/${propCaseId}/files/${encodeURIComponent(fname)}`} target="_blank" rel="noopener noreferrer">{fname}</a>
+                        <a href={`${API_BASE_URL}/cases/${propCaseId}/files/${encodeURIComponent(fname)}`} target="_blank" rel="noopener noreferrer">{fname}</a>
                       </li>
                     ))}
                   </ul>

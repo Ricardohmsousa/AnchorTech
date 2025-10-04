@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { layout, navBar, navLink, card, button as buttonStyle } from "./sharedStyles";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_BASE_URL } from "./config";
 
 function CasePage({ user, caseId: propCaseId }) {
   const navigate = useNavigate();
@@ -19,16 +20,16 @@ function CasePage({ user, caseId: propCaseId }) {
       try {
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const headers = user && user.token ? { Authorization: `Bearer ${user.token}` } : {};
-  const res = await fetch(`http://localhost:8000/cases/${caseId}`, { headers });
+  const res = await fetch(`${API_BASE_URL}/cases/${caseId}`, { headers });
         if (!res.ok) throw new Error("Case not found");
         const data = await res.json();
         setCaseData(data);
         // Fetch user info
-  const userRes = await fetch(`http://localhost:8000/users/${String(data.user_id)}`, { headers });
+  const userRes = await fetch(`${API_BASE_URL}/users/${String(data.user_id)}`, { headers });
         if (!userRes.ok) throw new Error("User not found");
         setUserData(await userRes.json());
         // Fetch files for this case
-  const filesRes = await fetch(`http://localhost:8000/cases/${caseId}/files`, { headers });
+  const filesRes = await fetch(`${API_BASE_URL}/cases/${caseId}/files`, { headers });
         if (filesRes.ok) {
           const filesData = await filesRes.json();
           setFiles(filesData.files || []);
@@ -45,7 +46,7 @@ function CasePage({ user, caseId: propCaseId }) {
     // Mark case as reviewed
     const user = JSON.parse(localStorage.getItem("user") || "null");
     const headers = user && user.token ? { Authorization: `Bearer ${user.token}` } : {};
-    await fetch(`http://localhost:8000/cases/${caseId}/status`, {
+    await fetch(`${API_BASE_URL}/cases/${caseId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json", ...headers },
       body: JSON.stringify({ status: "reviewed" })
@@ -57,7 +58,7 @@ function CasePage({ user, caseId: propCaseId }) {
     // Mark case as reviewed by local offices
     const user = JSON.parse(localStorage.getItem("user") || "null");
     const headers = user && user.token ? { Authorization: `Bearer ${user.token}` } : {};
-    await fetch(`http://localhost:8000/cases/${caseId}/status`, {
+    await fetch(`${API_BASE_URL}/cases/${caseId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json", ...headers },
       body: JSON.stringify({ status: "local_reviewed" })
@@ -69,7 +70,7 @@ function CasePage({ user, caseId: propCaseId }) {
     // Mark case as processed (NIF issued)
     const user = JSON.parse(localStorage.getItem("user") || "null");
     const headers = user && user.token ? { Authorization: `Bearer ${user.token}` } : {};
-    await fetch(`http://localhost:8000/cases/${caseId}/status`, {
+    await fetch(`${API_BASE_URL}/cases/${caseId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json", ...headers },
       body: JSON.stringify({ status: "processed" })
@@ -107,7 +108,7 @@ function CasePage({ user, caseId: propCaseId }) {
             <ul style={{ paddingLeft: 16 }}>
               {files.map((fname) => (
                 <li key={fname}>
-                  <a href={`http://localhost:8000/cases/${caseId}/files/${encodeURIComponent(fname)}`} target="_blank" rel="noopener noreferrer">{fname}</a>
+                  <a href={`${API_BASE_URL}/cases/${caseId}/files/${encodeURIComponent(fname)}`} target="_blank" rel="noopener noreferrer">{fname}</a>
                 </li>
               ))}
             </ul>
