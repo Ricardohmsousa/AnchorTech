@@ -106,7 +106,7 @@ app.add_middleware(
 load_dotenv()
 
 # Initialize Firebase
-FIREBASE_CRED_PATH = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "backend/firebase_service_account.json")
+FIREBASE_CRED_PATH = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "firebase_service_account.json")
 
 # Check if credentials are provided as JSON string in environment (for Railway/cloud deployment)
 firebase_creds_json = os.environ.get("FIREBASE_CREDENTIALS_JSON")
