@@ -16,6 +16,11 @@ if (isDevelopment) {
       console.warn('REACT_APP_API_URL not set, using relative URLs');
       // Use relative URLs - this will work if frontend and backend are on same domain
       API_BASE_URL = window.location.origin.replace(/:\d+$/, '') + ':' + (window.location.port || '80');
+    } else {
+      // Make sure the URL has protocol
+      if (!API_BASE_URL.startsWith('http://') && !API_BASE_URL.startsWith('https://')) {
+        API_BASE_URL = 'https://' + API_BASE_URL;
+      }
     }
   } catch (error) {
     console.error('Error reading environment variables:', error);
