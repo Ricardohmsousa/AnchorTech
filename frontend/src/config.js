@@ -32,4 +32,7 @@ console.log('Final API_BASE_URL:', API_BASE_URL);
 // Stripe configuration
 export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
+console.log('Stripe key available:', STRIPE_PUBLISHABLE_KEY ? 'Yes' : 'No');
+console.log('Stripe key length:', STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.length : 0);
+
 export { API_BASE_URL };

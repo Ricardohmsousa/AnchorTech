@@ -5,12 +5,21 @@ import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
 import { button as buttonStyle } from './sharedStyles';
 
 // Load Stripe outside of component to avoid recreating the object
-const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
+const stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY) : null;
 
 const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
+
+  // Check if Stripe is properly configured
+  if (!STRIPE_PUBLISHABLE_KEY) {
+    return (
+      <div style={{ color: '#d32f2f', padding: 16, textAlign: 'center' }}>
+        ⚠️ Payment system not configured. Please contact support.
+      </div>
+    );
+  }
 
   // Helper to get JWT token from localStorage
   function getAuthHeaders() {
@@ -79,6 +88,8 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       base: {
         fontSize: '16px',
         color: '#424770',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
         '::placeholder': {
           color: '#aab7c4',
         },
@@ -87,6 +98,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         color: '#9e2146',
       },
     },
+    hidePostalCode: true,
   };
 
   return (
@@ -95,11 +107,19 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         <h3 style={{ marginBottom: 10, color: '#333' }}>Payment Details</h3>
         <div style={{ 
           padding: 16, 
-          border: '1px solid #e0e0e0', 
+          border: '2px solid #e0e0e0', 
           borderRadius: 8, 
-          backgroundColor: '#f9f9f9' 
+          backgroundColor: '#fff',
+          minHeight: 40,
+          display: 'flex',
+          alignItems: 'center'
         }}>
-          <CardElement options={cardElementOptions} />
+          <CardElement 
+            options={cardElementOptions}
+            onChange={(event) => {
+              setPaymentError(event.error ? event.error.message : null);
+            }}
+          />
         </div>
       </div>
 
@@ -148,6 +168,34 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
 const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
   const [loading, setLoading] = useState(false);
 
+  // Check if Stripe is available
+  if (!stripePromise) {
+    return (
+      <div style={{ 
+        padding: 24, 
+        border: '1px solid #e0e0e0', 
+        borderRadius: 8, 
+        backgroundColor: 'white',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        textAlign: 'center'
+      }}>
+        <div style={{ color: '#d32f2f', marginBottom: 16 }}>
+          ⚠️ Payment system is not configured
+        </div>
+        <button
+          onClick={onCancel}
+          style={{
+            ...buttonStyle,
+            backgroundColor: '#6c757d',
+            border: '1px solid #6c757d'
+          }}
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
+
   return (
     <Elements stripe={stripePromise}>
       <div style={{ 
@@ -180,6 +228,9 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           textAlign: 'center' 
         }}>
           <p>🔒 Your payment information is securely processed by Stripe</p>
+          <p style={{ marginTop: 8, fontSize: 11 }}>
+            Test card: 4242 4242 4242 4242 | Any future date | Any CVC
+          </p>
         </div>
       </div>
     </Elements>

@@ -38,7 +38,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-        'REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL)
+        'REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
+        'REACT_APP_STRIPE_PUBLISHABLE_KEY': JSON.stringify(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
       }
     }),
     new webpack.ProvidePlugin({
