@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "serve -s build -l 3000",
-    "build": "webpack --mode production",
+    "build": "echo 'Building with environment variables:' && node -e 'console.log(\"REACT_APP_STRIPE_PUBLISHABLE_KEY:\", process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY ? \"SET\" : \"NOT SET\")' && webpack --mode production",
     "dev": "webpack serve --mode development --open"
   },
   "devDependencies": {

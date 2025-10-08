@@ -3,6 +3,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
+// Debug: Log environment variables during build
+console.log('=== Webpack Build Environment Variables ===');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+console.log('REACT_APP_STRIPE_PUBLISHABLE_KEY available:', !!process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+console.log('REACT_APP_STRIPE_PUBLISHABLE_KEY length:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY ? process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY.length : 0);
+console.log('==============================================');
+
 module.exports = {
   entry: './src/index.jsx',
   output: {
@@ -36,11 +44,11 @@ module.exports = {
       filename: 'index.html',
     }),
     new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-        'REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL),
-        'REACT_APP_STRIPE_PUBLISHABLE_KEY': JSON.stringify(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
-      }
+      'process.env': JSON.stringify({
+        NODE_ENV: process.env.NODE_ENV || 'development',
+        REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+        REACT_APP_STRIPE_PUBLISHABLE_KEY: process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
+      })
     }),
     new webpack.ProvidePlugin({
       process: 'process/browser',
