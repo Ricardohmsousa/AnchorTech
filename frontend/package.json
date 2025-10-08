@@ -11,7 +11,7 @@
     "@stripe/react-stripe-js": "^2.4.0"
   },
   "scripts": {
-    "start": "chmod +x start.sh && ./start.sh serve -s build -l 3000",
+    "start": "serve -s build -l 3000",
     "build": "webpack --mode production",
     "dev": "webpack serve --mode development --open"
   },
