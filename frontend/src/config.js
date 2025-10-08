@@ -8,12 +8,16 @@ const isProduction = process.env.NODE_ENV === 'production' ||
                     window.location.hostname.includes('railway.app') ||
                     window.location.hostname !== 'localhost';
 
+// Get API URL from build-time env vars or runtime window.ENV
+const runtimeApiUrl = window.ENV?.REACT_APP_API_URL;
+const buildTimeApiUrl = process.env.REACT_APP_API_URL;
+
 if (isDevelopment && window.location.hostname === 'localhost') {
   // Development: use localhost
   API_BASE_URL = 'http://localhost:8000';
 } else {
-  // Production: Always use the correct backend URL
-  API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shimmering-communication-production.up.railway.app';
+  // Production: Try runtime first, then build-time, then fallback
+  API_BASE_URL = runtimeApiUrl || buildTimeApiUrl || 'https://shimmering-communication-production.up.railway.app';
   
   // Remove any port numbers from Railway URLs to fix SSL issues
   API_BASE_URL = API_BASE_URL.replace(/:\d+$/, '');
@@ -26,13 +30,18 @@ if (isDevelopment && window.location.hostname === 'localhost') {
 
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Hostname:', window.location.hostname);
-console.log('Raw REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
+console.log('Runtime API URL:', runtimeApiUrl);
+console.log('Build-time API URL:', buildTimeApiUrl);
 console.log('Final API_BASE_URL:', API_BASE_URL);
 
-// Stripe configuration
-export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+// Stripe configuration - try runtime first, then build-time
+const runtimeStripeKey = window.ENV?.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+const buildTimeStripeKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+export const STRIPE_PUBLISHABLE_KEY = runtimeStripeKey || buildTimeStripeKey;
 
-console.log('Stripe key available:', STRIPE_PUBLISHABLE_KEY ? 'Yes' : 'No');
+console.log('Runtime Stripe key available:', !!runtimeStripeKey);
+console.log('Build-time Stripe key available:', !!buildTimeStripeKey);
+console.log('Final Stripe key available:', !!STRIPE_PUBLISHABLE_KEY);
 console.log('Stripe key length:', STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.length : 0);
 
 export { API_BASE_URL };
