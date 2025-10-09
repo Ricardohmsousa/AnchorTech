@@ -12,6 +12,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
   const [cardComplete, setCardComplete] = useState(false);
+  const [cardholderName, setCardholderName] = useState('');
 
   // Check if Stripe is properly configured
   if (!STRIPE_PUBLISHABLE_KEY) {
@@ -77,7 +78,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         payment_method: {
           card: elements.getElement(CardElement),
           billing_details: {
-            name: 'Customer', // You could collect this from a form
+            name: cardholderName || 'Customer',
           },
         },
       });
@@ -123,6 +124,52 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
     <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto' }}>
       <div style={{ marginBottom: 20 }}>
         <h3 style={{ marginBottom: 10, color: '#333' }}>Payment Details</h3>
+        
+        {/* Cardholder Name Input */}
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: 6, 
+            fontWeight: 600, 
+            color: '#333', 
+            fontSize: 14 
+          }}>
+            Cardholder Name
+          </label>
+          <input
+            type="text"
+            value={cardholderName}
+            onChange={(e) => setCardholderName(e.target.value)}
+            placeholder="John Doe"
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              border: '2px solid #e0e0e0',
+              borderRadius: 8,
+              fontSize: 16,
+              fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+              backgroundColor: '#fff',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.2s',
+            }}
+            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+            required
+          />
+        </div>
+
+        {/* Card Details */}
+        <div style={{ marginBottom: 8 }}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: 6, 
+            fontWeight: 600, 
+            color: '#333', 
+            fontSize: 14 
+          }}>
+            Card Details
+          </label>
+        </div>
         <div style={{ 
           padding: '12px 16px', 
           border: '2px solid #e0e0e0', 

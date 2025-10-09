@@ -20,9 +20,9 @@ if (isDevelopment && window.location.hostname === 'localhost') {
   }
 }
 
-// Stripe configuration with temporary test key fallback
-export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || 
-  'pk_test_51QCEhOE8WgUB6VyHHT8xQIZVZQE4rz9WTpQGXQpQG0P0XKXEL3BLSp4QcZbJY1G9yGyzE8XQP2UfCKh3ksBuS6Bj00vZAZpBfP';
+// Stripe configuration
+// For production, set REACT_APP_STRIPE_PUBLISHABLE_KEY in Railway environment variables
+export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
 // Debug logging
 console.log('=== CONFIG DEBUG ===');
