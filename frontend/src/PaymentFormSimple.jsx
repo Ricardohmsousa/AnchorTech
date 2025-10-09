@@ -478,6 +478,48 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
           {loading ? 'Processing...' : `Pay €${(amount / 100).toFixed(2)}`}
         </button>
       </div>
+      
+      {/* Debug information - moved to SimpleCheckoutForm where elementsReady is defined */}
+      <div style={{ 
+        marginTop: 16, 
+        padding: 8, 
+        backgroundColor: '#f0f0f0', 
+        border: '1px solid #ddd',
+        borderRadius: 4,
+        fontSize: 10,
+        color: '#333',
+        fontFamily: 'monospace'
+      }}>
+        <div>🔧 DEBUG: Elements ready = {elementsReady ? 'YES' : 'NO'}</div>
+        <div>🔧 DEBUG: Stripe available = {!!stripe ? 'YES' : 'NO'}</div>
+        <div>🔧 DEBUG: Elements available = {!!elements ? 'YES' : 'NO'}</div>
+        <button 
+          type="button"
+          onClick={() => {
+            console.log('🔧 MANUAL DEBUG TEST');
+            const cardElement = elements?.getElement(CardElement);
+            console.log('🔧 CardElement from elements:', cardElement);
+            if (cardElement && typeof cardElement.focus === 'function') {
+              console.log('🔧 Calling cardElement.focus()');
+              cardElement.focus();
+            } else {
+              console.log('🔧 Cannot focus element');
+            }
+          }}
+          style={{
+            marginTop: 4,
+            padding: '2px 6px',
+            fontSize: 9,
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: 2,
+            cursor: 'pointer'
+          }}
+        >
+          FORCE FOCUS
+        </button>
+      </div>
     </form>
   );
 };
@@ -547,48 +589,6 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           <p style={{ marginTop: 8, fontSize: 11 }}>
             Test card: 4242 4242 4242 4242 | Any future date | Any CVC
           </p>
-          
-          {/* Debug information */}
-          <div style={{ 
-            marginTop: 12, 
-            padding: 8, 
-            backgroundColor: '#f0f0f0', 
-            border: '1px solid #ddd',
-            borderRadius: 4,
-            fontSize: 10,
-            color: '#333',
-            fontFamily: 'monospace'
-          }}>
-            <div>🔧 DEBUG: Elements ready = {elementsReady ? 'YES' : 'NO'}</div>
-            <div>🔧 DEBUG: Stripe available = {!!stripe ? 'YES' : 'NO'}</div>
-            <div>🔧 DEBUG: Elements available = {!!elements ? 'YES' : 'NO'}</div>
-            <button 
-              type="button"
-              onClick={() => {
-                console.log('🔧 MANUAL DEBUG TEST');
-                const cardElement = elements?.getElement(CardElement);
-                console.log('🔧 CardElement from elements:', cardElement);
-                if (cardElement && typeof cardElement.focus === 'function') {
-                  console.log('🔧 Calling cardElement.focus()');
-                  cardElement.focus();
-                } else {
-                  console.log('🔧 Cannot focus element');
-                }
-              }}
-              style={{
-                marginTop: 4,
-                padding: '2px 6px',
-                fontSize: 9,
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: 2,
-                cursor: 'pointer'
-              }}
-            >
-              FORCE FOCUS
-            </button>
-          </div>
           
           <div style={{ 
             marginTop: 12, 
