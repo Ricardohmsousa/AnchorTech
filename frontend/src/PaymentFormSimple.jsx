@@ -235,7 +235,18 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
             Card Details (Number, Expiry, CVC)
           </label>
         </div>
-        <div style={{ 
+        <div 
+          onClick={() => {
+            console.log('🎯 CardElement wrapper clicked - attempting force focus');
+            const cardElement = elements?.getElement(CardElement);
+            if (cardElement) {
+              console.log('🃏 Found CardElement, calling focus()');
+              cardElement.focus();
+            } else {
+              console.error('❌ CardElement not found in elements');
+            }
+          }}
+          style={{ 
           padding: '14px 16px', 
           border: '2px solid #e0e0e0', 
           borderRadius: 8, 
@@ -278,14 +289,14 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
               }
             }}
             onFocus={(event) => {
-              console.log('🎯 Card element focused', event);
+              console.log('🎯 Card element FOCUSED', event);
               // Update border color on focus
               if (cardElementRef.current && cardElementRef.current.parentElement) {
                 cardElementRef.current.parentElement.style.borderColor = '#0070f3';
               }
             }}
             onBlur={(event) => {
-              console.log('👋 Card element blurred', event);
+              console.log('👋 Card element BLURRED', event);
               // Reset border color on blur
               if (cardElementRef.current && cardElementRef.current.parentElement) {
                 cardElementRef.current.parentElement.style.borderColor = '#e0e0e0';

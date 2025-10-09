@@ -228,6 +228,16 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           </label>
         </div>
         <div
+          onClick={() => {
+            console.log('🎯 Card Number wrapper clicked - attempting force focus');
+            const cardNumberElement = elements?.getElement(CardNumberElement);
+            if (cardNumberElement) {
+              console.log('📱 Found CardNumberElement, calling focus()');
+              cardNumberElement.focus();
+            } else {
+              console.error('❌ CardNumberElement not found in elements');
+            }
+          }}
           style={{
             padding: '14px 16px',
             border: `2px solid ${numberFocused ? '#0070f3' : '#e0e0e0'}`,
@@ -248,12 +258,26 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           <CardNumberElement
             options={cardElementOptions}
             disabled={loading}
-            onFocus={() => setNumberFocused(true)}
-            onBlur={() => setNumberFocused(false)}
+            onFocus={() => {
+              console.log('🎯 Card number FOCUSED');
+              setNumberFocused(true);
+            }}
+            onBlur={() => {
+              console.log('👋 Card number BLURRED');
+              setNumberFocused(false);
+            }}
             onChange={(event) => {
-              console.log('📱 Card number change:', event);
+              console.log('📱 Card number CHANGE:', {
+                error: event.error,
+                complete: event.complete,
+                empty: event.empty,
+                elementType: event.elementType
+              });
               setPaymentError(event.error ? event.error.message : null);
               setCardNumberComplete(event.complete);
+            }}
+            onReady={() => {
+              console.log('✅ Card number element READY');
             }}
           />
         </div>
@@ -273,6 +297,16 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               Expiry Date
             </label>
             <div
+              onClick={() => {
+                console.log('🎯 Expiry wrapper clicked - attempting force focus');
+                const cardExpiryElement = elements?.getElement(CardExpiryElement);
+                if (cardExpiryElement) {
+                  console.log('📅 Found CardExpiryElement, calling focus()');
+                  cardExpiryElement.focus();
+                } else {
+                  console.error('❌ CardExpiryElement not found in elements');
+                }
+              }}
               style={{
                 padding: '14px 16px',
                 border: `2px solid ${expiryFocused ? '#0070f3' : '#e0e0e0'}`,
@@ -292,12 +326,26 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               <CardExpiryElement
                 options={cardElementOptions}
                 disabled={loading}
-                onFocus={() => setExpiryFocused(true)}
-                onBlur={() => setExpiryFocused(false)}
+                onFocus={() => {
+                  console.log('🎯 Expiry FOCUSED');
+                  setExpiryFocused(true);
+                }}
+                onBlur={() => {
+                  console.log('👋 Expiry BLURRED');
+                  setExpiryFocused(false);
+                }}
                 onChange={(event) => {
-                  console.log('📅 Expiry change:', event);
+                  console.log('📅 Expiry CHANGE:', {
+                    error: event.error,
+                    complete: event.complete,
+                    empty: event.empty,
+                    elementType: event.elementType
+                  });
                   if (event.error) setPaymentError(event.error.message);
                   setCardExpiryComplete(event.complete);
+                }}
+                onReady={() => {
+                  console.log('✅ Expiry element READY');
                 }}
               />
             </div>
@@ -316,6 +364,16 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               CVC
             </label>
             <div
+              onClick={() => {
+                console.log('🎯 CVC wrapper clicked - attempting force focus');
+                const cardCvcElement = elements?.getElement(CardCvcElement);
+                if (cardCvcElement) {
+                  console.log('🔒 Found CardCvcElement, calling focus()');
+                  cardCvcElement.focus();
+                } else {
+                  console.error('❌ CardCvcElement not found in elements');
+                }
+              }}
               style={{
                 padding: '14px 16px',
                 border: `2px solid ${cvcFocused ? '#0070f3' : '#e0e0e0'}`,
@@ -335,12 +393,26 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               <CardCvcElement
                 options={cardElementOptions}
                 disabled={loading}
-                onFocus={() => setCvcFocused(true)}
-                onBlur={() => setCvcFocused(false)}
+                onFocus={() => {
+                  console.log('🎯 CVC FOCUSED');
+                  setCvcFocused(true);
+                }}
+                onBlur={() => {
+                  console.log('👋 CVC BLURRED');
+                  setCvcFocused(false);
+                }}
                 onChange={(event) => {
-                  console.log('🔒 CVC change:', event);
+                  console.log('🔒 CVC CHANGE:', {
+                    error: event.error,
+                    complete: event.complete,
+                    empty: event.empty,
+                    elementType: event.elementType
+                  });
                   if (event.error) setPaymentError(event.error.message);
                   setCardCvcComplete(event.complete);
+                }}
+                onReady={() => {
+                  console.log('✅ CVC element READY');
                 }}
               />
             </div>
