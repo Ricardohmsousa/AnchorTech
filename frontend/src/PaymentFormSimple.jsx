@@ -5,6 +5,7 @@ import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
 import { button as buttonStyle } from './sharedStyles';
 
 // Load Stripe outside of component to avoid recreating the object
+// Updated: 2025-10-09 - Added automatic focus test and token expiration check
 console.log('🔑 Stripe key available:', !!STRIPE_PUBLISHABLE_KEY);
 console.log('🔑 Stripe key length:', STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.length : 0);
 const stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY) : null;
@@ -95,6 +96,25 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
     console.log('PaymentForm - User from localStorage:', user);
     if (user && user.token) {
       console.log('PaymentForm - Token exists, length:', user.token.length);
+      
+      // Check if token is expired (basic JWT check)
+      try {
+        const tokenPayload = JSON.parse(atob(user.token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+        console.log('Token exp:', tokenPayload.exp, 'Current time:', currentTime);
+        
+        if (tokenPayload.exp && tokenPayload.exp < currentTime) {
+          console.warn('⚠️ Token expired, redirecting to login');
+          // Clear expired token
+          localStorage.removeItem('user');
+          // Redirect to login - you might want to customize this
+          window.location.href = '/login';
+          return {};
+        }
+      } catch (e) {
+        console.warn('Could not parse token expiration:', e);
+      }
+      
       return { Authorization: `Bearer ${user.token}` };
     }
     console.log('PaymentForm - No token found');
