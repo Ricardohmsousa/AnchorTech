@@ -22,9 +22,10 @@ if (isDevelopment && window.location.hostname === 'localhost') {
 
 // Stripe configuration
 // For production, set REACT_APP_STRIPE_PUBLISHABLE_KEY in Railway environment variables
+// Make sure to also add these as build-time environment variables in Railway
 export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
-// Debug logging
+// Debug logging - show what environment variables are available
 console.log('=== CONFIG DEBUG ===');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Hostname:', window.location.hostname);
@@ -33,6 +34,14 @@ console.log('Raw REACT_APP_STRIPE_PUBLISHABLE_KEY:', process.env.REACT_APP_STRIP
 console.log('Final API_BASE_URL:', API_BASE_URL);
 console.log('Final Stripe key available:', !!STRIPE_PUBLISHABLE_KEY);
 console.log('Final Stripe key length:', STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.length : 0);
+
+// If environment variables are missing, show instructions
+if (!process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY) {
+  console.warn('⚠️ REACT_APP_STRIPE_PUBLISHABLE_KEY not found!');
+  console.warn('Please add this as a build-time environment variable in Railway.');
+  console.warn('Go to Railway → Frontend Service → Variables → Add Variable');
+}
+
 console.log('==================');
 
 export { API_BASE_URL };
