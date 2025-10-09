@@ -11,6 +11,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
+  const [cardComplete, setCardComplete] = useState(false);
 
   // Check if Stripe is properly configured
   if (!STRIPE_PUBLISHABLE_KEY) {
@@ -20,6 +21,9 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       </div>
     );
   }
+
+  // Debug logging
+  console.log('CheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
 
   // Helper to get JWT token from localStorage
   function getAuthHeaders() {
@@ -93,12 +97,18 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         '::placeholder': {
           color: '#aab7c4',
         },
+        lineHeight: '24px',
+        padding: '10px 12px',
       },
       invalid: {
         color: '#9e2146',
       },
+      complete: {
+        color: '#2e7d32',
+      },
     },
     hidePostalCode: true,
+    disabled: false, // Ensure the element is not disabled
   };
 
   return (
@@ -106,21 +116,39 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       <div style={{ marginBottom: 20 }}>
         <h3 style={{ marginBottom: 10, color: '#333' }}>Payment Details</h3>
         <div style={{ 
-          padding: 16, 
+          padding: '12px 16px', 
           border: '2px solid #e0e0e0', 
           borderRadius: 8, 
           backgroundColor: '#fff',
-          minHeight: 40,
+          minHeight: 48,
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
+          position: 'relative',
+          cursor: 'text'
         }}>
           <CardElement 
             options={cardElementOptions}
             onChange={(event) => {
+              console.log('Card element change:', event);
               setPaymentError(event.error ? event.error.message : null);
+              setCardComplete(event.complete);
+            }}
+            onReady={() => {
+              console.log('Card element ready');
+            }}
+            onFocus={() => {
+              console.log('Card element focused');
+            }}
+            onBlur={() => {
+              console.log('Card element blurred');
             }}
           />
         </div>
+        {cardComplete && (
+          <div style={{ fontSize: 12, color: '#2e7d32', marginTop: 4 }}>
+            ✓ Card details complete
+          </div>
+        )}
       </div>
 
       {paymentError && (
