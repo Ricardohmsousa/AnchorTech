@@ -2,6 +2,7 @@
 set -e
 
 echo "=== Railway Runtime Environment Setup ==="
+echo "PORT: ${PORT:-3000}"
 
 # Create the env.js file with actual environment variables
 cat > build/env.js << EOF
@@ -9,11 +10,13 @@ window.ENV = {
   REACT_APP_API_URL: '${REACT_APP_API_URL}',
   REACT_APP_STRIPE_PUBLISHABLE_KEY: '${REACT_APP_STRIPE_PUBLISHABLE_KEY}'
 };
+console.log("Runtime env loaded:", window.ENV);
 EOF
 
 echo "Environment variables injected into env.js"
 echo "REACT_APP_API_URL: ${REACT_APP_API_URL:-not set}"
 echo "REACT_APP_STRIPE_PUBLISHABLE_KEY: ${REACT_APP_STRIPE_PUBLISHABLE_KEY:+SET}"
 
-# Start the application
-exec "$@"
+# Start the application with dynamic port
+echo "Starting server on 0.0.0.0:${PORT:-3000}"
+exec serve -s build -l ${PORT:-3000} -H 0.0.0.0 --no-clipboard
