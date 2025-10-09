@@ -141,7 +141,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         '::placeholder': {
           color: '#aab7c4',
         },
-        lineHeight: '24px',
+        // Removed lineHeight as per Stripe warning - using container padding instead
       },
       invalid: {
         color: '#9e2146',
@@ -203,7 +203,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           </label>
         </div>
         <div style={{ 
-          padding: '12px 16px', 
+          padding: '14px 16px', 
           border: '2px solid #e0e0e0', 
           borderRadius: 8, 
           backgroundColor: '#fff',
@@ -211,6 +211,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           display: 'flex',
           alignItems: 'center',
           marginBottom: 16,
+          cursor: 'text'
         }}>
           <CardNumberElement 
             options={cardElementOptions}
@@ -224,6 +225,9 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
             }}
             onFocus={() => {
               console.log('🎯 Card number element focused');
+            }}
+            onBlur={() => {
+              console.log('👋 Card number element blurred');
             }}
           />
         </div>
@@ -241,13 +245,14 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               Expiry Date
             </label>
             <div style={{ 
-              padding: '12px 16px', 
+              padding: '14px 16px', 
               border: '2px solid #e0e0e0', 
               borderRadius: 8, 
               backgroundColor: '#fff',
               minHeight: 48,
               display: 'flex',
               alignItems: 'center',
+              cursor: 'text'
             }}>
               <CardExpiryElement 
                 options={cardElementOptions}
@@ -258,6 +263,12 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
                 }}
                 onReady={() => {
                   console.log('✅ Card expiry element ready');
+                }}
+                onFocus={() => {
+                  console.log('🎯 Card expiry element focused');
+                }}
+                onBlur={() => {
+                  console.log('👋 Card expiry element blurred');
                 }}
               />
             </div>
@@ -274,13 +285,14 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               CVC
             </label>
             <div style={{ 
-              padding: '12px 16px', 
+              padding: '14px 16px', 
               border: '2px solid #e0e0e0', 
               borderRadius: 8, 
               backgroundColor: '#fff',
               minHeight: 48,
               display: 'flex',
               alignItems: 'center',
+              cursor: 'text'
             }}>
               <CardCvcElement 
                 options={cardElementOptions}
@@ -291,6 +303,12 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
                 }}
                 onReady={() => {
                   console.log('✅ Card CVC element ready');
+                }}
+                onFocus={() => {
+                  console.log('🎯 Card CVC element focused');
+                }}
+                onBlur={() => {
+                  console.log('👋 Card CVC element blurred');
                 }}
               />
             </div>
