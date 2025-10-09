@@ -35,6 +35,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
 
   // Debug logging
   console.log('CheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
+  console.log('API_BASE_URL being used:', API_BASE_URL);
 
   // Helper to get JWT token from localStorage
   function getAuthHeaders() {
@@ -57,17 +58,29 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
 
     try {
       // Create payment intent on backend
-      const response = await fetch(`${API_BASE_URL}/create-payment-intent`, {
+      const requestUrl = `${API_BASE_URL}/create-payment-intent`;
+      const headers = {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      };
+      const requestBody = {
+        amount: amount,
+        service_type: 'nif_application'
+      };
+      
+      console.log('🔄 Making payment request...');
+      console.log('URL:', requestUrl);
+      console.log('Headers:', headers);
+      console.log('Body:', requestBody);
+      
+      const response = await fetch(requestUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getAuthHeaders()
-        },
-        body: JSON.stringify({
-          amount: amount,
-          service_type: 'nif_application'
-        })
+        headers: headers,
+        body: JSON.stringify(requestBody)
       });
+      
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response ok:', response.ok);
 
       if (!response.ok) {
         const errorData = await response.text();
