@@ -376,7 +376,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           style={{
             ...buttonStyle,
             backgroundColor: '#6c757d',
-            border: '1px solid '#6c757d',
+            border: '1px solid #6c757d',
           }}
           disabled={loading}
         >
