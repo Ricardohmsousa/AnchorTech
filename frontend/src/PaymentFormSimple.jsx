@@ -61,6 +61,22 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
       
       // Check after a short delay to allow Stripe to initialize
       setTimeout(checkTrackingPrevention, 2000);
+      
+      // Add global click listener to debug click interception
+      const globalClickHandler = (e) => {
+        console.log('🌍 GLOBAL CLICK:', {
+          target: e.target?.tagName,
+          className: e.target?.className,
+          id: e.target?.id,
+          isStripeFrame: e.target?.tagName === 'IFRAME' && e.target?.title?.includes('Secure'),
+        });
+      };
+      
+      document.addEventListener('click', globalClickHandler, true);
+      
+      return () => {
+        document.removeEventListener('click', globalClickHandler, true);
+      };
     }
   }, [stripe, elements]);
 
@@ -234,10 +250,43 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
           }}>
             Card Details (Number, Expiry, CVC)
           </label>
+          {/* TEST BUTTON - External force focus */}
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log('🧪 TEST BUTTON clicked - forcing focus');
+              const cardElement = elements?.getElement(CardElement);
+              if (cardElement) {
+                console.log('🃏 TEST: Found CardElement, calling focus()');
+                cardElement.focus();
+              } else {
+                console.error('❌ TEST: CardElement not found');
+              }
+            }}
+            style={{
+              padding: '4px 8px',
+              fontSize: '10px',
+              backgroundColor: '#ff6b6b',
+              color: 'white',
+              border: 'none',
+              borderRadius: 4,
+              cursor: 'pointer',
+              marginLeft: 8
+            }}
+          >
+            TEST FOCUS
+          </button>
         </div>
         <div 
-          onClick={() => {
+          onClick={(e) => {
             console.log('🎯 CardElement wrapper clicked - attempting force focus');
+            console.log('🖱️ Click event details:', {
+              target: e.target,
+              currentTarget: e.currentTarget,
+              bubbles: e.bubbles,
+              defaultPrevented: e.defaultPrevented
+            });
             const cardElement = elements?.getElement(CardElement);
             if (cardElement) {
               console.log('🃏 Found CardElement, calling focus()');
@@ -245,6 +294,12 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
             } else {
               console.error('❌ CardElement not found in elements');
             }
+          }}
+          onMouseDown={(e) => {
+            console.log('🖱️ MOUSEDOWN on wrapper:', e.target);
+          }}
+          onMouseUp={(e) => {
+            console.log('🖱️ MOUSEUP on wrapper:', e.target);
           }}
           style={{ 
           padding: '14px 16px', 
@@ -260,7 +315,9 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
           zIndex: 1,
           overflow: 'visible',
           boxSizing: 'border-box',
-          width: '100%'
+          width: '100%',
+          // Force pointer events
+          pointerEvents: 'auto'
         }}>
           <CardElement 
             ref={cardElementRef}
