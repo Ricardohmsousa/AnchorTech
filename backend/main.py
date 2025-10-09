@@ -44,7 +44,15 @@ import stripe
 app = FastAPI()
 
 # Stripe configuration
-stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+stripe_secret_key = os.environ.get("STRIPE_SECRET_KEY")
+print(f"[STRIPE] Stripe secret key configured: {'Yes' if stripe_secret_key else 'No'}")
+if stripe_secret_key:
+    print(f"[STRIPE] Key starts with: {stripe_secret_key[:10]}...")
+    stripe.api_key = stripe_secret_key
+else:
+    print("[STRIPE] ERROR: No Stripe secret key found in environment variables!")
+    print(f"[STRIPE] Available env vars: {[k for k in os.environ.keys() if 'STRIPE' in k.upper()]}")
+    print("[STRIPE] Please set STRIPE_SECRET_KEY environment variable")
 
 # JWT secret and config
 JWT_SECRET = os.environ.get("JWT_SECRET", "dev_secret_key_change_me")
