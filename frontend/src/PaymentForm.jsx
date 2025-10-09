@@ -59,7 +59,15 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create payment intent');
+        const errorData = await response.text();
+        console.error('Payment intent creation failed:', errorData);
+        
+        // Handle authentication errors specifically
+        if (response.status === 401) {
+          throw new Error('Your session has expired. Please log in again.');
+        }
+        
+        throw new Error(`Failed to create payment intent: ${response.status} - ${errorData}`);
       }
 
       const { client_secret } = await response.json();
