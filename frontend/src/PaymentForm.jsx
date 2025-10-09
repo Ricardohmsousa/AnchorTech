@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { 
+  Elements, 
+  CardNumberElement, 
+  CardExpiryElement, 
+  CardCvcElement, 
+  useStripe, 
+  useElements 
+} from '@stripe/react-stripe-js';
 import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
 import { button as buttonStyle } from './sharedStyles';
 
@@ -13,6 +20,9 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   const [paymentError, setPaymentError] = useState(null);
   const [cardComplete, setCardComplete] = useState(false);
   const [cardholderName, setCardholderName] = useState('');
+  const [cardNumberComplete, setCardNumberComplete] = useState(false);
+  const [cardExpiryComplete, setCardExpiryComplete] = useState(false);
+  const [cardCvcComplete, setCardCvcComplete] = useState(false);
 
   // Check if Stripe is properly configured
   if (!STRIPE_PUBLISHABLE_KEY) {
@@ -76,7 +86,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       // Confirm payment with Stripe
       const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
-          card: elements.getElement(CardElement),
+          card: elements.getElement(CardNumberElement),
           billing_details: {
             name: cardholderName || 'Customer',
           },
@@ -107,7 +117,6 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           color: '#aab7c4',
         },
         lineHeight: '24px',
-        padding: '10px 12px',
       },
       invalid: {
         color: '#9e2146',
@@ -116,8 +125,6 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         color: '#2e7d32',
       },
     },
-    hidePostalCode: true,
-    disabled: false, // Ensure the element is not disabled
   };
 
   return (
@@ -167,7 +174,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
             color: '#333', 
             fontSize: 14 
           }}>
-            Card Details
+            Card Number
           </label>
         </div>
         <div style={{ 
@@ -178,30 +185,85 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           minHeight: 48,
           display: 'flex',
           alignItems: 'center',
-          position: 'relative',
-          cursor: 'text'
+          marginBottom: 16,
         }}>
-          <CardElement 
+          <CardNumberElement 
             options={cardElementOptions}
             onChange={(event) => {
-              console.log('Card element change:', event);
+              console.log('Card number change:', event);
               setPaymentError(event.error ? event.error.message : null);
-              setCardComplete(event.complete);
-            }}
-            onReady={() => {
-              console.log('Card element ready');
-            }}
-            onFocus={() => {
-              console.log('Card element focused');
-            }}
-            onBlur={() => {
-              console.log('Card element blurred');
+              setCardNumberComplete(event.complete);
             }}
           />
         </div>
-        {cardComplete && (
-          <div style={{ fontSize: 12, color: '#2e7d32', marginTop: 4 }}>
-            ✓ Card details complete
+
+        {/* Expiry and CVC Row */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+          <div style={{ flex: 1 }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: 6, 
+              fontWeight: 600, 
+              color: '#333', 
+              fontSize: 14 
+            }}>
+              Expiry Date
+            </label>
+            <div style={{ 
+              padding: '12px 16px', 
+              border: '2px solid #e0e0e0', 
+              borderRadius: 8, 
+              backgroundColor: '#fff',
+              minHeight: 48,
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <CardExpiryElement 
+                options={cardElementOptions}
+                onChange={(event) => {
+                  console.log('Expiry change:', event);
+                  if (event.error) setPaymentError(event.error.message);
+                  setCardExpiryComplete(event.complete);
+                }}
+              />
+            </div>
+          </div>
+          
+          <div style={{ flex: 1 }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: 6, 
+              fontWeight: 600, 
+              color: '#333', 
+              fontSize: 14 
+            }}>
+              CVC
+            </label>
+            <div style={{ 
+              padding: '12px 16px', 
+              border: '2px solid #e0e0e0', 
+              borderRadius: 8, 
+              backgroundColor: '#fff',
+              minHeight: 48,
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <CardCvcElement 
+                options={cardElementOptions}
+                onChange={(event) => {
+                  console.log('CVC change:', event);
+                  if (event.error) setPaymentError(event.error.message);
+                  setCardCvcComplete(event.complete);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Completion indicator */}
+        {cardNumberComplete && cardExpiryComplete && cardCvcComplete && (
+          <div style={{ fontSize: 12, color: '#2e7d32', marginBottom: 8 }}>
+            ✓ All card details complete
           </div>
         )}
       </div>
