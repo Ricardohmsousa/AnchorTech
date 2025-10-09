@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { 
   Elements, 
@@ -38,6 +38,12 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   const [cardNumberComplete, setCardNumberComplete] = useState(false);
   const [cardExpiryComplete, setCardExpiryComplete] = useState(false);
   const [cardCvcComplete, setCardCvcComplete] = useState(false);
+  
+  // Refs to prevent re-mounting of Stripe elements
+  const cardNumberRef = useRef(null);
+  const cardExpiryRef = useRef(null);
+  const cardCvcRef = useRef(null);
+  const [elementsReady, setElementsReady] = useState(false);
 
   // Check if Stripe is properly configured
   if (!STRIPE_PUBLISHABLE_KEY) {
@@ -52,8 +58,16 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   console.log('CheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
   console.log('API_BASE_URL being used:', API_BASE_URL);
 
+  // Ensure Stripe elements are ready and prevent double mounting
+  useEffect(() => {
+    if (stripe && elements) {
+      console.log('✅ Stripe and Elements are ready');
+      setElementsReady(true);
+    }
+  }, [stripe, elements]);
+
   // Show loading state while Stripe is initializing
-  if (!stripe || !elements) {
+  if (!stripe || !elements || !elementsReady) {
     return (
       <div style={{ color: '#666', padding: 16, textAlign: 'center' }}>
         🔄 Loading payment system...
@@ -162,6 +176,17 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         color: '#2e7d32',
       },
     },
+    // Explicitly ensure elements are not disabled
+    disabled: false,
+    // Add padding for better touch targets
+    classes: {
+      base: 'stripe-element-base',
+      complete: 'stripe-element-complete',
+      empty: 'stripe-element-empty',
+      focus: 'stripe-element-focus',
+      invalid: 'stripe-element-invalid',
+      webkitAutofill: 'stripe-element-webkit-autofill',
+    },
   };
 
   return (
@@ -223,23 +248,50 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           display: 'flex',
           alignItems: 'center',
           marginBottom: 16,
-          cursor: 'text'
+          cursor: 'text',
+          // Fix potential CSS issues
+          position: 'relative',
+          zIndex: 1,
+          overflow: 'visible',
+          // Ensure proper box model
+          boxSizing: 'border-box',
+          width: '100%'
         }}>
           <CardNumberElement 
-            options={cardElementOptions}
+            ref={cardNumberRef}
+            options={{
+              ...cardElementOptions,
+              // Ensure element is not disabled
+              disabled: false,
+            }}
             onChange={(event) => {
               console.log('📱 Card number change:', event);
+              console.log('📱 Event details:', {
+                error: event.error,
+                complete: event.complete,
+                empty: event.empty,
+                elementType: event.elementType
+              });
               setPaymentError(event.error ? event.error.message : null);
               setCardNumberComplete(event.complete);
             }}
-            onReady={() => {
-              console.log('✅ Card number element ready');
+            onReady={(element) => {
+              console.log('✅ Card number element ready', element);
+              console.log('✅ Element can be focused:', typeof element.focus === 'function');
             }}
-            onFocus={() => {
-              console.log('🎯 Card number element focused');
+            onFocus={(event) => {
+              console.log('🎯 Card number element focused', event);
+              // Update border color on focus
+              if (cardNumberRef.current && cardNumberRef.current.parentElement) {
+                cardNumberRef.current.parentElement.style.borderColor = '#0070f3';
+              }
             }}
-            onBlur={() => {
-              console.log('👋 Card number element blurred');
+            onBlur={(event) => {
+              console.log('👋 Card number element blurred', event);
+              // Reset border color on blur
+              if (cardNumberRef.current && cardNumberRef.current.parentElement) {
+                cardNumberRef.current.parentElement.style.borderColor = '#e0e0e0';
+              }
             }}
           />
         </div>
@@ -264,23 +316,45 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               minHeight: 48,
               display: 'flex',
               alignItems: 'center',
-              cursor: 'text'
+              cursor: 'text',
+              // Fix potential CSS issues
+              position: 'relative',
+              zIndex: 1,
+              overflow: 'visible',
+              boxSizing: 'border-box',
+              width: '100%'
             }}>
               <CardExpiryElement 
-                options={cardElementOptions}
+                ref={cardExpiryRef}
+                options={{
+                  ...cardElementOptions,
+                  disabled: false,
+                }}
                 onChange={(event) => {
                   console.log('📅 Expiry change:', event);
+                  console.log('📅 Event details:', {
+                    error: event.error,
+                    complete: event.complete,
+                    empty: event.empty,
+                    elementType: event.elementType
+                  });
                   if (event.error) setPaymentError(event.error.message);
                   setCardExpiryComplete(event.complete);
                 }}
-                onReady={() => {
-                  console.log('✅ Card expiry element ready');
+                onReady={(element) => {
+                  console.log('✅ Card expiry element ready', element);
                 }}
-                onFocus={() => {
-                  console.log('🎯 Card expiry element focused');
+                onFocus={(event) => {
+                  console.log('🎯 Card expiry element focused', event);
+                  if (cardExpiryRef.current && cardExpiryRef.current.parentElement) {
+                    cardExpiryRef.current.parentElement.style.borderColor = '#0070f3';
+                  }
                 }}
-                onBlur={() => {
-                  console.log('👋 Card expiry element blurred');
+                onBlur={(event) => {
+                  console.log('👋 Card expiry element blurred', event);
+                  if (cardExpiryRef.current && cardExpiryRef.current.parentElement) {
+                    cardExpiryRef.current.parentElement.style.borderColor = '#e0e0e0';
+                  }
                 }}
               />
             </div>
@@ -304,23 +378,45 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               minHeight: 48,
               display: 'flex',
               alignItems: 'center',
-              cursor: 'text'
+              cursor: 'text',
+              // Fix potential CSS issues
+              position: 'relative',
+              zIndex: 1,
+              overflow: 'visible',
+              boxSizing: 'border-box',
+              width: '100%'
             }}>
               <CardCvcElement 
-                options={cardElementOptions}
+                ref={cardCvcRef}
+                options={{
+                  ...cardElementOptions,
+                  disabled: false,
+                }}
                 onChange={(event) => {
                   console.log('🔒 CVC change:', event);
+                  console.log('🔒 Event details:', {
+                    error: event.error,
+                    complete: event.complete,
+                    empty: event.empty,
+                    elementType: event.elementType
+                  });
                   if (event.error) setPaymentError(event.error.message);
                   setCardCvcComplete(event.complete);
                 }}
-                onReady={() => {
-                  console.log('✅ Card CVC element ready');
+                onReady={(element) => {
+                  console.log('✅ Card CVC element ready', element);
                 }}
-                onFocus={() => {
-                  console.log('🎯 Card CVC element focused');
+                onFocus={(event) => {
+                  console.log('🎯 Card CVC element focused', event);
+                  if (cardCvcRef.current && cardCvcRef.current.parentElement) {
+                    cardCvcRef.current.parentElement.style.borderColor = '#0070f3';
+                  }
                 }}
-                onBlur={() => {
-                  console.log('👋 Card CVC element blurred');
+                onBlur={(event) => {
+                  console.log('👋 Card CVC element blurred', event);
+                  if (cardCvcRef.current && cardCvcRef.current.parentElement) {
+                    cardCvcRef.current.parentElement.style.borderColor = '#e0e0e0';
+                  }
                 }}
               />
             </div>
@@ -409,7 +505,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
   }
 
   return (
-    <Elements stripe={stripePromise}>
+    <Elements stripe={stripePromise} key="stripe-elements">
       <div style={{ 
         padding: 24, 
         border: '1px solid #e0e0e0', 
