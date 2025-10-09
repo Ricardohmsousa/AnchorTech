@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
@@ -27,6 +27,10 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
   const [cardholderName, setCardholderName] = useState('');
+  
+  // Refs to prevent re-mounting of Stripe elements
+  const cardElementRef = useRef(null);
+  const [elementsReady, setElementsReady] = useState(false);
 
   // Check if Stripe is properly configured
   if (!STRIPE_PUBLISHABLE_KEY) {
@@ -41,8 +45,16 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
   console.log('SimpleCheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
   console.log('API_BASE_URL being used:', API_BASE_URL);
 
+  // Ensure Stripe elements are ready and prevent double mounting
+  useEffect(() => {
+    if (stripe && elements) {
+      console.log('✅ Stripe and Elements are ready');
+      setElementsReady(true);
+    }
+  }, [stripe, elements]);
+
   // Show loading state while Stripe is initializing
-  if (!stripe || !elements) {
+  if (!stripe || !elements || !elementsReady) {
     return (
       <div style={{ color: '#666', padding: 16, textAlign: 'center' }}>
         🔄 Loading payment system...
@@ -154,6 +166,8 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
       },
     },
     hidePostalCode: true,
+    // Explicitly ensure element is not disabled
+    disabled: false,
   };
 
   return (
@@ -214,22 +228,53 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
           minHeight: 48,
           display: 'flex',
           alignItems: 'center',
-          cursor: 'text'
+          cursor: 'text',
+          // Fix potential CSS issues
+          position: 'relative',
+          zIndex: 1,
+          overflow: 'visible',
+          boxSizing: 'border-box',
+          width: '100%'
         }}>
           <CardElement 
-            options={cardElementOptions}
+            ref={cardElementRef}
+            options={{
+              ...cardElementOptions,
+              // Ensure element is not disabled
+              disabled: false,
+            }}
             onChange={(event) => {
               console.log('🃏 Card element change:', event);
+              console.log('🃏 Event details:', {
+                error: event.error,
+                complete: event.complete,
+                empty: event.empty,
+                elementType: event.elementType
+              });
               setPaymentError(event.error ? event.error.message : null);
             }}
-            onReady={() => {
-              console.log('✅ Card element ready');
+            onReady={(element) => {
+              console.log('✅ Card element ready', element);
+              console.log('✅ Element can be focused:', typeof element.focus === 'function');
+              // Try to focus the element as a test
+              if (element && typeof element.focus === 'function') {
+                console.log('🎯 Testing element focus capability');
+                // Don't auto-focus, just log that it's possible
+              }
             }}
-            onFocus={() => {
-              console.log('🎯 Card element focused');
+            onFocus={(event) => {
+              console.log('🎯 Card element focused', event);
+              // Update border color on focus
+              if (cardElementRef.current && cardElementRef.current.parentElement) {
+                cardElementRef.current.parentElement.style.borderColor = '#0070f3';
+              }
             }}
-            onBlur={() => {
-              console.log('👋 Card element blurred');
+            onBlur={(event) => {
+              console.log('👋 Card element blurred', event);
+              // Reset border color on blur
+              if (cardElementRef.current && cardElementRef.current.parentElement) {
+                cardElementRef.current.parentElement.style.borderColor = '#e0e0e0';
+              }
             }}
           />
         </div>
@@ -308,7 +353,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
   }
 
   return (
-    <Elements stripe={stripePromise}>
+    <Elements stripe={stripePromise} key="stripe-elements-simple">
       <div style={{ 
         padding: 24, 
         border: '1px solid #e0e0e0', 
