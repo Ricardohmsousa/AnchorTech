@@ -204,6 +204,11 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
         '::placeholder': {
           color: '#aab7c4',
         },
+        // Try forcing some properties that might help with input visibility
+        backgroundColor: 'transparent',
+        ':-webkit-autofill': {
+          color: '#424770',
+        },
       },
       invalid: {
         color: '#9e2146',
@@ -215,10 +220,11 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
     hidePostalCode: true,
     // Explicitly ensure element is not disabled
     disabled: false,
-    // Disable hCaptcha to avoid tracking prevention issues
-    disableLink: true,
-    // Reduce Stripe's security requirements for better compatibility
-    iconStyle: 'solid',
+    // Try different options to fix input issues
+    disableLink: false, // Re-enable this to see if it helps
+    iconStyle: 'default', // Use default icon style
+    // Add some additional options that might help
+    placeholder: 'Card number',
   };
 
   return (
@@ -347,13 +353,16 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
               disabled: false,
             }}
             onChange={(event) => {
-              console.log('🃏 Card element change:', event);
+              console.log('🃏 Card element CHANGE:', event);
               console.log('🃏 Event details:', {
                 error: event.error,
                 complete: event.complete,
                 empty: event.empty,
-                elementType: event.elementType
+                elementType: event.elementType,
+                brand: event.brand,
+                value: event.value // This should show if any value is detected
               });
+              console.log('🃏 Full event object:', event);
               setPaymentError(event.error ? event.error.message : null);
             }}
             onReady={(element) => {
@@ -379,6 +388,35 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
             }}
             onFocus={(event) => {
               console.log('🎯 Card element FOCUSED', event);
+              
+              // Add keyboard event listeners when focused
+              const keydownHandler = (e) => {
+                console.log('⌨️ KEYDOWN detected:', {
+                  key: e.key,
+                  code: e.code,
+                  keyCode: e.keyCode,
+                  target: e.target?.tagName
+                });
+              };
+              
+              const inputHandler = (e) => {
+                console.log('📝 INPUT event detected:', {
+                  inputType: e.inputType,
+                  data: e.data,
+                  target: e.target?.tagName
+                });
+              };
+              
+              // Add global listeners to catch any keyboard input
+              document.addEventListener('keydown', keydownHandler);
+              document.addEventListener('input', inputHandler);
+              
+              // Store cleanup function
+              window.stripeKeyboardCleanup = () => {
+                document.removeEventListener('keydown', keydownHandler);
+                document.removeEventListener('input', inputHandler);
+              };
+              
               // Update border color on focus
               if (cardElementRef.current && cardElementRef.current.parentElement) {
                 cardElementRef.current.parentElement.style.borderColor = '#0070f3';
@@ -386,6 +424,13 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
             }}
             onBlur={(event) => {
               console.log('👋 Card element BLURRED', event);
+              
+              // Clean up keyboard listeners
+              if (window.stripeKeyboardCleanup) {
+                window.stripeKeyboardCleanup();
+                delete window.stripeKeyboardCleanup;
+              }
+              
               // Reset border color on blur
               if (cardElementRef.current && cardElementRef.current.parentElement) {
                 cardElementRef.current.parentElement.style.borderColor = '#e0e0e0';
