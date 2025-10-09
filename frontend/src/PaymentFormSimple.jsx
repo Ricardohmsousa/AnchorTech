@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { 
-  Elements, 
-  CardNumberElement, 
-  CardExpiryElement, 
-  CardCvcElement, 
-  useStripe, 
-  useElements 
-} from '@stripe/react-stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
 import { button as buttonStyle } from './sharedStyles';
 
@@ -29,15 +22,11 @@ if (stripePromise) {
   });
 }
 
-const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading }) => {
+const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
-  const [cardComplete, setCardComplete] = useState(false);
   const [cardholderName, setCardholderName] = useState('');
-  const [cardNumberComplete, setCardNumberComplete] = useState(false);
-  const [cardExpiryComplete, setCardExpiryComplete] = useState(false);
-  const [cardCvcComplete, setCardCvcComplete] = useState(false);
 
   // Check if Stripe is properly configured
   if (!STRIPE_PUBLISHABLE_KEY) {
@@ -49,7 +38,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   }
 
   // Debug logging
-  console.log('CheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
+  console.log('SimpleCheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
   console.log('API_BASE_URL being used:', API_BASE_URL);
 
   // Show loading state while Stripe is initializing
@@ -64,9 +53,12 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   // Helper to get JWT token from localStorage
   function getAuthHeaders() {
     const user = JSON.parse(localStorage.getItem("user") || "null");
+    console.log('PaymentForm - User from localStorage:', user);
     if (user && user.token) {
+      console.log('PaymentForm - Token exists, length:', user.token.length);
       return { Authorization: `Bearer ${user.token}` };
     }
+    console.log('PaymentForm - No token found');
     return {};
   }
 
@@ -123,7 +115,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       // Confirm payment with Stripe
       const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
-          card: elements.getElement(CardNumberElement),
+          card: elements.getElement(CardElement),
           billing_details: {
             name: cardholderName || 'Customer',
           },
@@ -153,7 +145,6 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         '::placeholder': {
           color: '#aab7c4',
         },
-        // Removed lineHeight as per Stripe warning - using container padding instead
       },
       invalid: {
         color: '#9e2146',
@@ -162,6 +153,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         color: '#2e7d32',
       },
     },
+    hidePostalCode: true,
   };
 
   return (
@@ -187,7 +179,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
             placeholder="John Doe"
             style={{
               width: '100%',
-              padding: '12px 16px',
+              padding: '14px 16px',
               border: '2px solid #e0e0e0',
               borderRadius: 8,
               fontSize: 16,
@@ -202,7 +194,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           />
         </div>
 
-        {/* Card Details */}
+        {/* Combined Card Details */}
         <div style={{ marginBottom: 8 }}>
           <label style={{ 
             display: 'block', 
@@ -211,7 +203,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
             color: '#333', 
             fontSize: 14 
           }}>
-            Card Number
+            Card Details (Number, Expiry, CVC)
           </label>
         </div>
         <div style={{ 
@@ -222,117 +214,25 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           minHeight: 48,
           display: 'flex',
           alignItems: 'center',
-          marginBottom: 16,
           cursor: 'text'
         }}>
-          <CardNumberElement 
+          <CardElement 
             options={cardElementOptions}
             onChange={(event) => {
-              console.log('📱 Card number change:', event);
+              console.log('🃏 Card element change:', event);
               setPaymentError(event.error ? event.error.message : null);
-              setCardNumberComplete(event.complete);
             }}
             onReady={() => {
-              console.log('✅ Card number element ready');
+              console.log('✅ Card element ready');
             }}
             onFocus={() => {
-              console.log('🎯 Card number element focused');
+              console.log('🎯 Card element focused');
             }}
             onBlur={() => {
-              console.log('👋 Card number element blurred');
+              console.log('👋 Card element blurred');
             }}
           />
         </div>
-
-        {/* Expiry and CVC Row */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: 6, 
-              fontWeight: 600, 
-              color: '#333', 
-              fontSize: 14 
-            }}>
-              Expiry Date
-            </label>
-            <div style={{ 
-              padding: '14px 16px', 
-              border: '2px solid #e0e0e0', 
-              borderRadius: 8, 
-              backgroundColor: '#fff',
-              minHeight: 48,
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'text'
-            }}>
-              <CardExpiryElement 
-                options={cardElementOptions}
-                onChange={(event) => {
-                  console.log('📅 Expiry change:', event);
-                  if (event.error) setPaymentError(event.error.message);
-                  setCardExpiryComplete(event.complete);
-                }}
-                onReady={() => {
-                  console.log('✅ Card expiry element ready');
-                }}
-                onFocus={() => {
-                  console.log('🎯 Card expiry element focused');
-                }}
-                onBlur={() => {
-                  console.log('👋 Card expiry element blurred');
-                }}
-              />
-            </div>
-          </div>
-          
-          <div style={{ flex: 1 }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: 6, 
-              fontWeight: 600, 
-              color: '#333', 
-              fontSize: 14 
-            }}>
-              CVC
-            </label>
-            <div style={{ 
-              padding: '14px 16px', 
-              border: '2px solid #e0e0e0', 
-              borderRadius: 8, 
-              backgroundColor: '#fff',
-              minHeight: 48,
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'text'
-            }}>
-              <CardCvcElement 
-                options={cardElementOptions}
-                onChange={(event) => {
-                  console.log('🔒 CVC change:', event);
-                  if (event.error) setPaymentError(event.error.message);
-                  setCardCvcComplete(event.complete);
-                }}
-                onReady={() => {
-                  console.log('✅ Card CVC element ready');
-                }}
-                onFocus={() => {
-                  console.log('🎯 Card CVC element focused');
-                }}
-                onBlur={() => {
-                  console.log('👋 Card CVC element blurred');
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Completion indicator */}
-        {cardNumberComplete && cardExpiryComplete && cardCvcComplete && (
-          <div style={{ fontSize: 12, color: '#2e7d32', marginBottom: 8 }}>
-            ✓ All card details complete
-          </div>
-        )}
       </div>
 
       {paymentError && (
@@ -388,7 +288,6 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
         border: '1px solid #e0e0e0', 
         borderRadius: 8, 
         backgroundColor: 'white',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
         textAlign: 'center'
       }}>
         <div style={{ color: '#d32f2f', marginBottom: 16 }}>
@@ -424,7 +323,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           </p>
         </div>
         
-        <CheckoutForm 
+        <SimpleCheckoutForm 
           amount={amount}
           onSuccess={onSuccess}
           onError={onError}
