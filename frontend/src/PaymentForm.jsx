@@ -12,7 +12,10 @@ import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
 import { button as buttonStyle } from './sharedStyles';
 
 // Load Stripe outside of component to avoid recreating the object
+console.log('🔑 Stripe key available:', !!STRIPE_PUBLISHABLE_KEY);
+console.log('🔑 Stripe key length:', STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.length : 0);
 const stripePromise = STRIPE_PUBLISHABLE_KEY ? loadStripe(STRIPE_PUBLISHABLE_KEY) : null;
+console.log('🔄 Stripe promise created:', !!stripePromise);
 
 const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading }) => {
   const stripe = useStripe();
@@ -36,6 +39,15 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   // Debug logging
   console.log('CheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
   console.log('API_BASE_URL being used:', API_BASE_URL);
+
+  // Show loading state while Stripe is initializing
+  if (!stripe || !elements) {
+    return (
+      <div style={{ color: '#666', padding: 16, textAlign: 'center' }}>
+        🔄 Loading payment system...
+      </div>
+    );
+  }
 
   // Helper to get JWT token from localStorage
   function getAuthHeaders() {
@@ -203,9 +215,15 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           <CardNumberElement 
             options={cardElementOptions}
             onChange={(event) => {
-              console.log('Card number change:', event);
+              console.log('📱 Card number change:', event);
               setPaymentError(event.error ? event.error.message : null);
               setCardNumberComplete(event.complete);
+            }}
+            onReady={() => {
+              console.log('✅ Card number element ready');
+            }}
+            onFocus={() => {
+              console.log('🎯 Card number element focused');
             }}
           />
         </div>
@@ -234,9 +252,12 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               <CardExpiryElement 
                 options={cardElementOptions}
                 onChange={(event) => {
-                  console.log('Expiry change:', event);
+                  console.log('📅 Expiry change:', event);
                   if (event.error) setPaymentError(event.error.message);
                   setCardExpiryComplete(event.complete);
+                }}
+                onReady={() => {
+                  console.log('✅ Card expiry element ready');
                 }}
               />
             </div>
@@ -264,9 +285,12 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               <CardCvcElement 
                 options={cardElementOptions}
                 onChange={(event) => {
-                  console.log('CVC change:', event);
+                  console.log('🔒 CVC change:', event);
                   if (event.error) setPaymentError(event.error.message);
                   setCardCvcComplete(event.complete);
+                }}
+                onReady={() => {
+                  console.log('✅ Card CVC element ready');
                 }}
               />
             </div>
