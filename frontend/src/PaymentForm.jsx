@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { 
-  Elements, 
-  CardNumberElement, 
-  CardExpiryElement, 
-  CardCvcElement, 
-  useStripe, 
-  useElements 
+import {
+  Elements,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement,
+  useStripe,
+  useElements,
 } from '@stripe/react-stripe-js';
 import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
 import { button as buttonStyle } from './sharedStyles';
@@ -19,33 +19,62 @@ console.log('🔄 Stripe promise created:', !!stripePromise);
 
 // Add debugging for stripe promise resolution
 if (stripePromise) {
-  stripePromise.then(stripe => {
-    console.log('✅ Stripe loaded successfully:', !!stripe);
-    if (stripe) {
-      console.log('📊 Stripe version:', stripe.version);
-    }
-  }).catch(error => {
-    console.error('❌ Stripe loading failed:', error);
-  });
+  stripePromise
+    .then((stripe) => {
+      console.log('✅ Stripe loaded successfully:', !!stripe);
+      if (stripe) console.log('📊 Stripe version:', stripe.version);
+    })
+    .catch((error) => {
+      console.error('❌ Stripe loading failed:', error);
+    });
 }
 
 const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading }) => {
   const stripe = useStripe();
   const elements = useElements();
+
   const [paymentError, setPaymentError] = useState(null);
-  const [cardComplete, setCardComplete] = useState(false);
   const [cardholderName, setCardholderName] = useState('');
+
+  // Individual completion states
   const [cardNumberComplete, setCardNumberComplete] = useState(false);
   const [cardExpiryComplete, setCardExpiryComplete] = useState(false);
   const [cardCvcComplete, setCardCvcComplete] = useState(false);
-  
-  // Refs to prevent re-mounting of Stripe elements
-  const cardNumberRef = useRef(null);
-  const cardExpiryRef = useRef(null);
-  const cardCvcRef = useRef(null);
-  const [elementsReady, setElementsReady] = useState(false);
 
-  // Check if Stripe is properly configured
+  // Focus states for styling wrappers (no refs on Stripe Elements)
+  const [numberFocused, setNumberFocused] = useState(false);
+  const [expiryFocused, setExpiryFocused] = useState(false);
+  const [cvcFocused, setCvcFocused] = useState(false);
+
+  const allCardPartsComplete = cardNumberComplete && cardExpiryComplete && cardCvcComplete;
+
+  // Memoize options so Elements don't remount on each render
+  const cardElementOptions = useMemo(
+    () => ({
+      style: {
+        base: {
+          fontSize: '16px',
+          color: '#424770',
+          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+          fontSmoothing: 'antialiased',
+          '::placeholder': { color: '#aab7c4' },
+        },
+        invalid: { color: '#9e2146' },
+        complete: { color: '#2e7d32' },
+      },
+      classes: {
+        base: 'stripe-element-base',
+        complete: 'stripe-element-complete',
+        empty: 'stripe-element-empty',
+        focus: 'stripe-element-focus',
+        invalid: 'stripe-element-invalid',
+        webkitAutofill: 'stripe-element-webkit-autofill',
+      },
+      // ❌ do NOT put `disabled` here; pass it as a prop
+    }),
+    []
+  );
+
   if (!STRIPE_PUBLISHABLE_KEY) {
     return (
       <div style={{ color: '#d32f2f', padding: 16, textAlign: 'center' }}>
@@ -58,26 +87,9 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   console.log('CheckoutForm render:', { stripe: !!stripe, elements: !!elements, loading });
   console.log('API_BASE_URL being used:', API_BASE_URL);
 
-  // Ensure Stripe elements are ready and prevent double mounting
-  useEffect(() => {
-    if (stripe && elements) {
-      console.log('✅ Stripe and Elements are ready');
-      setElementsReady(true);
-    }
-  }, [stripe, elements]);
-
-  // Show loading state while Stripe is initializing
-  if (!stripe || !elements || !elementsReady) {
-    return (
-      <div style={{ color: '#666', padding: 16, textAlign: 'center' }}>
-        🔄 Loading payment system...
-      </div>
-    );
-  }
-
   // Helper to get JWT token from localStorage
   function getAuthHeaders() {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
     if (user && user.token) {
       return { Authorization: `Bearer ${user.token}` };
     }
@@ -86,10 +98,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
+    if (!stripe || !elements) return;
 
     setLoading(true);
     setPaymentError(null);
@@ -99,36 +108,34 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       const requestUrl = `${API_BASE_URL}/create-payment-intent`;
       const headers = {
         'Content-Type': 'application/json',
-        ...getAuthHeaders()
+        ...getAuthHeaders(),
       };
       const requestBody = {
         amount: amount,
-        service_type: 'nif_application'
+        service_type: 'nif_application',
       };
-      
+
       console.log('🔄 Making payment request...');
       console.log('URL:', requestUrl);
       console.log('Headers:', headers);
       console.log('Body:', requestBody);
-      
+
       const response = await fetch(requestUrl, {
         method: 'POST',
-        headers: headers,
-        body: JSON.stringify(requestBody)
+        headers,
+        body: JSON.stringify(requestBody),
       });
-      
+
       console.log('📡 Response status:', response.status);
       console.log('📡 Response ok:', response.ok);
 
       if (!response.ok) {
         const errorData = await response.text();
         console.error('Payment intent creation failed:', errorData);
-        
-        // Handle authentication errors specifically
+
         if (response.status === 401) {
           throw new Error('Your session has expired. Please log in again.');
         }
-        
         throw new Error(`Failed to create payment intent: ${response.status} - ${errorData}`);
       }
 
@@ -147,8 +154,13 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       if (error) {
         setPaymentError(error.message);
         setLoading(false);
-      } else if (paymentIntent.status === 'succeeded') {
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        setLoading(false); // ensure we stop the spinner after success
         onSuccess(paymentIntent);
+      } else {
+        // Unexpected state
+        setLoading(false);
+        onError(new Error('Payment did not complete. Please try again.'));
       }
     } catch (err) {
       setPaymentError(err.message);
@@ -157,52 +169,25 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
     }
   };
 
-  const cardElementOptions = {
-    style: {
-      base: {
-        fontSize: '16px',
-        color: '#424770',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-        '::placeholder': {
-          color: '#aab7c4',
-        },
-        // Removed lineHeight as per Stripe warning - using container padding instead
-      },
-      invalid: {
-        color: '#9e2146',
-      },
-      complete: {
-        color: '#2e7d32',
-      },
-    },
-    // Explicitly ensure elements are not disabled
-    disabled: false,
-    // Add padding for better touch targets
-    classes: {
-      base: 'stripe-element-base',
-      complete: 'stripe-element-complete',
-      empty: 'stripe-element-empty',
-      focus: 'stripe-element-focus',
-      invalid: 'stripe-element-invalid',
-      webkitAutofill: 'stripe-element-webkit-autofill',
-    },
-  };
+  // While Stripe bootstraps, Elements renders children once ready,
+  // so no extra "elementsReady" gate is needed.
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto' }}>
       <div style={{ marginBottom: 20 }}>
         <h3 style={{ marginBottom: 10, color: '#333' }}>Payment Details</h3>
-        
-        {/* Cardholder Name Input */}
+
+        {/* Cardholder Name */}
         <div style={{ marginBottom: 16 }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: 6, 
-            fontWeight: 600, 
-            color: '#333', 
-            fontSize: 14 
-          }}>
+          <label
+            style={{
+              display: 'block',
+              marginBottom: 6,
+              fontWeight: 600,
+              color: '#333',
+              fontSize: 14,
+            }}
+          >
             Cardholder Name
           </label>
           <input
@@ -220,78 +205,55 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               backgroundColor: '#fff',
               boxSizing: 'border-box',
               transition: 'border-color 0.2s',
+              outline: 'none',
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
-            onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+            onFocus={(e) => (e.target.style.borderColor = '#0070f3')}
+            onBlur={(e) => (e.target.style.borderColor = '#e0e0e0')}
             required
           />
         </div>
 
-        {/* Card Details */}
+        {/* Card Number */}
         <div style={{ marginBottom: 8 }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: 6, 
-            fontWeight: 600, 
-            color: '#333', 
-            fontSize: 14 
-          }}>
+          <label
+            style={{
+              display: 'block',
+              marginBottom: 6,
+              fontWeight: 600,
+              color: '#333',
+              fontSize: 14,
+            }}
+          >
             Card Number
           </label>
         </div>
-        <div style={{ 
-          padding: '14px 16px', 
-          border: '2px solid #e0e0e0', 
-          borderRadius: 8, 
-          backgroundColor: '#fff',
-          minHeight: 48,
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: 16,
-          cursor: 'text',
-          // Fix potential CSS issues
-          position: 'relative',
-          zIndex: 1,
-          overflow: 'visible',
-          // Ensure proper box model
-          boxSizing: 'border-box',
-          width: '100%'
-        }}>
-          <CardNumberElement 
-            ref={cardNumberRef}
-            options={{
-              ...cardElementOptions,
-              // Ensure element is not disabled
-              disabled: false,
-            }}
+        <div
+          style={{
+            padding: '14px 16px',
+            border: `2px solid ${numberFocused ? '#0070f3' : '#e0e0e0'}`,
+            borderRadius: 8,
+            backgroundColor: '#fff',
+            minHeight: 48,
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: 16,
+            cursor: 'text',
+            position: 'relative',
+            zIndex: 1,
+            overflow: 'visible',
+            boxSizing: 'border-box',
+            width: '100%',
+          }}
+        >
+          <CardNumberElement
+            options={cardElementOptions}
+            disabled={loading}
+            onFocus={() => setNumberFocused(true)}
+            onBlur={() => setNumberFocused(false)}
             onChange={(event) => {
               console.log('📱 Card number change:', event);
-              console.log('📱 Event details:', {
-                error: event.error,
-                complete: event.complete,
-                empty: event.empty,
-                elementType: event.elementType
-              });
               setPaymentError(event.error ? event.error.message : null);
               setCardNumberComplete(event.complete);
-            }}
-            onReady={(element) => {
-              console.log('✅ Card number element ready', element);
-              console.log('✅ Element can be focused:', typeof element.focus === 'function');
-            }}
-            onFocus={(event) => {
-              console.log('🎯 Card number element focused', event);
-              // Update border color on focus
-              if (cardNumberRef.current && cardNumberRef.current.parentElement) {
-                cardNumberRef.current.parentElement.style.borderColor = '#0070f3';
-              }
-            }}
-            onBlur={(event) => {
-              console.log('👋 Card number element blurred', event);
-              // Reset border color on blur
-              if (cardNumberRef.current && cardNumberRef.current.parentElement) {
-                cardNumberRef.current.parentElement.style.borderColor = '#e0e0e0';
-              }
             }}
           />
         </div>
@@ -299,132 +261,93 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         {/* Expiry and CVC Row */}
         <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
           <div style={{ flex: 1 }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: 6, 
-              fontWeight: 600, 
-              color: '#333', 
-              fontSize: 14 
-            }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: 6,
+                fontWeight: 600,
+                color: '#333',
+                fontSize: 14,
+              }}
+            >
               Expiry Date
             </label>
-            <div style={{ 
-              padding: '14px 16px', 
-              border: '2px solid #e0e0e0', 
-              borderRadius: 8, 
-              backgroundColor: '#fff',
-              minHeight: 48,
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'text',
-              // Fix potential CSS issues
-              position: 'relative',
-              zIndex: 1,
-              overflow: 'visible',
-              boxSizing: 'border-box',
-              width: '100%'
-            }}>
-              <CardExpiryElement 
-                ref={cardExpiryRef}
-                options={{
-                  ...cardElementOptions,
-                  disabled: false,
-                }}
+            <div
+              style={{
+                padding: '14px 16px',
+                border: `2px solid ${expiryFocused ? '#0070f3' : '#e0e0e0'}`,
+                borderRadius: 8,
+                backgroundColor: '#fff',
+                minHeight: 48,
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'text',
+                position: 'relative',
+                zIndex: 1,
+                overflow: 'visible',
+                boxSizing: 'border-box',
+                width: '100%',
+              }}
+            >
+              <CardExpiryElement
+                options={cardElementOptions}
+                disabled={loading}
+                onFocus={() => setExpiryFocused(true)}
+                onBlur={() => setExpiryFocused(false)}
                 onChange={(event) => {
                   console.log('📅 Expiry change:', event);
-                  console.log('📅 Event details:', {
-                    error: event.error,
-                    complete: event.complete,
-                    empty: event.empty,
-                    elementType: event.elementType
-                  });
                   if (event.error) setPaymentError(event.error.message);
                   setCardExpiryComplete(event.complete);
-                }}
-                onReady={(element) => {
-                  console.log('✅ Card expiry element ready', element);
-                }}
-                onFocus={(event) => {
-                  console.log('🎯 Card expiry element focused', event);
-                  if (cardExpiryRef.current && cardExpiryRef.current.parentElement) {
-                    cardExpiryRef.current.parentElement.style.borderColor = '#0070f3';
-                  }
-                }}
-                onBlur={(event) => {
-                  console.log('👋 Card expiry element blurred', event);
-                  if (cardExpiryRef.current && cardExpiryRef.current.parentElement) {
-                    cardExpiryRef.current.parentElement.style.borderColor = '#e0e0e0';
-                  }
                 }}
               />
             </div>
           </div>
-          
+
           <div style={{ flex: 1 }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: 6, 
-              fontWeight: 600, 
-              color: '#333', 
-              fontSize: 14 
-            }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: 6,
+                fontWeight: 600,
+                color: '#333',
+                fontSize: 14,
+              }}
+            >
               CVC
             </label>
-            <div style={{ 
-              padding: '14px 16px', 
-              border: '2px solid #e0e0e0', 
-              borderRadius: 8, 
-              backgroundColor: '#fff',
-              minHeight: 48,
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'text',
-              // Fix potential CSS issues
-              position: 'relative',
-              zIndex: 1,
-              overflow: 'visible',
-              boxSizing: 'border-box',
-              width: '100%'
-            }}>
-              <CardCvcElement 
-                ref={cardCvcRef}
-                options={{
-                  ...cardElementOptions,
-                  disabled: false,
-                }}
+            <div
+              style={{
+                padding: '14px 16px',
+                border: `2px solid ${cvcFocused ? '#0070f3' : '#e0e0e0'}`,
+                borderRadius: 8,
+                backgroundColor: '#fff',
+                minHeight: 48,
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'text',
+                position: 'relative',
+                zIndex: 1,
+                overflow: 'visible',
+                boxSizing: 'border-box',
+                width: '100%',
+              }}
+            >
+              <CardCvcElement
+                options={cardElementOptions}
+                disabled={loading}
+                onFocus={() => setCvcFocused(true)}
+                onBlur={() => setCvcFocused(false)}
                 onChange={(event) => {
                   console.log('🔒 CVC change:', event);
-                  console.log('🔒 Event details:', {
-                    error: event.error,
-                    complete: event.complete,
-                    empty: event.empty,
-                    elementType: event.elementType
-                  });
                   if (event.error) setPaymentError(event.error.message);
                   setCardCvcComplete(event.complete);
-                }}
-                onReady={(element) => {
-                  console.log('✅ Card CVC element ready', element);
-                }}
-                onFocus={(event) => {
-                  console.log('🎯 Card CVC element focused', event);
-                  if (cardCvcRef.current && cardCvcRef.current.parentElement) {
-                    cardCvcRef.current.parentElement.style.borderColor = '#0070f3';
-                  }
-                }}
-                onBlur={(event) => {
-                  console.log('👋 Card CVC element blurred', event);
-                  if (cardCvcRef.current && cardCvcRef.current.parentElement) {
-                    cardCvcRef.current.parentElement.style.borderColor = '#e0e0e0';
-                  }
                 }}
               />
             </div>
           </div>
         </div>
 
-        {/* Completion indicator */}
-        {cardNumberComplete && cardExpiryComplete && cardCvcComplete && (
+        {allCardPartsComplete && (
           <div style={{ fontSize: 12, color: '#2e7d32', marginBottom: 8 }}>
             ✓ All card details complete
           </div>
@@ -432,14 +355,16 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       </div>
 
       {paymentError && (
-        <div style={{ 
-          color: '#d32f2f', 
-          marginBottom: 16, 
-          padding: 8, 
-          backgroundColor: '#ffebee', 
-          borderRadius: 4,
-          fontSize: 14
-        }}>
+        <div
+          style={{
+            color: '#d32f2f',
+            marginBottom: 16,
+            padding: 8,
+            backgroundColor: '#ffebee',
+            borderRadius: 4,
+            fontSize: 14,
+          }}
+        >
           {paymentError}
         </div>
       )}
@@ -451,7 +376,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           style={{
             ...buttonStyle,
             backgroundColor: '#6c757d',
-            border: '1px solid #6c757d'
+            border: '1px solid '#6c757d',
           }}
           disabled={loading}
         >
@@ -459,11 +384,11 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         </button>
         <button
           type="submit"
-          disabled={!stripe || loading}
+          disabled={!stripe || loading || !allCardPartsComplete || !cardholderName.trim()}
           style={{
             ...buttonStyle,
             backgroundColor: loading ? '#ccc' : '#0070f3',
-            cursor: loading ? 'not-allowed' : 'pointer'
+            cursor: loading ? 'not-allowed' : 'pointer',
           }}
         >
           {loading ? 'Processing...' : `Pay €${(amount / 100).toFixed(2)}`}
@@ -476,17 +401,18 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
 const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
   const [loading, setLoading] = useState(false);
 
-  // Check if Stripe is available
   if (!stripePromise) {
     return (
-      <div style={{ 
-        padding: 24, 
-        border: '1px solid #e0e0e0', 
-        borderRadius: 8, 
-        backgroundColor: 'white',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        textAlign: 'center'
-      }}>
+      <div
+        style={{
+          padding: 24,
+          border: '1px solid #e0e0e0',
+          borderRadius: 8,
+          backgroundColor: 'white',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          textAlign: 'center',
+        }}
+      >
         <div style={{ color: '#d32f2f', marginBottom: 16 }}>
           ⚠️ Payment system is not configured
         </div>
@@ -495,7 +421,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           style={{
             ...buttonStyle,
             backgroundColor: '#6c757d',
-            border: '1px solid #6c757d'
+            border: '1px solid #6c757d',
           }}
         >
           Go Back
@@ -506,21 +432,23 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
 
   return (
     <Elements stripe={stripePromise} key="stripe-elements">
-      <div style={{ 
-        padding: 24, 
-        border: '1px solid #e0e0e0', 
-        borderRadius: 8, 
-        backgroundColor: 'white',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
+      <div
+        style={{
+          padding: 24,
+          border: '1px solid #e0e0e0',
+          borderRadius: 8,
+          backgroundColor: 'white',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        }}
+      >
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <h2 style={{ color: '#333', marginBottom: 8 }}>Complete Your Payment</h2>
           <p style={{ color: '#666', margin: 0 }}>
             You'll be charged €{(amount / 100).toFixed(2)} for the NIF application service
           </p>
         </div>
-        
-        <CheckoutForm 
+
+        <CheckoutForm
           amount={amount}
           onSuccess={onSuccess}
           onError={onError}
@@ -528,13 +456,8 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           loading={loading}
           setLoading={setLoading}
         />
-        
-        <div style={{ 
-          marginTop: 16, 
-          fontSize: 12, 
-          color: '#999', 
-          textAlign: 'center' 
-        }}>
+
+        <div style={{ marginTop: 16, fontSize: 12, color: '#999', textAlign: 'center' }}>
           <p>🔒 Your payment information is securely processed by Stripe</p>
           <p style={{ marginTop: 8, fontSize: 11 }}>
             Test card: 4242 4242 4242 4242 | Any future date | Any CVC
