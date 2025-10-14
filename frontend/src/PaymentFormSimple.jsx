@@ -365,6 +365,22 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
                 value: event.value // This should show if any value is detected
               });
               console.log('🃏 Full event object:', event);
+              
+              // DEBUG: Try to extract card number for debugging
+              if (event.elementType === 'card') {
+                console.log('🔢 CARD DEBUG - Empty status:', event.empty);
+                console.log('🔢 CARD DEBUG - Complete status:', event.complete);
+                console.log('🔢 CARD DEBUG - Brand detected:', event.brand);
+                
+                // Note: Stripe doesn't expose actual card number for security,
+                // but we can see if it's detecting input
+                if (!event.empty) {
+                  console.log('✅ CARD DEBUG - Card has content (numbers are being typed!)');
+                } else {
+                  console.log('❌ CARD DEBUG - Card appears empty');
+                }
+              }
+              
               setPaymentError(event.error ? event.error.message : null);
             }}
             onReady={(element) => {
