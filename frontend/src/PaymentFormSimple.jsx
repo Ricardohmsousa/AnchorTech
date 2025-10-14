@@ -198,23 +198,25 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
     style: {
       base: {
         fontSize: '16px',
-        color: '#424770',
+        color: '#1a1a1a', // Changed from '#424770' to darker, more visible color
         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
         fontSmoothing: 'antialiased',
+        backgroundColor: '#ffffff', // Explicitly set white background
         '::placeholder': {
-          color: '#aab7c4',
+          color: '#6b7280', // Darker placeholder color
         },
         // Try forcing some properties that might help with input visibility
-        backgroundColor: 'transparent',
         ':-webkit-autofill': {
-          color: '#424770',
+          color: '#1a1a1a',
         },
       },
       invalid: {
-        color: '#9e2146',
+        color: '#dc2626', // Red for invalid input
+        iconColor: '#dc2626'
       },
       complete: {
-        color: '#2e7d32',
+        color: '#059669', // Green for complete input
+        iconColor: '#059669'
       },
     },
     hidePostalCode: true,

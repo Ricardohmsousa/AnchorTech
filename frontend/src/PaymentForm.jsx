@@ -54,13 +54,22 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       style: {
         base: {
           fontSize: '16px',
-          color: '#424770',
+          color: '#1a1a1a', // Changed from '#424770' to darker, more visible color
           fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
           fontSmoothing: 'antialiased',
-          '::placeholder': { color: '#aab7c4' },
+          backgroundColor: '#ffffff', // Explicitly set white background
+          '::placeholder': { 
+            color: '#6b7280' // Darker placeholder color
+          },
         },
-        invalid: { color: '#9e2146' },
-        complete: { color: '#2e7d32' },
+        invalid: { 
+          color: '#dc2626', // Red for invalid input
+          iconColor: '#dc2626'
+        },
+        complete: { 
+          color: '#059669', // Green for complete input
+          iconColor: '#059669'
+        },
       },
       classes: {
         base: 'stripe-element-base',
