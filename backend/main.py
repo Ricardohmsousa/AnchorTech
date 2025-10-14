@@ -238,6 +238,16 @@ def get_user(user_id: str, token_data: dict = Depends(verify_jwt_token)):
 @app.post("/create-payment-intent")
 def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dict = Depends(verify_jwt_token)):
     try:
+        print(f"[PAYMENT] Creating payment intent for amount: {payment_request.amount}")
+        print(f"[PAYMENT] Service type: {payment_request.service_type}")
+        print(f"[PAYMENT] User ID: {token_data['user_id']}")
+        print(f"[PAYMENT] Stripe API key configured: {'Yes' if stripe.api_key else 'No'}")
+        
+        # Check if Stripe is properly configured
+        if not stripe.api_key:
+            print(f"[PAYMENT] ERROR: Stripe API key is not set!")
+            raise HTTPException(status_code=500, detail="Payment system not configured")
+        
         # Create a PaymentIntent with the order amount and currency
         intent = stripe.PaymentIntent.create(
             amount=payment_request.amount,
@@ -248,11 +258,16 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
             }
         )
         
+        print(f"[PAYMENT] Payment intent created successfully: {intent.id}")
         return {"client_secret": intent.client_secret}
     except stripe.error.StripeError as e:
+        print(f"[PAYMENT] Stripe error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        print(f"[PAYMENT] Error creating payment intent: {e}")
+        print(f"[PAYMENT] Unexpected error creating payment intent: {e}")
+        print(f"[PAYMENT] Error type: {type(e)}")
+        import traceback
+        print(f"[PAYMENT] Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail="Failed to create payment intent")
 
 @app.post("/verify-payment")
