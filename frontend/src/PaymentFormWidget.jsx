@@ -79,14 +79,6 @@ const CheckoutForm = ({ onSuccess, onError, onCancel }) => {
         <PaymentElement 
           options={{
             layout: 'tabs',
-            fields: {
-              billingDetails: {
-                name: 'auto',
-                email: 'auto',
-                phone: 'never',
-                address: 'never',
-              }
-            },
           }}
           onChange={(event) => {
             if (event.error) {
