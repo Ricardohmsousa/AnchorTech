@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Authentication</title>
+</head>
+<body>
+    <h1>Authentication Debug</h1>
+    <button onclick="checkAuth()">Check Authentication Status</button>
+    <pre id="result"></pre>
+
+    <script>
+        function checkAuth() {
+            const result = document.getElementById('result');
+            
+            // Check localStorage
+            const user = localStorage.getItem("user");
+            console.log('Raw user data from localStorage:', user);
+            
+            if (!user) {
+                result.textContent = '❌ NO USER DATA found in localStorage\nYou need to log in first!';
+                return;
+            }
+            
+            try {
+                const userData = JSON.parse(user);
+                console.log('Parsed user data:', userData);
+                
+                if (!userData.token) {
+                    result.textContent = '❌ NO TOKEN found in user data\nUser data exists but no token!';
+                    return;
+                }
+                
+                // Check if token is expired
+                const tokenParts = userData.token.split('.');
+                if (tokenParts.length !== 3) {
+                    result.textContent = '❌ INVALID TOKEN format\nToken is not a valid JWT!';
+                    return;
+                }
+                
+                const payload = JSON.parse(atob(tokenParts[1]));
+                const currentTime = Math.floor(Date.now() / 1000);
+                
+                result.textContent = `✅ USER AUTHENTICATED
+Username: ${userData.username || 'N/A'}
+Token length: ${userData.token.length}
+Token expires: ${new Date(payload.exp * 1000).toLocaleString()}
+Current time: ${new Date().toLocaleString()}
+Token valid: ${payload.exp > currentTime ? 'YES' : 'NO - EXPIRED!'}
+User ID: ${payload.user_id || 'N/A'}`;
+                
+            } catch (e) {
+                result.textContent = `❌ ERROR parsing user data: ${e.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

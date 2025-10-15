@@ -49,14 +49,38 @@ else:
 security = HTTPBearer()
 
 def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    print(f"[AUTH] Verifying JWT token...")
+    print(f"[AUTH] Credentials received: {credentials is not None}")
+    
+    if not credentials:
+        print(f"[AUTH] ERROR: No credentials provided")
+        raise HTTPException(status_code=401, detail="No authorization header")
+    
     token = credentials.credentials
+    print(f"[AUTH] Token received, length: {len(token) if token else 0}")
+    print(f"[AUTH] Token starts with: {token[:20] if token else 'N/A'}...")
+    
     try:
+        print(f"[AUTH] JWT_SECRET available: {'Yes' if JWT_SECRET else 'No'}")
+        print(f"[AUTH] JWT_ALGORITHM: {JWT_ALGORITHM}")
+        
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        print(f"[AUTH] Token decoded successfully")
+        print(f"[AUTH] Payload keys: {list(payload.keys())}")
+        print(f"[AUTH] User ID from token: {payload.get('user_id', 'NOT_FOUND')}")
         return payload
-    except jwt.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError as e:
+        print(f"[AUTH] Token expired: {e}")
         raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
+        print(f"[AUTH] Invalid token: {e}")
+        print(f"[AUTH] Token that failed: {token[:50] if token else 'N/A'}...")
         raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception as e:
+        print(f"[AUTH] Unexpected auth error: {e}")
+        import traceback
+        print(f"[AUTH] Auth traceback: {traceback.format_exc()}")
+        raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
 
 app = FastAPI()
 
