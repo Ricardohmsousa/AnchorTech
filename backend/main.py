@@ -17,51 +17,28 @@ load_dotenv()
 
 # Stripe configuration - using older stable version approach
 stripe_secret_key = os.environ.get("STRIPE_SECRET_KEY")
-print(f"[STRIPE] Stripe secret key configured: {'Yes' if stripe_secret_key else 'No'}")
 if stripe_secret_key:
-    print(f"[STRIPE] Key starts with: {stripe_secret_key[:10]}...")
     stripe.api_key = stripe_secret_key
-    print(f"[STRIPE] Stripe API key set successfully")
-    print(f"[STRIPE] Stripe version: {stripe.version.VERSION}")
 else:
     print("[STRIPE] ERROR: No Stripe secret key found in environment variables!")
-    print(f"[STRIPE] Available env vars: {[k for k in os.environ.keys() if 'STRIPE' in k.upper()]}")
     print("[STRIPE] Please set STRIPE_SECRET_KEY environment variable")
 
 security = HTTPBearer()
 
 def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    print(f"[AUTH] Verifying JWT token...")
-    print(f"[AUTH] Credentials received: {credentials is not None}")
-    
     if not credentials:
-        print(f"[AUTH] ERROR: No credentials provided")
         raise HTTPException(status_code=401, detail="No authorization header")
     
     token = credentials.credentials
-    print(f"[AUTH] Token received, length: {len(token) if token else 0}")
-    print(f"[AUTH] Token starts with: {token[:20] if token else 'N/A'}...")
     
     try:
-        print(f"[AUTH] JWT_SECRET available: {'Yes' if JWT_SECRET else 'No'}")
-        print(f"[AUTH] JWT_ALGORITHM: {JWT_ALGORITHM}")
-        
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        print(f"[AUTH] Token decoded successfully")
-        print(f"[AUTH] Payload keys: {list(payload.keys())}")
-        print(f"[AUTH] User ID from token: {payload.get('user_id', 'NOT_FOUND')}")
         return payload
-    except jwt.ExpiredSignatureError as e:
-        print(f"[AUTH] Token expired: {e}")
+    except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError as e:
-        print(f"[AUTH] Invalid token: {e}")
-        print(f"[AUTH] Token that failed: {token[:50] if token else 'N/A'}...")
+    except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
     except Exception as e:
-        print(f"[AUTH] Unexpected auth error: {e}")
-        import traceback
-        print(f"[AUTH] Auth traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
 
 app = FastAPI()
@@ -137,17 +114,13 @@ if firebase_creds_json:
     try:
         cred_dict = json.loads(firebase_creds_json)
         cred = credentials.Certificate(cred_dict)
-        print("[FIREBASE] Using credentials from environment variable")
     except json.JSONDecodeError:
-        print("[FIREBASE] Invalid JSON in FIREBASE_CREDENTIALS_JSON, falling back to file")
         cred = credentials.Certificate(FIREBASE_CRED_PATH)
 else:
     cred = credentials.Certificate(FIREBASE_CRED_PATH)
-    print(f"[FIREBASE] Using credentials from file: {FIREBASE_CRED_PATH}")
 
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
-    print("[FIREBASE] Firebase initialized successfully")
 
 db = firestore.client()
 
@@ -212,15 +185,12 @@ def login(data: LoginRequest):
 
 @app.post("/register", response_model=UserResponse)
 def register(data: RegisterRequest):
-    print(f"[REGISTER] Attempting to register user: {data.username} (type: {data.user_type})")
     if data.user_type not in ["collaborator", "client"]:
-        print(f"[REGISTER] Invalid user type: {data.user_type}")
         raise HTTPException(status_code=400, detail="Invalid user type")
     users_ref = db.collection("users")
     # Check if username exists
     existing = list(users_ref.where("username", "==", data.username).limit(1).stream())
     if existing:
-        print(f"[REGISTER] Username already exists: {data.username}")
         raise HTTPException(status_code=400, detail="Username already exists")
     doc_ref = users_ref.document()
     doc_ref.set({
@@ -229,7 +199,6 @@ def register(data: RegisterRequest):
         "password": data.password,
         "user_type": data.user_type
     })
-    print(f"[REGISTER] User registered successfully: {data.username} (id: {doc_ref.id})")
     payload = {
         "user_id": doc_ref.id,
         "username": data.username,
@@ -254,59 +223,24 @@ def get_user(user_id: str, token_data: dict = Depends(verify_jwt_token)):
 @app.post("/create-payment-intent")
 def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dict = Depends(verify_jwt_token)):
     try:
-        print(f"[PAYMENT] Creating payment intent for amount: {payment_request.amount}")
-        print(f"[PAYMENT] Service type: {payment_request.service_type}")
-        print(f"[PAYMENT] User ID: {token_data['user_id']}")
-        print(f"[PAYMENT] Stripe API key configured: {'Yes' if stripe.api_key else 'No'}")
-        print(f"[PAYMENT] Available env vars: {[k for k in os.environ.keys() if 'STRIPE' in k.upper()]}")
-        
         # Check if Stripe is properly configured
         if not stripe.api_key:
-            print(f"[PAYMENT] ERROR: Stripe API key is not set!")
-            print(f"[PAYMENT] Environment STRIPE_SECRET_KEY: {os.environ.get('STRIPE_SECRET_KEY', 'NOT_SET')[:15]}...")
             raise HTTPException(status_code=500, detail="Payment system not configured - missing Stripe key")
         
         # Create a PaymentIntent with the order amount and currency
-        print(f"[PAYMENT] About to call Stripe API...")
-        print(f"[PAYMENT] Stripe version: {stripe.version.VERSION}")
+        intent = stripe.PaymentIntent.create(
+            amount=payment_request.amount,
+            currency='eur',
+            metadata={
+                'service_type': payment_request.service_type,
+                'user_id': token_data["user_id"]
+            }
+        )
         
-        try:
-            intent = stripe.PaymentIntent.create(
-                amount=payment_request.amount,
-                currency='eur',
-                metadata={
-                    'service_type': payment_request.service_type,
-                    'user_id': token_data["user_id"]
-                }
-            )
-            print(f"[PAYMENT] Raw Stripe response received")
-        except Exception as stripe_creation_error:
-            print(f"[PAYMENT] Error during Stripe PaymentIntent.create: {stripe_creation_error}")
-            print(f"[PAYMENT] Stripe creation error type: {type(stripe_creation_error)}")
-            import traceback
-            print(f"[PAYMENT] Stripe creation traceback: {traceback.format_exc()}")
-            raise stripe_creation_error
-        
-        print(f"[PAYMENT] Payment intent created successfully: {intent.id}")
-        print(f"[PAYMENT] Intent object type: {type(intent)}")
-        
-        # Get client secret
-        client_secret = intent.client_secret
-        print(f"[PAYMENT] Client secret obtained: {client_secret[:20]}...")
-        
-        response = {"client_secret": client_secret}
-        print(f"[PAYMENT] Response ready to return: {response}")
-        return response
+        return {"client_secret": intent.client_secret}
     except stripe.error.StripeError as e:
-        print(f"[PAYMENT] Stripe error: {e}")
-        print(f"[PAYMENT] Stripe error type: {type(e)}")
-        print(f"[PAYMENT] Stripe error details: {e.args}")
         raise HTTPException(status_code=400, detail=f"Stripe error: {str(e)}")
     except Exception as e:
-        print(f"[PAYMENT] Unexpected error creating payment intent: {e}")
-        print(f"[PAYMENT] Error type: {type(e)}")
-        import traceback
-        print(f"[PAYMENT] Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Failed to create payment intent: {str(e)}")
 
 @app.post("/verify-payment")
@@ -328,7 +262,6 @@ def verify_payment(payment_intent_id: str, token_data: dict = Depends(verify_jwt
     except stripe.error.StripeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        print(f"[PAYMENT] Error verifying payment: {e}")
         raise HTTPException(status_code=500, detail="Failed to verify payment")
 
 def _serialize_case(case: dict, id: str = None):
@@ -353,7 +286,6 @@ def _serialize_case(case: dict, id: str = None):
     case["collaborator_name"] = case.get("collaborator_name", "Unknown Collaborator") if case.get("collaborator_id") else None
     case["client_name"] = case.get("client_name", "Unknown Client") if case.get("user_id") else None
     
-    print(f"[_serialize_case] Using saved names - client: {case.get('client_name')}, collaborator: {case.get('collaborator_name')}")
     return case
 
 @app.post("/cases", response_model=CaseResponse)
@@ -363,14 +295,12 @@ def create_case(data: CaseCreateRequest, token_data: dict = Depends(verify_jwt_t
         raise HTTPException(status_code=403, detail="Not authorized")
     
     # Get client name from user document
-    print(f"[CASE_CREATION] Fetching client name for user: {data.user_id}")
     client_doc = db.collection("users").document(data.user_id).get()
     if not client_doc.exists:
         raise HTTPException(status_code=404, detail="User not found")
     
     client_data = client_doc.to_dict()
     client_name = client_data.get("name") or client_data.get("username", "Unknown Client")
-    print(f"[CASE_CREATION] Client name resolved: {client_name}")
     
     # Verify payment if payment_intent_id is provided
     payment_verified = False
