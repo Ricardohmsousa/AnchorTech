@@ -156,9 +156,19 @@ const ChatTab = ({ user }) => {
               <div style={chatStyles.caseStatus}>Status: {caseItem.status}</div>
               <div style={chatStyles.collaboratorInfo}>
                 {user.user_type === 'collaborator' 
-                  ? (caseItem.client_name ? `Client: ${caseItem.client_name}` : 'Unknown Client')
+                  ? (
+                      // For collaborators, show client name from messages if available, fallback to case data
+                      selectedCase?.id === caseItem.id && messages.length > 0 
+                        ? `Client: ${messages[0].client_name || 'Unknown Client'}`
+                        : (caseItem.client_name ? `Client: ${caseItem.client_name}` : 'Unknown Client')
+                    )
                   : (caseItem.collaborator_id 
-                      ? `With ${caseItem.collaborator_name || 'Collaborator'}` 
+                      ? (
+                          // For clients, show collaborator name from messages if available, fallback to case data
+                          selectedCase?.id === caseItem.id && messages.length > 0
+                            ? `With ${messages[0].collaborator_name || 'Collaborator'}`
+                            : `With ${caseItem.collaborator_name || 'Collaborator'}`
+                        )
                       : 'Unassigned')
                 }
               </div>
