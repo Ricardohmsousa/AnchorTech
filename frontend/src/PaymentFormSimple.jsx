@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { 
+  Elements, 
+  CardNumberElement, 
+  CardExpiryElement, 
+  CardCvcElement, 
+  useStripe, 
+  useElements 
+} from '@stripe/react-stripe-js';
 import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from './config';
 import { button as buttonStyle } from './sharedStyles';
 
@@ -174,7 +181,7 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
       // Confirm payment with Stripe
       const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
-          card: elements.getElement(CardElement),
+          card: elements.getElement(CardNumberElement),
           billing_details: {
             name: cardholderName || 'Customer',
           },
@@ -194,43 +201,53 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
     }
   };
 
-  const cardElementOptions = {
+  const elementOptions = {
     style: {
       base: {
         fontSize: '16px',
-        color: '#1a1a1a', // Changed from '#424770' to darker, more visible color
+        color: '#000000',
         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
         fontSmoothing: 'antialiased',
-        backgroundColor: '#ffffff', // Explicitly set white background
+        backgroundColor: '#ffffff',
         '::placeholder': {
-          color: '#6b7280', // Darker placeholder color
+          color: '#666666',
         },
-        // Try forcing some properties that might help with input visibility
-        ':-webkit-autofill': {
-          color: '#1a1a1a',
+        ':focus': {
+          color: '#000000',
         },
       },
       invalid: {
-        color: '#dc2626', // Red for invalid input
+        color: '#dc2626',
         iconColor: '#dc2626'
       },
       complete: {
-        color: '#059669', // Green for complete input
+        color: '#000000',
         iconColor: '#059669'
       },
     },
-    hidePostalCode: true,
-    // Explicitly ensure element is not disabled
-    disabled: false,
-    // Try different options to fix input issues
-    disableLink: false, // Re-enable this to see if it helps
-    iconStyle: 'default', // Use default icon style
-    // Add some additional options that might help
-    placeholder: 'Card number',
   };
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto' }}>
+      {/* Clear Instructions */}
+      <div style={{
+        backgroundColor: '#e3f2fd',
+        border: '1px solid #1976d2',
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 20,
+        fontSize: 14
+      }}>
+        <h4 style={{ margin: '0 0 8px 0', color: '#1976d2' }}>💳 How to pay:</h4>
+        <p style={{ margin: '0 0 8px 0' }}>
+          1. Enter your name below<br/>
+          2. Fill in the separate card fields: Card Number, Expiry Date (MM/YY), and CVC
+        </p>
+        <p style={{ margin: 0, fontWeight: 600 }}>
+          🧪 Test: Card <code>4242 4242 4242 4242</code> | Expiry <code>12/25</code> | CVC <code>123</code>
+        </p>
+      </div>
+      
       <div style={{ marginBottom: 20 }}>
         <h3 style={{ marginBottom: 10, color: '#333' }}>Payment Details</h3>
         
@@ -267,8 +284,8 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
           />
         </div>
 
-        {/* Combined Card Details */}
-        <div style={{ marginBottom: 8 }}>
+        {/* Card Number */}
+        <div style={{ marginBottom: 16 }}>
           <label style={{ 
             display: 'block', 
             marginBottom: 6, 
@@ -276,185 +293,93 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
             color: '#333', 
             fontSize: 14 
           }}>
-            Card Details (Number, Expiry, CVC)
+            Card Number
           </label>
-          {/* TEST BUTTON - External force focus */}
-          <button 
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log('🧪 TEST BUTTON clicked - forcing focus');
-              const cardElement = elements?.getElement(CardElement);
-              if (cardElement) {
-                console.log('🃏 TEST: Found CardElement, calling focus()');
-                cardElement.focus();
-              } else {
-                console.error('❌ TEST: CardElement not found');
-              }
-            }}
-            style={{
-              padding: '4px 8px',
-              fontSize: '10px',
-              backgroundColor: '#ff6b6b',
-              color: 'white',
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-              marginLeft: 8
-            }}
-          >
-            TEST FOCUS
-          </button>
+          <div style={{ 
+            padding: '14px 16px', 
+            border: '2px solid #e0e0e0', 
+            borderRadius: 8, 
+            backgroundColor: '#fff',
+            minHeight: 48,
+            display: 'flex',
+            alignItems: 'center',
+          }}>
+            <CardNumberElement 
+              options={elementOptions}
+              onChange={(event) => {
+                console.log('🔢 Card number change:', {
+                  error: event.error?.message,
+                  complete: event.complete,
+                  empty: event.empty,
+                  brand: event.brand
+                });
+                setPaymentError(event.error ? event.error.message : null);
+              }}
+            />
+          </div>
         </div>
-        <div 
-          onClick={(e) => {
-            console.log('🎯 CardElement wrapper clicked - attempting force focus');
-            console.log('🖱️ Click event details:', {
-              target: e.target,
-              currentTarget: e.currentTarget,
-              bubbles: e.bubbles,
-              defaultPrevented: e.defaultPrevented
-            });
-            const cardElement = elements?.getElement(CardElement);
-            if (cardElement) {
-              console.log('🃏 Found CardElement, calling focus()');
-              cardElement.focus();
-            } else {
-              console.error('❌ CardElement not found in elements');
-            }
-          }}
-          onMouseDown={(e) => {
-            console.log('🖱️ MOUSEDOWN on wrapper:', e.target);
-          }}
-          onMouseUp={(e) => {
-            console.log('🖱️ MOUSEUP on wrapper:', e.target);
-          }}
-          style={{ 
-          padding: '14px 16px', 
-          border: '2px solid #e0e0e0', 
-          borderRadius: 8, 
-          backgroundColor: '#fff',
-          minHeight: 48,
-          display: 'flex',
-          alignItems: 'center',
-          cursor: 'text',
-          // Fix potential CSS issues
-          position: 'relative',
-          zIndex: 1,
-          overflow: 'visible',
-          boxSizing: 'border-box',
-          width: '100%',
-          // Force pointer events
-          pointerEvents: 'auto'
-        }}>
-          <CardElement 
-            ref={cardElementRef}
-            options={{
-              ...cardElementOptions,
-              // Ensure element is not disabled
-              disabled: false,
-            }}
-            onChange={(event) => {
-              console.log('🃏 Card element CHANGE:', event);
-              console.log('🃏 Event details:', {
-                error: event.error,
-                complete: event.complete,
-                empty: event.empty,
-                elementType: event.elementType,
-                brand: event.brand,
-                value: event.value // This should show if any value is detected
-              });
-              console.log('🃏 Full event object:', event);
-              
-              // DEBUG: Try to extract card number for debugging
-              if (event.elementType === 'card') {
-                console.log('🔢 CARD DEBUG - Empty status:', event.empty);
-                console.log('🔢 CARD DEBUG - Complete status:', event.complete);
-                console.log('🔢 CARD DEBUG - Brand detected:', event.brand);
-                
-                // Note: Stripe doesn't expose actual card number for security,
-                // but we can see if it's detecting input
-                if (!event.empty) {
-                  console.log('✅ CARD DEBUG - Card has content (numbers are being typed!)');
-                } else {
-                  console.log('❌ CARD DEBUG - Card appears empty');
-                }
-              }
-              
-              setPaymentError(event.error ? event.error.message : null);
-            }}
-            onReady={(element) => {
-              console.log('✅ Card element ready', element);
-              console.log('✅ Element can be focused:', typeof element.focus === 'function');
-              
-              // Immediate test - try to focus after 1 second
-              setTimeout(() => {
-                console.log('🧪 AUTOMATIC FOCUS TEST - calling element.focus()');
-                try {
-                  element.focus();
-                  console.log('✅ Automatic focus call completed');
-                } catch (error) {
-                  console.error('❌ Automatic focus failed:', error);
-                }
-              }, 1000);
-              
-              // Try to focus the element as a test
-              if (element && typeof element.focus === 'function') {
-                console.log('🎯 Testing element focus capability');
-                // Don't auto-focus, just log that it's possible
-              }
-            }}
-            onFocus={(event) => {
-              console.log('🎯 Card element FOCUSED', event);
-              
-              // Add keyboard event listeners when focused
-              const keydownHandler = (e) => {
-                console.log('⌨️ KEYDOWN detected:', {
-                  key: e.key,
-                  code: e.code,
-                  keyCode: e.keyCode,
-                  target: e.target?.tagName
-                });
-              };
-              
-              const inputHandler = (e) => {
-                console.log('📝 INPUT event detected:', {
-                  inputType: e.inputType,
-                  data: e.data,
-                  target: e.target?.tagName
-                });
-              };
-              
-              // Add global listeners to catch any keyboard input
-              document.addEventListener('keydown', keydownHandler);
-              document.addEventListener('input', inputHandler);
-              
-              // Store cleanup function
-              window.stripeKeyboardCleanup = () => {
-                document.removeEventListener('keydown', keydownHandler);
-                document.removeEventListener('input', inputHandler);
-              };
-              
-              // Update border color on focus
-              if (cardElementRef.current && cardElementRef.current.parentElement) {
-                cardElementRef.current.parentElement.style.borderColor = '#0070f3';
-              }
-            }}
-            onBlur={(event) => {
-              console.log('👋 Card element BLURRED', event);
-              
-              // Clean up keyboard listeners
-              if (window.stripeKeyboardCleanup) {
-                window.stripeKeyboardCleanup();
-                delete window.stripeKeyboardCleanup;
-              }
-              
-              // Reset border color on blur
-              if (cardElementRef.current && cardElementRef.current.parentElement) {
-                cardElementRef.current.parentElement.style.borderColor = '#e0e0e0';
-              }
-            }}
-          />
+
+        {/* Expiry and CVC in a row */}
+        <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+          {/* Expiry Date */}
+          <div style={{ flex: 1 }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: 6, 
+              fontWeight: 600, 
+              color: '#333', 
+              fontSize: 14 
+            }}>
+              Expiry Date
+            </label>
+            <div style={{ 
+              padding: '14px 16px', 
+              border: '2px solid #e0e0e0', 
+              borderRadius: 8, 
+              backgroundColor: '#fff',
+              minHeight: 48,
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <CardExpiryElement 
+                options={elementOptions}
+                onChange={(event) => {
+                  console.log('📅 Expiry change:', event);
+                  if (event.error) setPaymentError(event.error.message);
+                }}
+              />
+            </div>
+          </div>
+
+          {/* CVC */}
+          <div style={{ flex: 1 }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: 6, 
+              fontWeight: 600, 
+              color: '#333', 
+              fontSize: 14 
+            }}>
+              CVC
+            </label>
+            <div style={{ 
+              padding: '14px 16px', 
+              border: '2px solid #e0e0e0', 
+              borderRadius: 8, 
+              backgroundColor: '#fff',
+              minHeight: 48,
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <CardCvcElement 
+                options={elementOptions}
+                onChange={(event) => {
+                  console.log('� CVC change:', event);
+                  if (event.error) setPaymentError(event.error.message);
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -515,11 +440,11 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
           type="button"
           onClick={() => {
             console.log('🔧 MANUAL DEBUG TEST');
-            const cardElement = elements?.getElement(CardElement);
-            console.log('🔧 CardElement from elements:', cardElement);
-            if (cardElement && typeof cardElement.focus === 'function') {
-              console.log('🔧 Calling cardElement.focus()');
-              cardElement.focus();
+            const cardNumberElement = elements?.getElement(CardNumberElement);
+            console.log('🔧 CardNumberElement from elements:', cardNumberElement);
+            if (cardNumberElement && typeof cardNumberElement.focus === 'function') {
+              console.log('🔧 Calling cardNumberElement.focus()');
+              cardNumberElement.focus();
             } else {
               console.log('🔧 Cannot focus element');
             }
