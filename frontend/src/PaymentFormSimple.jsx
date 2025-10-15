@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { 
   Elements, 
-  CardNumberElement, 
-  CardExpiryElement, 
-  CardCvcElement, 
+  PaymentElement, 
   useStripe, 
   useElements 
 } from '@stripe/react-stripe-js';
@@ -30,14 +28,10 @@ if (stripePromise) {
   });
 }
 
-const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading }) => {
+const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading, clientSecret }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState(null);
-  const [cardholderName, setCardholderName] = useState('');
-  
-  // Refs to prevent re-mounting of Stripe elements
-  const cardElementRef = useRef(null);
   const [elementsReady, setElementsReady] = useState(false);
 
   // Check if Stripe is properly configured
@@ -139,93 +133,34 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
     setPaymentError(null);
 
     try {
-      // Create payment intent on backend
-      const requestUrl = `${API_BASE_URL}/create-payment-intent`;
-      const headers = {
-        'Content-Type': 'application/json',
-        ...getAuthHeaders()
-      };
-      const requestBody = {
-        amount: amount,
-        service_type: 'nif_application'
-      };
-      
-      console.log('🔄 Making payment request...');
-      console.log('URL:', requestUrl);
-      console.log('Headers:', headers);
-      console.log('Body:', requestBody);
-      
-      const response = await fetch(requestUrl, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(requestBody)
-      });
-      
-      console.log('📡 Response status:', response.status);
-      console.log('📡 Response ok:', response.ok);
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Payment intent creation failed:', errorData);
-        
-        // Handle authentication errors specifically
-        if (response.status === 401) {
-          throw new Error('Your session has expired. Please log in again.');
-        }
-        
-        throw new Error(`Failed to create payment intent: ${response.status} - ${errorData}`);
-      }
-
-      const { client_secret } = await response.json();
-
-      // Confirm payment with Stripe
-      const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
-        payment_method: {
-          card: elements.getElement(CardNumberElement),
-          billing_details: {
-            name: cardholderName || 'Customer',
-          },
+      // Confirm payment using the Payment Element
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          // Return URL after payment (you can customize this)
+          return_url: window.location.origin + '/payment-success',
         },
+        redirect: 'if_required', // Only redirect if absolutely necessary
       });
 
       if (error) {
+        console.error('Payment failed:', error);
         setPaymentError(error.message);
         setLoading(false);
-      } else if (paymentIntent.status === 'succeeded') {
+        onError(error);
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log('Payment succeeded:', paymentIntent);
         onSuccess(paymentIntent);
       }
     } catch (err) {
+      console.error('Payment error:', err);
       setPaymentError(err.message);
       setLoading(false);
       onError(err);
     }
   };
 
-  const elementOptions = {
-    style: {
-      base: {
-        fontSize: '16px',
-        color: '#000000',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-        backgroundColor: '#ffffff',
-        '::placeholder': {
-          color: '#666666',
-        },
-        ':focus': {
-          color: '#000000',
-        },
-      },
-      invalid: {
-        color: '#dc2626',
-        iconColor: '#dc2626'
-      },
-      complete: {
-        color: '#000000',
-        iconColor: '#059669'
-      },
-    },
-  };
+  // Helper to get JWT token from localStorage (moved here for use in handleSubmit)
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto' }}>
@@ -469,6 +404,68 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
 
 const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
   const [loading, setLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState('');
+  const [error, setError] = useState(null);
+
+  // Helper to get JWT token from localStorage
+  function getAuthHeaders() {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (user && user.token) {
+      // Check if token is expired (basic JWT check)
+      try {
+        const tokenPayload = JSON.parse(atob(user.token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+        
+        if (tokenPayload.exp && tokenPayload.exp < currentTime) {
+          console.warn('⚠️ Token expired, redirecting to login');
+          localStorage.removeItem('user');
+          window.location.href = '/login';
+          return {};
+        }
+      } catch (e) {
+        console.warn('Could not parse token expiration:', e);
+      }
+      
+      return { Authorization: `Bearer ${user.token}` };
+    }
+    return {};
+  }
+
+  // Create PaymentIntent when component mounts
+  useEffect(() => {
+    const createPaymentIntent = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_BASE_URL}/create-payment-intent`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeaders()
+          },
+          body: JSON.stringify({
+            amount: amount,
+            service_type: 'nif_application'
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.text();
+          throw new Error(`Failed to create payment intent: ${response.status} - ${errorData}`);
+        }
+
+        const { client_secret } = await response.json();
+        setClientSecret(client_secret);
+        console.log('✅ Payment Intent created successfully');
+      } catch (err) {
+        console.error('❌ Error creating PaymentIntent:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    createPaymentIntent();
+  }, [amount]);
 
   // Check if Stripe is available
   if (!stripePromise) {
@@ -497,8 +494,59 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
     );
   }
 
+  // Show error if PaymentIntent creation failed
+  if (error) {
+    return (
+      <div style={{ 
+        padding: 24, 
+        border: '1px solid #e0e0e0', 
+        borderRadius: 8, 
+        backgroundColor: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ color: '#d32f2f', marginBottom: 16 }}>
+          ❌ Error: {error}
+        </div>
+        <button
+          onClick={onCancel}
+          style={{
+            ...buttonStyle,
+            backgroundColor: '#6c757d',
+            border: '1px solid #6c757d'
+          }}
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
+
+  // Show loading while creating PaymentIntent
+  if (loading || !clientSecret) {
+    return (
+      <div style={{ 
+        padding: 24, 
+        border: '1px solid #e0e0e0', 
+        borderRadius: 8, 
+        backgroundColor: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ color: '#666', marginBottom: 16 }}>
+          🔄 Setting up payment...
+        </div>
+      </div>
+    );
+  }
+
+  const options = {
+    clientSecret,
+    appearance: {
+      theme: 'stripe',
+    },
+  };
+
   return (
-    <Elements stripe={stripePromise} key="stripe-elements-simple">
+    <Elements stripe={stripePromise} options={options}>
       <div style={{ 
         padding: 24, 
         border: '1px solid #e0e0e0', 
@@ -520,6 +568,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           onCancel={onCancel}
           loading={loading}
           setLoading={setLoading}
+          clientSecret={clientSecret}
         />
         
         <div style={{ 
@@ -532,21 +581,6 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           <p style={{ marginTop: 8, fontSize: 11 }}>
             Test card: 4242 4242 4242 4242 | Any future date | Any CVC
           </p>
-          
-          <div style={{ 
-            marginTop: 12, 
-            padding: 8, 
-            backgroundColor: '#fff3cd', 
-            border: '1px solid #ffeaa7',
-            borderRadius: 4,
-            fontSize: 11,
-            color: '#856404'
-          }}>
-            💡 If the card field isn't responding, try:
-            <br />• Disabling tracking protection for this site
-            <br />• Using a different browser (Chrome/Firefox)
-            <br />• Refreshing the page
-          </div>
         </div>
       </div>
     </Elements>
