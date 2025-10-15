@@ -617,107 +617,321 @@ export default function HomePage({ user }) {
         </div>
       </section>
 
-      {/* Process Section */}
+      {/* Process Section - Vertical Timeline */}
       <section style={{ 
         padding: '6rem 2rem',
-        background: 'linear-gradient(135deg, #f8f9fb 0%, #e9ecef 100%)'
+        background: 'linear-gradient(135deg, #f8f9fb 0%, #e9ecef 100%)',
+        position: 'relative'
       }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ 
-            fontSize: '3rem', 
-            fontWeight: '800', 
-            marginBottom: '1rem',
-            color: '#222'
-          }}>
-            Your Journey in 3 Simple Steps
-          </h2>
-          <p style={{ 
-            fontSize: '1.2rem', 
-            color: '#666',
-            marginBottom: '4rem'
-          }}>
-            From consultation to celebration, we guide you every step of the way
-          </p>
-
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: '3rem'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ 
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
-                color: 'white',
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '2rem',
-                fontWeight: '800',
-                margin: '0 auto 2rem auto'
+        <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
+          {/* Header Area */}
+          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <span style={{ 
+                color: '#0070f3', 
+                fontSize: '14px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                letterSpacing: '2px'
               }}>
-                1
+                HOW TO GET STARTED
+              </span>
+            </div>
+            <h2 style={{ 
+              fontSize: '3rem', 
+              fontWeight: '800', 
+              marginBottom: '1rem',
+              color: '#222',
+              lineHeight: '1.2'
+            }}>
+              Get Started in Three Simple Steps
+            </h2>
+            <p style={{ 
+              fontSize: '1.2rem', 
+              color: '#666',
+              lineHeight: '1.6',
+              maxWidth: '500px',
+              margin: '0 auto'
+            }}>
+              From consultation to celebration, we guide you every step of the way
+            </p>
+          </div>
+
+          {/* Vertical Timeline Container */}
+          <div style={{ position: 'relative' }}>
+            {/* Central Vertical Line */}
+            <div style={{
+              position: 'absolute',
+              left: '50%',
+              top: '0',
+              bottom: '0',
+              width: '2px',
+              background: 'linear-gradient(180deg, #0070f3 0%, #10b981 50%, #f59e0b 100%)',
+              transform: 'translateX(-50%)',
+              zIndex: 1
+            }} />
+
+            {/* Step 1 - Left Side */}
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              marginBottom: '6rem',
+              position: 'relative'
+            }}>
+              {/* Content Block - Left */}
+              <div style={{ 
+                width: '45%', 
+                paddingRight: '3rem',
+                textAlign: 'right'
+              }}>
+                <div style={{ 
+                  background: '#ffffff',
+                  borderRadius: '16px',
+                  padding: '2.5rem',
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
+                  border: '1px solid #e2e8f0'
+                }}>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <span style={{ 
+                      color: '#0070f3', 
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px'
+                    }}>
+                      Step 1
+                    </span>
+                  </div>
+                  <h3 style={{ 
+                    fontSize: '1.5rem', 
+                    fontWeight: '700', 
+                    marginBottom: '1rem',
+                    color: '#222'
+                  }}>
+                    Create Your Free Account
+                  </h3>
+                  <p style={{ 
+                    color: '#666', 
+                    lineHeight: '1.6',
+                    fontSize: '1rem'
+                  }}>
+                    Sign up in minutes and complete our assessment. We'll analyze your situation and create a personalized relocation strategy.
+                  </p>
+                </div>
               </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem' }}>
-                Free Consultation
-              </h3>
-              <p style={{ color: '#666', lineHeight: '1.6' }}>
-                We analyze your situation and create a personalized relocation strategy tailored to your needs and timeline.
-              </p>
+
+              {/* Central Node */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '20px',
+                height: '20px',
+                background: '#0070f3',
+                borderRadius: '50%',
+                border: '4px solid #ffffff',
+                boxShadow: '0 0 0 4px rgba(0, 112, 243, 0.2)',
+                zIndex: 2
+              }} />
+
+              {/* Illustration - Right */}
+              <div style={{ 
+                width: '45%', 
+                paddingLeft: '3rem'
+              }}>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  borderRadius: '12px',
+                  padding: '2rem',
+                  height: '200px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid #e2e8f0',
+                  fontSize: '14px',
+                  color: '#666',
+                  fontStyle: 'italic'
+                }}>
+                  [Dashboard Screenshot - Account Creation]
+                </div>
+              </div>
             </div>
 
-            <div style={{ textAlign: 'center' }}>
+            {/* Step 2 - Right Side */}
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              marginBottom: '6rem',
+              position: 'relative'
+            }}>
+              {/* Illustration - Left */}
               <div style={{ 
-                background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
-                color: 'white',
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '2rem',
-                fontWeight: '800',
-                margin: '0 auto 2rem auto'
+                width: '45%', 
+                paddingRight: '3rem'
               }}>
-                2
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  borderRadius: '12px',
+                  padding: '2rem',
+                  height: '200px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid #e2e8f0',
+                  fontSize: '14px',
+                  color: '#666',
+                  fontStyle: 'italic'
+                }}>
+                  [Progress Tracking Interface]
+                </div>
               </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem' }}>
-                Expert Execution
-              </h3>
-              <p style={{ color: '#666', lineHeight: '1.6' }}>
-                Our team handles all paperwork, appointments, and bureaucracy while you track progress in real-time.
-              </p>
+
+              {/* Central Node */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '20px',
+                height: '20px',
+                background: '#10b981',
+                borderRadius: '50%',
+                border: '4px solid #ffffff',
+                boxShadow: '0 0 0 4px rgba(16, 185, 129, 0.2)',
+                zIndex: 2
+              }} />
+
+              {/* Content Block - Right */}
+              <div style={{ 
+                width: '45%', 
+                paddingLeft: '3rem',
+                textAlign: 'left'
+              }}>
+                <div style={{ 
+                  background: '#ffffff',
+                  borderRadius: '16px',
+                  padding: '2.5rem',
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
+                  border: '1px solid #e2e8f0'
+                }}>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <span style={{ 
+                      color: '#10b981', 
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px'
+                    }}>
+                      Step 2
+                    </span>
+                  </div>
+                  <h3 style={{ 
+                    fontSize: '1.5rem', 
+                    fontWeight: '700', 
+                    marginBottom: '1rem',
+                    color: '#222'
+                  }}>
+                    Expert Execution
+                  </h3>
+                  <p style={{ 
+                    color: '#666', 
+                    lineHeight: '1.6',
+                    fontSize: '1rem'
+                  }}>
+                    Our team handles all paperwork and appointments. Track your progress in real-time through our dashboard.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div style={{ textAlign: 'center' }}>
+            {/* Step 3 - Left Side */}
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              marginBottom: '4rem',
+              position: 'relative'
+            }}>
+              {/* Content Block - Left */}
               <div style={{ 
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                color: 'white',
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '2rem',
-                fontWeight: '800',
-                margin: '0 auto 2rem auto'
+                width: '45%', 
+                paddingRight: '3rem',
+                textAlign: 'right'
               }}>
-                3
+                <div style={{ 
+                  background: '#ffffff',
+                  borderRadius: '16px',
+                  padding: '2.5rem',
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
+                  border: '1px solid #e2e8f0'
+                }}>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <span style={{ 
+                      color: '#f59e0b', 
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px'
+                    }}>
+                      Step 3
+                    </span>
+                  </div>
+                  <h3 style={{ 
+                    fontSize: '1.5rem', 
+                    fontWeight: '700', 
+                    marginBottom: '1rem',
+                    color: '#222'
+                  }}>
+                    Welcome to Portugal
+                  </h3>
+                  <p style={{ 
+                    color: '#666', 
+                    lineHeight: '1.6',
+                    fontSize: '1rem'
+                  }}>
+                    Celebrate your successful move! Receive ongoing support as you settle into your new life in Portugal.
+                  </p>
+                </div>
               </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem' }}>
-                Welcome to Portugal
-              </h3>
-              <p style={{ color: '#666', lineHeight: '1.6' }}>
-                Celebrate your successful move with ongoing support as you settle into your new life in Portugal.
-              </p>
+
+              {/* Central Node */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '20px',
+                height: '20px',
+                background: '#f59e0b',
+                borderRadius: '50%',
+                border: '4px solid #ffffff',
+                boxShadow: '0 0 0 4px rgba(245, 158, 11, 0.2)',
+                zIndex: 2
+              }} />
+
+              {/* Illustration - Right */}
+              <div style={{ 
+                width: '45%', 
+                paddingLeft: '3rem'
+              }}>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.8)',
+                  borderRadius: '12px',
+                  padding: '2rem',
+                  height: '200px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid #e2e8f0',
+                  fontSize: '14px',
+                  color: '#666',
+                  fontStyle: 'italic'
+                }}>
+                  [Success Celebration & Support Hub]
+                </div>
+              </div>
             </div>
           </div>
 
-          <div style={{ marginTop: '4rem' }}>
+          {/* CTA Button */}
+          <div style={{ textAlign: 'center', marginTop: '4rem' }}>
             <button 
               className="cta-button"
               style={{ 
@@ -734,6 +948,18 @@ export default function HomePage({ user }) {
               Start Your Journey Today →
             </button>
           </div>
+        </div>
+        
+        {/* Footer Tag */}
+        <div style={{
+          position: 'absolute',
+          bottom: '2rem',
+          right: '2rem',
+          fontSize: '12px',
+          color: '#999',
+          fontWeight: '500'
+        }}>
+          Design Item—005
         </div>
       </section>
 
