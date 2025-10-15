@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { layout, navBar, navLink, card, button as buttonStyle } from "../../../styles/sharedStyles";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_BASE_URL } from "../../../lib";
+import { API_BASE_URL } from "../../../lib/config";
 
 function CasePage({ user, caseId: propCaseId }) {
   const navigate = useNavigate();

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // import Header from "./Header";
 import { layout, section, card, button as buttonStyle } from "../../../styles/sharedStyles";
 import { ChatTab } from "../../cases";
-import { API_BASE_URL } from "../../../lib";
+import { API_BASE_URL } from "../../../lib/config";
 
 function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
   const [tab, setTab] = useState("cases");

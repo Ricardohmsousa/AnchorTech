@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { layout, card, button as buttonStyle } from "../../../styles/sharedStyles";
-import { API_BASE_URL } from "../../../lib";
+import { API_BASE_URL } from "../../../lib/config";
 
 
 function RegisterPage({ onBack, onRegister }) {

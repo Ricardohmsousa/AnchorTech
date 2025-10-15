@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { layout, card, section } from '../../../styles/sharedStyles';
-import { API_BASE_URL } from '../../../lib';
+import { API_BASE_URL } from '../../../lib/config';
 
 const ChatTab = ({ user }) => {
   const [cases, setCases] = useState([]);
