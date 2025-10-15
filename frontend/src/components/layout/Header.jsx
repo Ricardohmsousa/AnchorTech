@@ -1,17 +1,30 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { navBar, navLink, button as buttonStyle } from "../../styles/sharedStyles";
 
 export default function Header({ user, onLogin, onLogout }) {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const navigate = useNavigate();
+  
+  const handleHomeNavigation = () => {
+    navigate('/');
+  };
+  
   return (
     <nav style={navBar}>
       <div
-        style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, fontSize: 28, color: '#0070f3', letterSpacing: 1, cursor: 'pointer' }}
-        onClick={() => window.location.pathname = '/'}
+        style={{ fontFamily: 'Lato, sans-serif', fontWeight: 900, fontSize: 28, color: '#0070f3', letterSpacing: 1, cursor: 'pointer' }}
+        onClick={handleHomeNavigation}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleHomeNavigation();
+          }
+        }}
         tabIndex={0}
         role="button"
-        aria-label="Go to home"
+        aria-label="Go to home page"
       >
         TechAnchor
       </div>
@@ -20,7 +33,7 @@ export default function Header({ user, onLogin, onLogout }) {
           <button
             style={{
               ...buttonStyle,
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'Lato, sans-serif',
               background: '#fff',
               color: '#222',
               border: 'none',

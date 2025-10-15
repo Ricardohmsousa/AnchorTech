@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Important pages
+Allow: /services/*
+Allow: /contact
+Allow: /about
+
+# Sitemap location
+Sitemap: https://techanchor.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1

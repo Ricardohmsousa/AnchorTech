@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ProgressIndicator from "../ProgressIndicator";
 
 import { layout, heroHeader, heroImage, heroOverlay, heroContent, section, card, footer as footerStyle, button as buttonStyle } from "../../styles/sharedStyles";
 
@@ -61,12 +62,64 @@ const benefits = [
 export default function HomePage({ user }) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailTouched, setEmailTouched] = useState(false);
   const navigate = useNavigate();
 
-  const handleChecklistSubmit = (e) => {
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    
+    // Real-time validation after field has been touched
+    if (emailTouched) {
+      if (!value) {
+        setEmailError("Email address is required");
+      } else if (!validateEmail(value)) {
+        setEmailError("Please enter a valid email address");
+      } else {
+        setEmailError("");
+      }
+    }
+  };
+
+  const handleEmailBlur = () => {
+    setEmailTouched(true);
+    if (!email) {
+      setEmailError("Email address is required");
+    } else if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+    }
+  };
+
+  const handleChecklistSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    // TODO: Integrate with email service
+    setEmailError("");
+    setIsLoading(true);
+    
+    if (!email) {
+      setEmailError("Email address is required");
+      setIsLoading(false);
+      return;
+    }
+    
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+      setIsLoading(false);
+      return;
+    }
+    
+    // Simulate API call
+    setTimeout(() => {
+      setSubmitted(true);
+      setIsLoading(false);
+      // TODO: Integrate with email service
+    }, 1500);
   };
 
   const handleGetStarted = () => {
@@ -202,6 +255,79 @@ export default function HomePage({ user }) {
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+            text-align: center;
+          }
+          
+          .hero-title {
+            font-size: 2.5rem !important;
+            line-height: 1.2 !important;
+          }
+          
+          .hero-subtitle {
+            font-size: 1.1rem !important;
+          }
+          
+          .timeline-step {
+            flex-direction: column !important;
+            text-align: center !important;
+          }
+          
+          .timeline-content {
+            width: 100% !important;
+            padding: 0 !important;
+            text-align: center !important;
+            margin-bottom: 2rem;
+          }
+          
+          .timeline-image {
+            width: 100% !important;
+            padding: 0 !important;
+          }
+          
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1rem !important;
+          }
+          
+          .benefits-grid {
+            grid-template-columns: 1fr !important;
+          }
+          
+          .cta-buttons {
+            flex-direction: column !important;
+            align-items: center !important;
+          }
+          
+          .cta-button, .secondary-button {
+            min-width: 280px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 2rem !important;
+          }
+          
+          .stats-grid {
+            grid-template-columns: 1fr !important;
+          }
+          
+          .section-title {
+            font-size: 2rem !important;
+          }
+        }
+        
+        /* Loading animation */
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
       `}</style>
 
       {/* Hero Section - Enhanced with more breathing space and modern layout */}
@@ -244,7 +370,7 @@ export default function HomePage({ user }) {
           gap: '4rem',
           alignItems: 'center',
           minHeight: '80vh'
-        }}>
+        }} className="hero-grid">
           {/* Left Column - Content */}
           <div className="fade-in-up">
             <div style={{ marginBottom: '2rem' }}>
@@ -271,7 +397,7 @@ export default function HomePage({ user }) {
               letterSpacing: '-2px', 
               color: '#ffffff',
               lineHeight: '1.1'
-            }}>
+            }} className="hero-title">
               Your Gateway to
               <br />
               <span className="gradient-text" style={{ 
@@ -293,7 +419,7 @@ export default function HomePage({ user }) {
               maxWidth: '550px',
               lineHeight: '1.6',
               fontWeight: '400'
-            }}>
+            }} className="hero-subtitle">
               Join <strong>5,000+ successful relocators</strong> who chose the smart way to move. Our proven system eliminates the guesswork with a <strong>99% success rate</strong> and <strong>average 90-day timeline</strong>.
             </p>
             
@@ -302,7 +428,7 @@ export default function HomePage({ user }) {
               gap: '1.5rem', 
               marginBottom: '3rem',
               flexWrap: 'wrap'
-            }}>
+            }} className="cta-buttons">
               <button 
                 className="cta-button"
                 style={{ 
@@ -316,6 +442,7 @@ export default function HomePage({ user }) {
                   minWidth: '220px'
                 }} 
                 onClick={handleGetStarted}
+                aria-label="Start your Portugal relocation journey"
               >
                 🚀 Start Your Journey
               </button>
@@ -331,6 +458,7 @@ export default function HomePage({ user }) {
                   minWidth: '220px'
                 }} 
                 onClick={handleBookConsultation}
+                aria-label="Book a free consultation call"
               >
                 📞 Book Free Call
               </button>
@@ -751,7 +879,10 @@ export default function HomePage({ user }) {
                   fontSize: '14px',
                   color: '#666',
                   fontStyle: 'italic'
-                }}>
+                }}
+                role="img"
+                aria-label="Dashboard screenshot showing account creation interface"
+                >
                   [Dashboard Screenshot - Account Creation]
                 </div>
               </div>
@@ -781,7 +912,10 @@ export default function HomePage({ user }) {
                   fontSize: '14px',
                   color: '#666',
                   fontStyle: 'italic'
-                }}>
+                }}
+                role="img"
+                aria-label="Progress tracking interface showing relocation status"
+                >
                   [Progress Tracking Interface]
                 </div>
               </div>
@@ -930,6 +1064,45 @@ export default function HomePage({ user }) {
             </div>
           </div>
 
+          {/* Process Visualization */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            padding: '3rem 2rem',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
+            border: '1px solid #e2e8f0',
+            marginTop: '2rem'
+          }}>
+            <h4 style={{ 
+              textAlign: 'center',
+              marginBottom: '2rem',
+              color: '#222',
+              fontSize: '1.3rem',
+              fontWeight: '700'
+            }}>
+              Your Relocation Journey
+            </h4>
+            <ProgressIndicator 
+              currentStep={2}
+              steps={[
+                "Consultation",
+                "Documentation", 
+                "Application",
+                "Processing",
+                "Welcome!"
+              ]}
+              size="small"
+            />
+            <p style={{
+              textAlign: 'center',
+              color: '#666',
+              fontSize: '14px',
+              marginTop: '1rem'
+            }}>
+              Track your progress every step of the way
+            </p>
+          </div>
+
           {/* CTA Button */}
           <div style={{ textAlign: 'center', marginTop: '4rem' }}>
             <button 
@@ -1031,38 +1204,91 @@ export default function HomePage({ user }) {
             flexWrap: 'wrap',
             maxWidth: '500px',
             margin: '2rem auto 0 auto'
-          }}>
-            <input
-              type="email"
-              required
-              placeholder="Enter your email address"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              style={{ 
-                padding: '16px 20px', 
-                borderRadius: '12px', 
-                border: '2px solid #e5e7eb', 
-                fontSize: '16px', 
-                minWidth: '280px',
-                flex: '1',
-                fontFamily: 'inherit'
-              }}
-            />
+          }} noValidate>
+            <div style={{ flex: '1', minWidth: '280px' }}>
+              <input
+                type="email"
+                required
+                placeholder="Enter your email address"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={handleEmailBlur}
+                style={{ 
+                  padding: '16px 20px', 
+                  borderRadius: '12px', 
+                  border: `2px solid ${
+                    emailError 
+                      ? '#ef4444' 
+                      : email && !emailError && emailTouched 
+                        ? '#10b981' 
+                        : '#e5e7eb'
+                  }`, 
+                  fontSize: '16px', 
+                  width: '100%',
+                  fontFamily: 'inherit',
+                  outline: 'none',
+                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                  boxShadow: emailError 
+                    ? '0 0 0 3px rgba(239, 68, 68, 0.1)'
+                    : email && !emailError && emailTouched
+                      ? '0 0 0 3px rgba(16, 185, 129, 0.1)'
+                      : 'none'
+                }}
+                aria-invalid={emailError ? 'true' : 'false'}
+                aria-describedby={emailError ? 'email-error' : undefined}
+              />
+              {emailError && (
+                <div 
+                  id="email-error" 
+                  style={{ 
+                    color: '#ef4444', 
+                    fontSize: '14px', 
+                    marginTop: '8px',
+                    textAlign: 'left'
+                  }}
+                  role="alert"
+                >
+                  {emailError}
+                </div>
+              )}
+            </div>
             <button 
               type="submit" 
               className="cta-button"
+              disabled={isLoading}
               style={{ 
                 ...buttonStyle, 
                 padding: '16px 32px', 
                 fontSize: '16px',
                 fontWeight: '700',
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                background: isLoading 
+                  ? '#94a3b8' 
+                  : 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
                 border: 'none',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                cursor: isLoading ? 'not-allowed' : 'pointer',
+                opacity: isLoading ? 0.7 : 1
               }}
+              aria-label="Get your free Portugal relocation checklist"
             >
-              Get Free Checklist 📋
+              {isLoading ? (
+                <>
+                  <span style={{ 
+                    display: 'inline-block', 
+                    width: '16px', 
+                    height: '16px', 
+                    border: '2px solid #ffffff', 
+                    borderTopColor: 'transparent', 
+                    borderRadius: '50%', 
+                    animation: 'spin 1s linear infinite',
+                    marginRight: '8px'
+                  }}></span>
+                  Processing...
+                </>
+              ) : (
+                'Get Free Checklist 📋'
+              )}
             </button>
           </form>
         )}
@@ -1191,6 +1417,139 @@ export default function HomePage({ user }) {
             </button>
           </div>
         </div>
+      </section>
+
+      {/* FAQ Section with Schema Markup */}
+      <section style={{ 
+        padding: '6rem 2rem',
+        background: '#f8f9fb'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <h2 style={{ 
+              fontSize: '3rem', 
+              fontWeight: '900', 
+              marginBottom: '1rem',
+              color: '#222'
+            }} className="section-title">
+              Frequently Asked Questions
+            </h2>
+            <p style={{ 
+              fontSize: '1.2rem', 
+              color: '#666',
+              lineHeight: '1.6'
+            }}>
+              Get answers to the most common questions about relocating to Portugal
+            </p>
+          </div>
+          
+          <div style={{ 
+            display: 'grid', 
+            gap: '1.5rem'
+          }}>
+            {[
+              {
+                question: "How long does the Portugal relocation process take?",
+                answer: "Our average timeline is 90 days from start to finish. This includes visa processing, document preparation, and all necessary appointments. The exact timeline depends on your specific visa type and circumstances."
+              },
+              {
+                question: "What visa types do you help with?",
+                answer: "We assist with all major Portugal visa types including D7 Passive Income Visa, Digital Nomad Visa, Golden Visa, Student Visas, and Work Visas. Our experts will help determine the best option for your situation."
+              },
+              {
+                question: "Do I need to speak Portuguese to relocate?",
+                answer: "No, Portuguese is not required initially. However, we recommend starting to learn as it will help with integration. We can connect you with language learning resources as part of our service."
+              },
+              {
+                question: "What is a NIF and why do I need it?",
+                answer: "A NIF (Número de Identificação Fiscal) is Portugal's tax identification number. It's required for opening bank accounts, signing contracts, renting property, and most official transactions in Portugal."
+              },
+              {
+                question: "How much does your service cost?",
+                answer: "Our pricing varies based on the services you need. We offer transparent, fixed-price packages with no hidden fees. Contact us for a free consultation to get a personalized quote for your situation."
+              }
+            ].map((faq, i) => (
+              <div 
+                key={i}
+                style={{ 
+                  background: '#ffffff',
+                  borderRadius: '16px',
+                  border: '1px solid #e2e8f0',
+                  overflow: 'hidden',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+                }}
+              >
+                <h3 style={{ 
+                  padding: '1.5rem',
+                  margin: 0,
+                  fontSize: '1.2rem',
+                  fontWeight: '700',
+                  color: '#222',
+                  borderBottom: '1px solid #f1f5f9'
+                }}>
+                  {faq.question}
+                </h3>
+                <div style={{ 
+                  padding: '1.5rem',
+                  color: '#666',
+                  lineHeight: '1.6'
+                }}>
+                  {faq.answer}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* FAQ Schema Markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How long does the Portugal relocation process take?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Our average timeline is 90 days from start to finish. This includes visa processing, document preparation, and all necessary appointments. The exact timeline depends on your specific visa type and circumstances."
+                }
+              },
+              {
+                "@type": "Question", 
+                "name": "What visa types do you help with?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "We assist with all major Portugal visa types including D7 Passive Income Visa, Digital Nomad Visa, Golden Visa, Student Visas, and Work Visas. Our experts will help determine the best option for your situation."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do I need to speak Portuguese to relocate?", 
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No, Portuguese is not required initially. However, we recommend starting to learn as it will help with integration. We can connect you with language learning resources as part of our service."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is a NIF and why do I need it?",
+                "acceptedAnswer": {
+                  "@type": "Answer", 
+                  "text": "A NIF (Número de Identificação Fiscal) is Portugal's tax identification number. It's required for opening bank accounts, signing contracts, renting property, and most official transactions in Portugal."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much does your service cost?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Our pricing varies based on the services you need. We offer transparent, fixed-price packages with no hidden fees. Contact us for a free consultation to get a personalized quote for your situation."
+                }
+              }
+            ]
+          })}
+        </script>
       </section>
 
       {/* Final CTA Section */}
