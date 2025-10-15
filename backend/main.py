@@ -511,6 +511,9 @@ class MessageResponse(BaseModel):
     sender_name: str
     text: str
     timestamp: str
+    # New fields for conversation context
+    client_name: Optional[str] = None
+    collaborator_name: Optional[str] = None
 
 @app.get("/cases/{case_id}/messages", response_model=List[MessageResponse])
 def get_case_messages(case_id: str, token_data: dict = Depends(verify_jwt_token)):
@@ -521,6 +524,25 @@ def get_case_messages(case_id: str, token_data: dict = Depends(verify_jwt_token)
     case = case_doc.to_dict()
     if token_data["user_id"] != case["user_id"] and token_data["user_id"] != case.get("collaborator_id"):
         raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Get client and collaborator information for context
+    client_name = "Unknown Client"
+    collaborator_name = "Unassigned"
+    
+    # Fetch client information
+    if case.get("user_id"):
+        client_doc = db.collection("users").document(case["user_id"]).get()
+        if client_doc.exists:
+            client_data = client_doc.to_dict()
+            client_name = client_data.get("name") or client_data.get("username", "Unknown Client")
+    
+    # Fetch collaborator information
+    if case.get("collaborator_id"):
+        collaborator_doc = db.collection("users").document(case["collaborator_id"]).get()
+        if collaborator_doc.exists:
+            collaborator_data = collaborator_doc.to_dict()
+            collaborator_name = collaborator_data.get("name") or collaborator_data.get("username", "Unknown Collaborator")
+    
     messages_ref = db.collection("cases").document(case_id).collection("messages").order_by("timestamp")
     messages = messages_ref.stream()
     result = []
@@ -542,7 +564,9 @@ def get_case_messages(case_id: str, token_data: dict = Depends(verify_jwt_token)
             "sender_type": m.get("sender_type"),
             "sender_name": sender_name,
             "text": m.get("text"),
-            "timestamp": m.get("timestamp").isoformat() if hasattr(m.get("timestamp"), "isoformat") else str(m.get("timestamp"))
+            "timestamp": m.get("timestamp").isoformat() if hasattr(m.get("timestamp"), "isoformat") else str(m.get("timestamp")),
+            "client_name": client_name,
+            "collaborator_name": collaborator_name
         })
     return result
 
@@ -555,6 +579,32 @@ def send_case_message(case_id: str, data: MessageRequest, token_data: dict = Dep
     case = case_doc.to_dict()
     if token_data["user_id"] != case["user_id"] and token_data["user_id"] != case.get("collaborator_id"):
         raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Get client and collaborator information for context
+    client_name = "Unknown Client"
+    collaborator_name = "Unassigned"
+    
+    # Fetch client information
+    if case.get("user_id"):
+        client_doc = db.collection("users").document(case["user_id"]).get()
+        if client_doc.exists:
+            client_data = client_doc.to_dict()
+            client_name = client_data.get("name") or client_data.get("username", "Unknown Client")
+    
+    # Fetch collaborator information
+    if case.get("collaborator_id"):
+        collaborator_doc = db.collection("users").document(case["collaborator_id"]).get()
+        if collaborator_doc.exists:
+            collaborator_data = collaborator_doc.to_dict()
+            collaborator_name = collaborator_data.get("name") or collaborator_data.get("username", "Unknown Collaborator")
+    
+    # Get sender name
+    sender_name = "Unknown User"
+    sender_doc = db.collection("users").document(token_data["user_id"]).get()
+    if sender_doc.exists:
+        sender_data = sender_doc.to_dict()
+        sender_name = sender_data.get("name") or sender_data.get("username", "Unknown User")
+    
     msg_data = {
         "sender_id": token_data["user_id"],
         "sender_type": token_data["user_type"],
@@ -568,8 +618,11 @@ def send_case_message(case_id: str, data: MessageRequest, token_data: dict = Dep
     return {
         "sender_id": msg["sender_id"],
         "sender_type": msg["sender_type"],
+        "sender_name": sender_name,
         "text": msg["text"],
-        "timestamp": msg["timestamp"].isoformat() if hasattr(msg["timestamp"], "isoformat") else str(msg["timestamp"])
+        "timestamp": msg["timestamp"].isoformat() if hasattr(msg["timestamp"], "isoformat") else str(msg["timestamp"]),
+        "client_name": client_name,
+        "collaborator_name": collaborator_name
     }
 
 @app.get("/")
