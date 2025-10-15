@@ -574,10 +574,6 @@ def get_case_messages(case_id: str, token_data: dict = Depends(verify_jwt_token)
             print(f"[CHAT_CONTEXT] Collaborator document not found for collaborator_id: {case['collaborator_id']}")
     
     print(f"[CHAT_CONTEXT] Final context - Client: '{client_name}', Collaborator: '{collaborator_name}'")
-        collaborator_doc = db.collection("users").document(case["collaborator_id"]).get()
-        if collaborator_doc.exists:
-            collaborator_data = collaborator_doc.to_dict()
-            collaborator_name = collaborator_data.get("name") or collaborator_data.get("username", "Unknown Collaborator")
     
     messages_ref = db.collection("cases").document(case_id).collection("messages").order_by("timestamp")
     messages = messages_ref.stream()
