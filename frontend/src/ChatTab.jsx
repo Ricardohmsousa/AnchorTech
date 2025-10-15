@@ -156,21 +156,15 @@ const ChatTab = ({ user }) => {
               <div style={chatStyles.caseStatus}>Status: {caseItem.status}</div>
               <div style={chatStyles.collaboratorInfo}>
                 {user.user_type === 'collaborator' 
-                  ? (
-                      // For collaborators, show client name from messages if available, fallback to case data
-                      selectedCase?.id === caseItem.id && messages.length > 0 
-                        ? `Client: ${messages[0].client_name || 'Unknown Client'}`
-                        : (caseItem.client_name ? `Client: ${caseItem.client_name}` : 'Unknown Client')
-                    )
+                  ? `Client: ${caseItem.client_name || 'Unknown Client'}`
                   : (caseItem.collaborator_id 
-                      ? (
-                          // For clients, show collaborator name from messages if available, fallback to case data
-                          selectedCase?.id === caseItem.id && messages.length > 0
-                            ? `With ${messages[0].collaborator_name || 'Collaborator'}`
-                            : `With ${caseItem.collaborator_name || 'Collaborator'}`
-                        )
+                      ? `With ${caseItem.collaborator_name || 'Collaborator'}` 
                       : 'Unassigned')
                 }
+                {/* Debug info for sidebar */}
+                <div style={{fontSize: '8px', color: '#999'}}>
+                  Debug: {JSON.stringify({client_name: caseItem.client_name, collaborator_name: caseItem.collaborator_name})}
+                </div>
               </div>
             </div>
           ))}

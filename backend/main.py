@@ -508,6 +508,11 @@ def get_collaborator_cases(collaborator_id: str, token_data: dict = Depends(veri
     cases = db.collection("cases").where("collaborator_id", "==", collaborator_id).stream()
     case_list = [_serialize_case(doc.to_dict(), doc.id) for doc in cases]
     print(f"[COLLAB_CASES] Returning {len(case_list)} cases for collaborator {collaborator_id}")
+    
+    # Debug: Check if client names are being added
+    for case in case_list:
+        print(f"[COLLAB_CASES] Case {case.get('id', 'unknown')[:8]}: client_name={case.get('client_name')}, user_id={case.get('user_id')}")
+    
     return case_list
 
 # --- Chat Message Models & Endpoints ---
