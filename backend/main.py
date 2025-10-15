@@ -33,21 +33,14 @@ import stripe
 # Load environment variables from .env file
 load_dotenv()
 
-# Initialize Stripe immediately after loading environment variables
+# Stripe configuration - using older stable version approach
 stripe_secret_key = os.environ.get("STRIPE_SECRET_KEY")
 print(f"[STRIPE] Stripe secret key configured: {'Yes' if stripe_secret_key else 'No'}")
 if stripe_secret_key:
     print(f"[STRIPE] Key starts with: {stripe_secret_key[:10]}...")
-    try:
-        stripe.api_key = stripe_secret_key
-        # Force Stripe initialization by accessing a simple property
-        stripe.api_version = "2023-10-16"
-        print(f"[STRIPE] Stripe library initialized successfully")
-        print(f"[STRIPE] Stripe version: {stripe.version.VERSION}")
-    except Exception as e:
-        print(f"[STRIPE] ERROR initializing Stripe: {e}")
-        import traceback
-        print(f"[STRIPE] Traceback: {traceback.format_exc()}")
+    stripe.api_key = stripe_secret_key
+    print(f"[STRIPE] Stripe API key set successfully")
+    print(f"[STRIPE] Stripe version: {stripe.version.VERSION}")
 else:
     print("[STRIPE] ERROR: No Stripe secret key found in environment variables!")
     print(f"[STRIPE] Available env vars: {[k for k in os.environ.keys() if 'STRIPE' in k.upper()]}")
@@ -268,8 +261,7 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
         
         # Create a PaymentIntent with the order amount and currency
         print(f"[PAYMENT] About to call Stripe API...")
-        print(f"[PAYMENT] Stripe API version: {stripe.api_version}")
-        print(f"[PAYMENT] Stripe library version: {stripe.version.VERSION}")
+        print(f"[PAYMENT] Stripe version: {stripe.version.VERSION}")
         
         try:
             intent = stripe.PaymentIntent.create(
@@ -278,9 +270,7 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
                 metadata={
                     'service_type': payment_request.service_type,
                     'user_id': token_data["user_id"]
-                },
-                # Explicitly set API version to avoid compatibility issues
-                stripe_version="2023-10-16"
+                }
             )
             print(f"[PAYMENT] Raw Stripe response received")
         except Exception as stripe_creation_error:
@@ -292,19 +282,14 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
         
         print(f"[PAYMENT] Payment intent created successfully: {intent.id}")
         print(f"[PAYMENT] Intent object type: {type(intent)}")
-        print(f"[PAYMENT] Intent has client_secret: {hasattr(intent, 'client_secret')}")
         
-        if hasattr(intent, 'client_secret') and intent.client_secret:
-            client_secret = intent.client_secret
-            print(f"[PAYMENT] Client secret obtained: {client_secret[:20]}...")
-            print(f"[PAYMENT] About to return response...")
-            response = {"client_secret": client_secret}
-            print(f"[PAYMENT] Response object created: {response}")
-            return response
-        else:
-            print(f"[PAYMENT] ERROR: Intent missing client_secret!")
-            print(f"[PAYMENT] Intent attributes: {dir(intent)}")
-            raise Exception("Payment intent created but client_secret is missing")
+        # Get client secret
+        client_secret = intent.client_secret
+        print(f"[PAYMENT] Client secret obtained: {client_secret[:20]}...")
+        
+        response = {"client_secret": client_secret}
+        print(f"[PAYMENT] Response ready to return: {response}")
+        return response
     except stripe.error.StripeError as e:
         print(f"[PAYMENT] Stripe error: {e}")
         print(f"[PAYMENT] Stripe error type: {type(e)}")
