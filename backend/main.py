@@ -397,9 +397,34 @@ def create_case(data: CaseCreateRequest, token_data: dict = Depends(verify_jwt_t
         except stripe.error.StripeError as e:
             raise HTTPException(status_code=400, detail=f"Payment verification failed: {str(e)}")
     
-    # Find a collaborator
-    collab = next(db.collection("users").where("user_type", "==", "collaborator").limit(1).stream(), None)
-    collaborator_id = collab.id if collab else None
+    # Find the collaborator with the fewest cases for load balancing
+    print(f"[CASE_ASSIGNMENT] Finding collaborator with least cases...")
+    collaborators = list(db.collection("users").where("user_type", "==", "collaborator").stream())
+    
+    if not collaborators:
+        print(f"[CASE_ASSIGNMENT] No collaborators found")
+        collaborator_id = None
+    else:
+        print(f"[CASE_ASSIGNMENT] Found {len(collaborators)} collaborators")
+        
+        # Count cases for each collaborator
+        collaborator_case_counts = []
+        for collab in collaborators:
+            case_count = len(list(db.collection("cases").where("collaborator_id", "==", collab.id).stream()))
+            collaborator_case_counts.append({
+                'id': collab.id, 
+                'username': collab.to_dict().get('username', 'Unknown'),
+                'name': collab.to_dict().get('name', ''),
+                'case_count': case_count
+            })
+            print(f"[CASE_ASSIGNMENT] Collaborator {collab.to_dict().get('username', 'Unknown')} has {case_count} cases")
+        
+        # Sort by case count (ascending) and pick the one with least cases
+        collaborator_case_counts.sort(key=lambda x: x['case_count'])
+        selected_collaborator = collaborator_case_counts[0]
+        collaborator_id = selected_collaborator['id']
+        
+        print(f"[CASE_ASSIGNMENT] Assigned to collaborator '{selected_collaborator['username']}' ({selected_collaborator['name']}) with {selected_collaborator['case_count']} cases")
     case_ref = db.collection("cases").document()
     case_data = {
         "user_id": data.user_id,
