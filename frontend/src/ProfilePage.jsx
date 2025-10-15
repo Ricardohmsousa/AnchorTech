@@ -1,16 +1,26 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { layout, card, button as buttonStyle, section } from "./sharedStyles";
 
 import ClientCasesTab from "./ClientCasesTab";
 import ChatTab from "./ChatTab";
-
 
 export default function ProfilePage({ user, onHome, onGetNif, onLogout }) {
   const [tab, setTab] = useState("main");
   const [servicesOpen, setServicesOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [selectedCaseId, setSelectedCaseId] = useState(null);
+  const navigate = useNavigate();
+
+  // Authentication guard
+  useEffect(() => {
+    if (!user) {
+      console.log('[ProfilePage] User not authenticated, redirecting to login');
+      navigate('/login');
+      return;
+    }
+  }, [user, navigate]);
 
 
   // Show case details if a case is selected

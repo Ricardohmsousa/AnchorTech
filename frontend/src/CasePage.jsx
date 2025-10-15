@@ -13,6 +13,15 @@ function CasePage({ user, caseId: propCaseId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Authentication guard
+  useEffect(() => {
+    if (!user) {
+      console.log('[CasePage] User not authenticated, redirecting to login');
+      navigate('/login');
+      return;
+    }
+  }, [user, navigate]);
+
   useEffect(() => {
     async function fetchCase() {
       setLoading(true);

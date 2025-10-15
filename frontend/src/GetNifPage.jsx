@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "./config";
 import PaymentFormWidget from "./PaymentFormWidget";
 
@@ -39,6 +40,16 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
   const [collaboratorUsername, setCollaboratorUsername] = useState(null);
   const [paymentCompleted, setPaymentCompleted] = useState(!!propCaseId); // True if existing case
   const [paymentIntent, setPaymentIntent] = useState(null);
+  const navigate = useNavigate();
+
+  // Authentication guard
+  useEffect(() => {
+    if (!user) {
+      console.log('[GetNifPage] User not authenticated, redirecting to login');
+      navigate('/login');
+      return;
+    }
+  }, [user, navigate]);
 
   const handlePassportChange = (e) => {
     setPassportFile(e.target.files && e.target.files[0] ? e.target.files[0] : null);
