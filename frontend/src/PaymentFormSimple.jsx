@@ -175,11 +175,10 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
       }}>
         <h4 style={{ margin: '0 0 8px 0', color: '#1976d2' }}>💳 How to pay:</h4>
         <p style={{ margin: '0 0 8px 0' }}>
-          1. Enter your name below<br/>
-          2. Fill in the separate card fields: Card Number, Expiry Date (MM/YY), and CVC
+          Fill in your payment information below - the secure widget accepts cards, Apple Pay, Google Pay and more!
         </p>
         <p style={{ margin: 0, fontWeight: 600 }}>
-          🧪 Test: Card <code>4242 4242 4242 4242</code> | Expiry <code>12/25</code> | CVC <code>123</code>
+          🧪 Test: Card <code>4242 4242 4242 4242</code> | Any future date | Any CVC
         </p>
       </div>
       

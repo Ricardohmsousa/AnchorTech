@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API_BASE_URL } from "./config";
-import PaymentFormSimple from "./PaymentFormSimple";
+import PaymentFormWidget from "./PaymentFormWidget";
 
 // Helper to get JWT token from localStorage
 function getAuthHeaders() {
@@ -233,7 +233,7 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
                   </p>
                 </div>
               </div>
-              <PaymentFormSimple
+              <PaymentFormWidget
                 amount={NIF_SERVICE_PRICE}
                 onSuccess={handlePaymentSuccess}
                 onError={handlePaymentError}

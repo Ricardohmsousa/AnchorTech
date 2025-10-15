@@ -18,17 +18,6 @@
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-security = HTTPBearer()
-
-def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    token = credentials.credentials
-    try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        return payload
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List
@@ -40,6 +29,21 @@ import shutil
 import jwt
 from datetime import datetime, timedelta
 import stripe
+
+# Load environment variables from .env file
+load_dotenv()
+
+security = HTTPBearer()
+
+def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 app = FastAPI()
 
