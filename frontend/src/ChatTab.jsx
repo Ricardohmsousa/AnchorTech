@@ -56,7 +56,6 @@ const ChatTab = ({ user }) => {
         const data = await response.json();
         if (user.user_type === 'collaborator') {
           // For collaborators, show all their assigned cases
-          console.log(data)
           setCases(data || []);
         } else {
           // For clients, only show cases with assigned collaborators
@@ -162,10 +161,6 @@ const ChatTab = ({ user }) => {
                       ? `With ${caseItem.collaborator_name || 'Collaborator'}` 
                       : 'Unassigned')
                 }
-                {/* Debug info for sidebar */}
-                <div style={{fontSize: '8px', color: '#999'}}>
-                  Debug: {JSON.stringify({client_name: caseItem.client_name, collaborator_name: caseItem.collaborator_name})}
-                </div>
               </div>
             </div>
           ))}
@@ -184,10 +179,6 @@ const ChatTab = ({ user }) => {
                       ? `💬 Chatting with client: ${messages[0].client_name || 'Unknown Client'}`
                       : `💬 Chatting with collaborator: ${messages[0].collaborator_name || 'Unassigned'}`
                     }
-                    {/* Debug info - remove this after testing */}
-                    <div style={{fontSize: '10px', color: '#999', marginTop: '2px'}}>
-                      Debug: Client={messages[0].client_name}, Collaborator={messages[0].collaborator_name}, UserType={user.user_type}
-                    </div>
                   </div>
                 )}
               </div>

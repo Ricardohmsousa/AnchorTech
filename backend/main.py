@@ -183,8 +183,9 @@ class CaseStatusUpdateRequest(BaseModel):
 class CaseResponse(BaseModel):
     id: str
     user_id: str
+    client_name: Optional[str] = None  # Client name saved in case
     collaborator_id: Optional[str]
-    collaborator_name: Optional[str] = None
+    collaborator_name: Optional[str] = None  # Collaborator name saved in case
     status: str
     created_at: str = None
     updated_at: str = None
@@ -348,32 +349,11 @@ def _serialize_case(case: dict, id: str = None):
     if "user_id" not in case:
         case["user_id"] = None
     
-    # Fetch collaborator name if collaborator_id exists
-    case["collaborator_name"] = None
-    if case.get("collaborator_id"):
-        collaborator_doc = db.collection("users").document(case["collaborator_id"]).get()
-        if collaborator_doc.exists:
-            collaborator_data = collaborator_doc.to_dict()
-            # Use name if available, fallback to username
-            case["collaborator_name"] = collaborator_data.get("name") or collaborator_data.get("username", "Unknown Collaborator")
+    # Use saved names from case data (much more efficient than fetching from database)
+    case["collaborator_name"] = case.get("collaborator_name", "Unknown Collaborator") if case.get("collaborator_id") else None
+    case["client_name"] = case.get("client_name", "Unknown Client") if case.get("user_id") else None
     
-    # Fetch client name if user_id exists
-    case["client_name"] = None
-    if case.get("user_id"):
-        print(f"[_serialize_case] Fetching client for user_id: {case['user_id']}")
-        client_doc = db.collection("users").document(case["user_id"]).get()
-        if client_doc.exists:
-            client_data = client_doc.to_dict()
-            # Use name if available, fallback to username
-            client_name = client_data.get("name") or client_data.get("username", "Unknown Client")
-            case["client_name"] = client_name
-            print(f"[_serialize_case] Client name resolved: {client_name}")
-        else:
-            print(f"[_serialize_case] Client document not found for user_id: {case['user_id']}")
-    else:
-        print(f"[_serialize_case] No user_id in case: {case}")
-    
-    print(f"[_serialize_case] Final case data - client_name: {case.get('client_name')}, collaborator_name: {case.get('collaborator_name')}")
+    print(f"[_serialize_case] Using saved names - client: {case.get('client_name')}, collaborator: {case.get('collaborator_name')}")
     return case
 
 @app.post("/cases", response_model=CaseResponse)
@@ -381,6 +361,16 @@ def create_case(data: CaseCreateRequest, token_data: dict = Depends(verify_jwt_t
     # Only allow user to create their own case
     if token_data["user_id"] != data.user_id:
         raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Get client name from user document
+    print(f"[CASE_CREATION] Fetching client name for user: {data.user_id}")
+    client_doc = db.collection("users").document(data.user_id).get()
+    if not client_doc.exists:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    client_data = client_doc.to_dict()
+    client_name = client_data.get("name") or client_data.get("username", "Unknown Client")
+    print(f"[CASE_CREATION] Client name resolved: {client_name}")
     
     # Verify payment if payment_intent_id is provided
     payment_verified = False
@@ -403,6 +393,7 @@ def create_case(data: CaseCreateRequest, token_data: dict = Depends(verify_jwt_t
     if not collaborators:
         print(f"[CASE_ASSIGNMENT] No collaborators found")
         collaborator_id = None
+        collaborator_name = None
     else:
         print(f"[CASE_ASSIGNMENT] Found {len(collaborators)} collaborators")
         
@@ -422,12 +413,16 @@ def create_case(data: CaseCreateRequest, token_data: dict = Depends(verify_jwt_t
         collaborator_case_counts.sort(key=lambda x: x['case_count'])
         selected_collaborator = collaborator_case_counts[0]
         collaborator_id = selected_collaborator['id']
+        collaborator_name = selected_collaborator['name'] or selected_collaborator['username']
         
         print(f"[CASE_ASSIGNMENT] Assigned to collaborator '{selected_collaborator['username']}' ({selected_collaborator['name']}) with {selected_collaborator['case_count']} cases")
+        
     case_ref = db.collection("cases").document()
     case_data = {
         "user_id": data.user_id,
+        "client_name": client_name,  # Save client name in case
         "collaborator_id": collaborator_id,
+        "collaborator_name": collaborator_name,  # Save collaborator name in case
         "status": "uploaded",
         "created_at": firestore.SERVER_TIMESTAMP,
         "updated_at": firestore.SERVER_TIMESTAMP,
