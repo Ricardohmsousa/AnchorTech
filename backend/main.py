@@ -258,6 +258,7 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
             raise HTTPException(status_code=500, detail="Payment system not configured - missing Stripe key")
         
         # Create a PaymentIntent with the order amount and currency
+        print(f"[PAYMENT] About to call Stripe API...")
         intent = stripe.PaymentIntent.create(
             amount=payment_request.amount,
             currency='eur',
@@ -268,7 +269,20 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
         )
         
         print(f"[PAYMENT] Payment intent created successfully: {intent.id}")
-        return {"client_secret": intent.client_secret}
+        print(f"[PAYMENT] Intent object type: {type(intent)}")
+        print(f"[PAYMENT] Intent has client_secret: {hasattr(intent, 'client_secret')}")
+        
+        if hasattr(intent, 'client_secret') and intent.client_secret:
+            client_secret = intent.client_secret
+            print(f"[PAYMENT] Client secret obtained: {client_secret[:20]}...")
+            print(f"[PAYMENT] About to return response...")
+            response = {"client_secret": client_secret}
+            print(f"[PAYMENT] Response object created: {response}")
+            return response
+        else:
+            print(f"[PAYMENT] ERROR: Intent missing client_secret!")
+            print(f"[PAYMENT] Intent attributes: {dir(intent)}")
+            raise Exception("Payment intent created but client_secret is missing")
     except stripe.error.StripeError as e:
         print(f"[PAYMENT] Stripe error: {e}")
         print(f"[PAYMENT] Stripe error type: {type(e)}")
