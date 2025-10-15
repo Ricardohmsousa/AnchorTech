@@ -484,11 +484,22 @@ def update_case_status(case_id: str, data: CaseStatusUpdateRequest, token_data: 
 
 @app.get("/collaborators/{collaborator_id}/cases", response_model=List[CaseResponse])
 def get_collaborator_cases(collaborator_id: str, token_data: dict = Depends(verify_jwt_token)):
-    # Only allow collaborator to get their assigned cases
-    if token_data["user_id"] != collaborator_id and token_data["user_type"] != "collaborator":
-        raise HTTPException(status_code=403, detail="Not authorized")
+    print(f"[COLLAB_CASES] Request from user {token_data['user_id']} (type: {token_data['user_type']}) for collaborator {collaborator_id}")
+    
+    # Allow access if:
+    # 1. The requesting user is the collaborator whose cases are being requested
+    # 2. OR the requesting user is any collaborator (can see other collaborator's cases)
+    if token_data["user_type"] != "collaborator":
+        print(f"[COLLAB_CASES] Access denied - user is not a collaborator")
+        raise HTTPException(status_code=403, detail="Only collaborators can access this endpoint")
+    
+    if token_data["user_id"] != collaborator_id:
+        print(f"[COLLAB_CASES] Collaborator {token_data['user_id']} accessing cases of collaborator {collaborator_id}")
+    
     cases = db.collection("cases").where("collaborator_id", "==", collaborator_id).stream()
-    return [_serialize_case(doc.to_dict(), doc.id) for doc in cases]
+    case_list = [_serialize_case(doc.to_dict(), doc.id) for doc in cases]
+    print(f"[COLLAB_CASES] Returning {len(case_list)} cases for collaborator {collaborator_id}")
+    return case_list
 
 # --- Chat Message Models & Endpoints ---
 class MessageRequest(BaseModel):
