@@ -529,15 +529,29 @@ def get_case_messages(case_id: str, token_data: dict = Depends(verify_jwt_token)
     client_name = "Unknown Client"
     collaborator_name = "Unassigned"
     
+    print(f"[CHAT_CONTEXT] Getting context for case. user_id: {case.get('user_id')}, collaborator_id: {case.get('collaborator_id')}")
+    
     # Fetch client information
     if case.get("user_id"):
         client_doc = db.collection("users").document(case["user_id"]).get()
         if client_doc.exists:
             client_data = client_doc.to_dict()
             client_name = client_data.get("name") or client_data.get("username", "Unknown Client")
+            print(f"[CHAT_CONTEXT] Client name resolved: '{client_name}' for user_id: {case['user_id']}")
+        else:
+            print(f"[CHAT_CONTEXT] Client document not found for user_id: {case['user_id']}")
     
     # Fetch collaborator information
     if case.get("collaborator_id"):
+        collaborator_doc = db.collection("users").document(case["collaborator_id"]).get()
+        if collaborator_doc.exists:
+            collaborator_data = collaborator_doc.to_dict()
+            collaborator_name = collaborator_data.get("name") or collaborator_data.get("username", "Unknown Collaborator")
+            print(f"[CHAT_CONTEXT] Collaborator name resolved: '{collaborator_name}' for collaborator_id: {case['collaborator_id']}")
+        else:
+            print(f"[CHAT_CONTEXT] Collaborator document not found for collaborator_id: {case['collaborator_id']}")
+    
+    print(f"[CHAT_CONTEXT] Final context - Client: '{client_name}', Collaborator: '{collaborator_name}'")
         collaborator_doc = db.collection("users").document(case["collaborator_id"]).get()
         if collaborator_doc.exists:
             collaborator_data = collaborator_doc.to_dict()
