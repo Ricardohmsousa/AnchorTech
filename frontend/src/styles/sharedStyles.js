@@ -1,7 +1,7 @@
 // Shared style objects for layout and components
 
 export const layout = {
-  fontFamily: 'Inter, sans-serif',
+  fontFamily: 'Lato, sans-serif',
   background: '#f8f9fb',
   color: '#222',
   minHeight: '100vh',
