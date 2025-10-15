@@ -155,7 +155,9 @@ const ChatTab = ({ user }) => {
               <div style={chatStyles.caseTitle}>Case #{caseItem.id.slice(0, 8)}</div>
               <div style={chatStyles.caseStatus}>Status: {caseItem.status}</div>
               <div style={chatStyles.collaboratorInfo}>
-                {caseItem.collaborator_id ? 'With Collaborator' : 'Unassigned'}
+                {caseItem.collaborator_id 
+                  ? `With ${caseItem.collaborator_name || 'Collaborator'}` 
+                  : 'Unassigned'}
               </div>
             </div>
           ))}
@@ -195,7 +197,7 @@ const ChatTab = ({ user }) => {
                           ...chatStyles.messageInfo,
                           ...(message.sender_id === user.id ? { color: '#e3f2fd' } : {})
                         }}>
-                          <span>{message.sender_type === 'client' ? 'Client' : 'Collaborator'}</span>
+                          <span>{message.sender_name || (message.sender_type === 'client' ? 'Client' : 'Collaborator')}</span>
                           <span>{formatTimestamp(message.timestamp)}</span>
                         </div>
                       </div>

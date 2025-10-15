@@ -5,6 +5,7 @@ import { API_BASE_URL } from "./config";
 
 function RegisterPage({ onBack, onRegister }) {
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("client");
   const [error, setError] = useState("");
@@ -18,7 +19,7 @@ function RegisterPage({ onBack, onRegister }) {
       const res = await fetch(`${API_BASE_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, user_type: userType }),
+        body: JSON.stringify({ username, name, password, user_type: userType }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -26,6 +27,7 @@ function RegisterPage({ onBack, onRegister }) {
       }
       setSuccess("Registration successful! You can now log in.");
       setUsername("");
+      setName("");
       setPassword("");
       setUserType("client");
   if (onRegister) onRegister({ ...data, id: String(data.id) });
@@ -45,6 +47,16 @@ function RegisterPage({ onBack, onRegister }) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc', marginTop: 4 }}
+          />
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <label>Full Name:</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your full name (optional)"
             style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc', marginTop: 4 }}
           />
         </div>

@@ -143,6 +143,7 @@ db = firestore.client()
 
 class RegisterRequest(BaseModel):
     username: str
+    name: Optional[str] = None
     password: str
     user_type: str
 
@@ -171,6 +172,7 @@ class CaseResponse(BaseModel):
     id: str
     user_id: str
     collaborator_id: Optional[str]
+    collaborator_name: Optional[str] = None
     status: str
     created_at: str = None
     updated_at: str = None
@@ -210,6 +212,7 @@ def register(data: RegisterRequest):
     doc_ref = users_ref.document()
     doc_ref.set({
         "username": data.username,
+        "name": data.name if data.name else data.username,  # Use name if provided, otherwise username
         "password": data.password,
         "user_type": data.user_type
     })
@@ -309,6 +312,16 @@ def _serialize_case(case: dict, id: str = None):
         case["status"] = "uploaded"
     if "user_id" not in case:
         case["user_id"] = None
+    
+    # Fetch collaborator name if collaborator_id exists
+    case["collaborator_name"] = None
+    if case.get("collaborator_id"):
+        collaborator_doc = db.collection("users").document(case["collaborator_id"]).get()
+        if collaborator_doc.exists:
+            collaborator_data = collaborator_doc.to_dict()
+            # Use name if available, fallback to username
+            case["collaborator_name"] = collaborator_data.get("name") or collaborator_data.get("username", "Unknown Collaborator")
+    
     return case
 
 @app.post("/cases", response_model=CaseResponse)
@@ -406,6 +419,7 @@ class MessageRequest(BaseModel):
 class MessageResponse(BaseModel):
     sender_id: str
     sender_type: str
+    sender_name: str
     text: str
     timestamp: str
 
@@ -423,9 +437,21 @@ def get_case_messages(case_id: str, token_data: dict = Depends(verify_jwt_token)
     result = []
     for msg in messages:
         m = msg.to_dict()
+        sender_id = m.get("sender_id")
+        
+        # Fetch sender information to get name
+        sender_name = "Unknown User"
+        if sender_id:
+            sender_doc = db.collection("users").document(sender_id).get()
+            if sender_doc.exists:
+                sender_data = sender_doc.to_dict()
+                # Use name if available, fallback to username
+                sender_name = sender_data.get("name") or sender_data.get("username", "Unknown User")
+        
         result.append({
-            "sender_id": m.get("sender_id"),
+            "sender_id": sender_id,
             "sender_type": m.get("sender_type"),
+            "sender_name": sender_name,
             "text": m.get("text"),
             "timestamp": m.get("timestamp").isoformat() if hasattr(m.get("timestamp"), "isoformat") else str(m.get("timestamp"))
         })
