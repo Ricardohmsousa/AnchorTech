@@ -82,200 +82,467 @@ export default function HomePage({ user }) {
     navigate("/contact");
   };
 
-
   return (
-    <div style={layout}>
+    <div style={{ background: '#ffffff', minHeight: '100vh' }}>
       <style>{`
         body { margin: 0 !important; padding: 0 !important; }
-        .pulse-animation {
-          animation: pulse 2s infinite;
+        
+        .floating-element {
+          animation: float 6s ease-in-out infinite;
         }
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
         }
+        
+        .fade-in-up {
+          animation: fadeInUp 0.8s ease-out;
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
         .cta-button {
           background: linear-gradient(135deg, #0070f3 0%, #0051cc 100%);
           transition: all 0.3s ease;
           transform: translateY(0);
+          position: relative;
+          overflow: hidden;
+        }
+        .cta-button:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.5s;
+        }
+        .cta-button:hover:before {
+          left: 100%;
         }
         .cta-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0, 112, 243, 0.3);
+          transform: translateY(-3px);
+          box-shadow: 0 12px 35px rgba(0, 112, 243, 0.4);
         }
+        
         .secondary-button {
-          background: transparent;
+          background: rgba(255, 255, 255, 0.95);
           color: #0070f3;
-          border: 2px solid #0070f3;
+          border: 2px solid rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(10px);
           transition: all 0.3s ease;
         }
         .secondary-button:hover {
-          background: #0070f3;
-          color: white;
+          background: rgba(255, 255, 255, 1);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
         }
+        
         .stat-card {
-          transition: transform 0.3s ease;
+          transition: all 0.4s ease;
+          backdrop-filter: blur(15px);
         }
         .stat-card:hover {
-          transform: translateY(-5px);
+          transform: translateY(-8px) scale(1.05);
+          box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
         }
+        
         .benefit-card {
-          transition: all 0.3s ease;
-          cursor: pointer;
+          transition: all 0.4s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        .benefit-card:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(0, 112, 243, 0.02) 0%, rgba(0, 112, 243, 0.05) 100%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .benefit-card:hover:before {
+          opacity: 1;
         }
         .benefit-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+          transform: translateY(-12px);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+        
+        .testimonial-card {
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+        }
+        .testimonial-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .process-step {
+          transition: all 0.3s ease;
+        }
+        .process-step:hover {
+          transform: translateY(-5px);
+        }
+        
+        .gradient-text {
+          background: linear-gradient(135deg, #0070f3 0%, #00d4ff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
       `}</style>
 
-      {/* Hero Section */}
-      <header style={heroHeader}>
-        <img src="/hero_section.jpg" alt="Relocation to Portugal" style={heroImage} />
-        <div style={heroOverlay} />
-        <div style={heroContent}>
-          <div style={{ marginBottom: '2rem' }}>
+      {/* Hero Section - Enhanced with more breathing space and modern layout */}
+      <section style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Background Elements */}
+        <div style={{
+          position: 'absolute',
+          top: '10%',
+          right: '5%',
+          width: '200px',
+          height: '200px',
+          background: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: '50%',
+          filter: 'blur(40px)'
+        }} className="floating-element" />
+        <div style={{
+          position: 'absolute',
+          bottom: '20%',
+          left: '10%',
+          width: '150px',
+          height: '150px',
+          background: 'rgba(255, 255, 255, 0.08)',
+          borderRadius: '50%',
+          filter: 'blur(30px)'
+        }} className="floating-element" />
+        
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: '0 2rem',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '4rem',
+          alignItems: 'center',
+          minHeight: '80vh'
+        }}>
+          {/* Left Column - Content */}
+          <div className="fade-in-up">
+            <div style={{ marginBottom: '2rem' }}>
+              <span style={{ 
+                background: 'rgba(255, 255, 255, 0.15)', 
+                color: '#ffffff', 
+                padding: '12px 24px', 
+                borderRadius: '50px', 
+                fontSize: '14px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                letterSpacing: '1.5px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}>
+                ✨ Portugal's #1 Relocation Platform
+              </span>
+            </div>
+            
+            <h1 style={{ 
+              fontSize: '4.5rem', 
+              fontWeight: '900', 
+              margin: '0 0 2rem 0', 
+              letterSpacing: '-2px', 
+              color: '#ffffff',
+              lineHeight: '1.1'
+            }}>
+              Your Gateway to
+              <br />
+              <span className="gradient-text" style={{ 
+                background: 'linear-gradient(135deg, #00d4ff 0%, #ffffff 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                Portugal
+              </span>
+              <br />
+              Awaits
+            </h1>
+            
+            <p style={{ 
+              color: 'rgba(255, 255, 255, 0.9)', 
+              fontSize: '1.3rem', 
+              margin: '0 0 3rem 0', 
+              maxWidth: '550px',
+              lineHeight: '1.6',
+              fontWeight: '400'
+            }}>
+              Join <strong>5,000+ successful relocators</strong> who chose the smart way to move. Our proven system eliminates the guesswork with a <strong>99% success rate</strong> and <strong>average 90-day timeline</strong>.
+            </p>
+            
+            <div style={{ 
+              display: 'flex', 
+              gap: '1.5rem', 
+              marginBottom: '3rem',
+              flexWrap: 'wrap'
+            }}>
+              <button 
+                className="cta-button"
+                style={{ 
+                  padding: '18px 36px', 
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  borderRadius: '16px',
+                  border: 'none',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  minWidth: '220px'
+                }} 
+                onClick={handleGetStarted}
+              >
+                🚀 Start Your Journey
+              </button>
+              
+              <button 
+                className="secondary-button"
+                style={{ 
+                  padding: '18px 36px', 
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  borderRadius: '16px',
+                  cursor: 'pointer',
+                  minWidth: '220px'
+                }} 
+                onClick={handleBookConsultation}
+              >
+                📞 Book Free Call
+              </button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2rem',
+              color: 'rgba(255, 255, 255, 0.9)', 
+              fontSize: '15px',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>⭐⭐⭐⭐⭐</span>
+                <span><strong>4.9/5</strong> (1,200+ reviews)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>🔒</span>
+                <span>Money-back guarantee</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>⚡</span>
+                <span>90-day average timeline</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right Column - Visual Mockup */}
+          <div style={{
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '24px',
+              padding: '2rem',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 25px 50px rgba(0, 0, 0, 0.1)',
+              maxWidth: '400px',
+              width: '100%'
+            }} className="floating-element">
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                marginBottom: '1rem',
+                color: '#333'
+              }}>
+                <h4 style={{ margin: '0 0 1rem 0', fontWeight: '700', color: '#0070f3' }}>Your Relocation Dashboard</h4>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '14px', color: '#666' }}>Progress</span>
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#10b981' }}>78% Complete</span>
+                </div>
+                <div style={{
+                  background: '#f0f0f0',
+                  height: '8px',
+                  borderRadius: '4px',
+                  marginBottom: '1.5rem'
+                }}>
+                  <div style={{
+                    background: 'linear-gradient(90deg, #10b981, #0070f3)',
+                    height: '100%',
+                    width: '78%',
+                    borderRadius: '4px'
+                  }} />
+                </div>
+                <div style={{ fontSize: '13px', color: '#666' }}>
+                  ✅ Documentation submitted<br/>
+                  ✅ Appointment scheduled<br/>
+                  🔄 Processing application<br/>
+                  ⏳ Awaiting approval
+                </div>
+              </div>
+              
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.9)',
+                borderRadius: '12px',
+                padding: '1rem',
+                fontSize: '13px',
+                color: '#333'
+              }}>
+                <strong style={{ color: '#0070f3' }}>Next Step:</strong> Schedule your appointment at the Portuguese consulate
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof Stats - Enhanced with better spacing and modern design */}
+      <section style={{
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        padding: '8rem 2rem',
+        position: 'relative'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ marginBottom: '1rem' }}>
             <span style={{ 
               background: 'rgba(0, 112, 243, 0.1)', 
               color: '#0070f3', 
-              padding: '8px 16px', 
-              borderRadius: '20px', 
+              padding: '8px 20px', 
+              borderRadius: '25px', 
               fontSize: '14px',
-              fontWeight: '600',
+              fontWeight: '700',
               textTransform: 'uppercase',
               letterSpacing: '1px'
             }}>
-              ✨ #1 Portugal Relocation Service
+              Trusted by Thousands
             </span>
           </div>
           
-          <h1 style={{ 
-            fontSize: '3.2rem', 
-            fontWeight: 900, 
-            margin: '0 0 1rem 0', 
-            letterSpacing: '1px', 
-            pointerEvents: 'auto',
-            lineHeight: '1.1'
+          <h2 style={{ 
+            fontSize: '3rem', 
+            fontWeight: '900',
+            marginBottom: '1rem',
+            color: '#1a202c',
+            letterSpacing: '-1px'
           }}>
-            Move to Portugal in
-            <span style={{ color: '#0070f3' }}> 90 Days</span>
-            <br />or Less
-          </h1>
+            The Numbers Speak for Themselves
+          </h2>
           
-          <p style={{ 
-            color: '#fff', 
-            fontSize: '1.4rem', 
-            margin: '1.5rem 0 3rem 0', 
-            maxWidth: 650, 
-            pointerEvents: 'auto',
-            lineHeight: '1.5',
-            fontWeight: '300'
+          <p style={{
+            fontSize: '1.2rem',
+            color: '#64748b',
+            marginBottom: '4rem',
+            maxWidth: '600px',
+            margin: '0 auto 4rem auto'
           }}>
-            Skip months of research and bureaucracy. Our proven system has helped <strong>5,000+ people</strong> relocate to Portugal with a <strong>99% success rate</strong>. 
+            Join thousands of successful relocators who chose the smart path to Portugal
           </p>
           
           <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: 20, 
-            pointerEvents: 'auto',
-            flexWrap: 'wrap'
-          }}>
-            <button 
-              className="cta-button"
-              style={{ 
-                ...buttonStyle, 
-                padding: '20px 40px', 
-                fontSize: 18,
-                fontWeight: 700,
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
-                border: 'none',
-                minWidth: '200px'
-              }} 
-              onClick={handleGetStarted}
-            >
-              🚀 Start My Journey
-            </button>
-            
-            <button 
-              className="secondary-button"
-              style={{ 
-                padding: '20px 40px', 
-                fontSize: 18,
-                fontWeight: 600,
-                borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: '#fff',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                minWidth: '200px',
-                cursor: 'pointer'
-              }} 
-              onClick={handleBookConsultation}
-            >
-              📞 Free Consultation
-            </button>
-          </div>
-
-          <div style={{ 
-            marginTop: '3rem', 
-            color: 'rgba(255, 255, 255, 0.9)', 
-            fontSize: '14px',
-            pointerEvents: 'auto'
-          }}>
-            ⭐ 4.9/5 stars from 1,200+ reviews | 🔒 Money-back guarantee
-          </div>
-        </div>
-      </header>
-
-      {/* Social Proof Stats */}
-      <section style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        padding: '4rem 2rem',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h3 style={{ 
-            fontSize: '1.8rem', 
-            marginBottom: '3rem',
-            fontWeight: '600'
-          }}>
-            Trusted by thousands of successful relocators
-          </h3>
-          <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '2rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '2rem',
+            marginBottom: '4rem'
           }}>
             {stats.map((stat, i) => (
               <div 
                 key={i} 
                 className="stat-card"
                 style={{ 
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  borderRadius: '15px',
-                  padding: '2rem 1rem',
-                  backdropFilter: 'blur(10px)'
+                  background: '#ffffff',
+                  borderRadius: '20px',
+                  padding: '3rem 2rem',
+                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                  border: '1px solid #e2e8f0',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '4px',
+                  background: 'linear-gradient(90deg, #0070f3, #00d4ff)'
+                }} />
                 <div style={{ 
-                  fontSize: '3rem', 
+                  fontSize: '3.5rem', 
                   fontWeight: '900',
-                  marginBottom: '0.5rem',
-                  color: '#fff'
+                  marginBottom: '1rem',
+                  color: '#0070f3'
                 }}>
                   {stat.number}
                 </div>
                 <div style={{ 
-                  fontSize: '1rem',
-                  opacity: 0.9
+                  fontSize: '1.1rem',
+                  color: '#64748b',
+                  fontWeight: '600'
                 }}>
                   {stat.label}
                 </div>
               </div>
             ))}
+          </div>
+          
+          {/* Client Logos Section */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            padding: '3rem 2rem',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #e2e8f0'
+          }}>
+            <p style={{
+              fontSize: '1rem',
+              color: '#64748b',
+              marginBottom: '2rem',
+              fontWeight: '600'
+            }}>
+              Empowering relocations to Portugal's fastest growing communities
+            </p>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '3rem',
+              flexWrap: 'wrap',
+              opacity: 0.7
+            }}>
+              {/* Placeholder for client logos */}
+              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Portugal Tech Hub</div>
+              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Lisbon Expat Network</div>
+              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Porto Business Council</div>
+              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Digital Nomad Community</div>
+            </div>
           </div>
         </div>
       </section>
