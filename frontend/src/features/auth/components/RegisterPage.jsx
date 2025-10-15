@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { layout, card, button as buttonStyle } from "../../../styles/sharedStyles";
-import { API_BASE_URL } from "../../../lib/config";
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shimmering-communication-production.up.railway.app';
 
 
 function RegisterPage({ onBack, onRegister }) {

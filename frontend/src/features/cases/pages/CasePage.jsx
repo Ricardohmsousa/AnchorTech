@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { layout, navBar, navLink, card, button as buttonStyle } from "../../../styles/sharedStyles";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_BASE_URL } from "../../../lib/config";
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shimmering-communication-production.up.railway.app';
 
 function CasePage({ user, caseId: propCaseId }) {
   const navigate = useNavigate();

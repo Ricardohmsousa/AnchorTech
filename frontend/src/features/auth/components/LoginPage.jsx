@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { layout, navBar, navLink, card, button as buttonStyle } from "../../../styles/sharedStyles";
-import { API_BASE_URL } from "../../../lib/config";
+
+// Simple config inline to avoid import issues
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shimmering-communication-production.up.railway.app';
 
 export default function LoginPage({ onLogin, onRegister }) {
   const [username, setUsername] = useState("");

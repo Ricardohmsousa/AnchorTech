@@ -6,7 +6,8 @@ import {
   useStripe, 
   useElements 
 } from '@stripe/react-stripe-js';
-import { STRIPE_PUBLISHABLE_KEY, API_BASE_URL } from '../../../lib/config';
+const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shimmering-communication-production.up.railway.app';
 import { button as buttonStyle } from '../../../styles/sharedStyles';
 
 // Load Stripe outside of component to avoid recreating the object
