@@ -12,12 +12,23 @@ function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
   useEffect(() => {
     // Fetch cases assigned to this collaborator
     const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+    console.log('🔍 CollaboratorProfilePage - Current user:', { 
+      id: storedUser?.id, 
+      user_type: storedUser?.user_type, 
+      username: storedUser?.username,
+      hasToken: !!storedUser?.token 
+    });
+    console.log('🔍 CollaboratorProfilePage - Target collaborator ID:', user.id);
     const headers = storedUser && storedUser.token ? { Authorization: `Bearer ${storedUser.token}` } : {};
     
     fetch(`${API_BASE_URL}/collaborators/${String(user.id)}/cases`, { headers })
       .then(res => {
+        console.log('🔍 Response status:', res.status);
         if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+          return res.text().then(text => {
+            console.error('🔍 Error response body:', text);
+            throw new Error(`HTTP error! status: ${res.status}, body: ${text}`);
+          });
         }
         return res.json();
       })
