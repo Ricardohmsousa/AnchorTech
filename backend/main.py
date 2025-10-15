@@ -249,11 +249,13 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
         print(f"[PAYMENT] Service type: {payment_request.service_type}")
         print(f"[PAYMENT] User ID: {token_data['user_id']}")
         print(f"[PAYMENT] Stripe API key configured: {'Yes' if stripe.api_key else 'No'}")
+        print(f"[PAYMENT] Available env vars: {[k for k in os.environ.keys() if 'STRIPE' in k.upper()]}")
         
         # Check if Stripe is properly configured
         if not stripe.api_key:
             print(f"[PAYMENT] ERROR: Stripe API key is not set!")
-            raise HTTPException(status_code=500, detail="Payment system not configured")
+            print(f"[PAYMENT] Environment STRIPE_SECRET_KEY: {os.environ.get('STRIPE_SECRET_KEY', 'NOT_SET')[:15]}...")
+            raise HTTPException(status_code=500, detail="Payment system not configured - missing Stripe key")
         
         # Create a PaymentIntent with the order amount and currency
         intent = stripe.PaymentIntent.create(
@@ -269,13 +271,15 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
         return {"client_secret": intent.client_secret}
     except stripe.error.StripeError as e:
         print(f"[PAYMENT] Stripe error: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
+        print(f"[PAYMENT] Stripe error type: {type(e)}")
+        print(f"[PAYMENT] Stripe error details: {e.args}")
+        raise HTTPException(status_code=400, detail=f"Stripe error: {str(e)}")
     except Exception as e:
         print(f"[PAYMENT] Unexpected error creating payment intent: {e}")
         print(f"[PAYMENT] Error type: {type(e)}")
         import traceback
         print(f"[PAYMENT] Traceback: {traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail="Failed to create payment intent")
+        raise HTTPException(status_code=500, detail=f"Failed to create payment intent: {str(e)}")
 
 @app.post("/verify-payment")
 def verify_payment(payment_intent_id: str, token_data: dict = Depends(verify_jwt_token)):
