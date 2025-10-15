@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { layout, card, button as buttonStyle, section } from "../../../styles/sharedStyles";
 
 import { ClientCasesTab, ChatTab } from "../../cases";
+import { GetNifPage } from "../../business-services";
+import { CasePage } from "../../cases";
 
 export default function ProfilePage({ user, onHome, onGetNif, onLogout }) {
   const [tab, setTab] = useState("main");
@@ -25,11 +27,9 @@ export default function ProfilePage({ user, onHome, onGetNif, onLogout }) {
   // Show case details if a case is selected
   if (selectedCaseId) {
     if (user && user.user_type === "client") {
-      const GetNifPage = require("./GetNifPage").default;
-  return <GetNifPage user={user} onBack={() => setSelectedCaseId(null)} caseId={String(selectedCaseId)} />;
+      return <GetNifPage user={user} onBack={() => setSelectedCaseId(null)} caseId={String(selectedCaseId)} />;
     } else {
-      const CasePage = require("./CasePage").default;
-  return <CasePage caseId={String(selectedCaseId)} onBack={() => setSelectedCaseId(null)} user={user} />;
+      return <CasePage caseId={String(selectedCaseId)} onBack={() => setSelectedCaseId(null)} user={user} />;
     }
   }
 

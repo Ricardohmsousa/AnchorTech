@@ -1,34 +1,85 @@
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { layout, heroHeader, heroImage, heroOverlay, heroContent, section, card, footer as footerStyle, button as buttonStyle } from "../../styles/sharedStyles";
-// import Header from "./Header";
 
 const testimonials = [
   {
     name: "Maria S.",
+    location: "Lisbon, Portugal",
     quote: "TechAnchor made my move to Portugal seamless. My case manager was always available and the process was so much easier than I expected!",
-    rating: 5
+    rating: 5,
+    visa: "D7 Visa"
   },
   {
     name: "James T.",
+    location: "Porto, Portugal", 
     quote: "I got my visa in just 3 months. The online tracker and support team were fantastic.",
-    rating: 5
+    rating: 5,
+    visa: "Digital Nomad Visa"
   },
   {
     name: "Elena R.",
+    location: "Cascais, Portugal",
     quote: "The AnchorMove tool helped me plan every step. Highly recommended for anyone relocating!",
-    rating: 4.8
+    rating: 4.8,
+    visa: "Golden Visa"
   }
 ];
 
-export default function HomePage({ user, onLogin, onLogout }) {
+const stats = [
+  { number: "5,000+", label: "Successful Relocations" },
+  { number: "99%", label: "Visa Success Rate" },
+  { number: "3 months", label: "Average Processing Time" },
+  { number: "24/7", label: "Support Available" }
+];
+
+const benefits = [
+  {
+    icon: "🎯",
+    title: "Personalized Strategy",
+    description: "Tailored relocation plan based on your specific situation and goals"
+  },
+  {
+    icon: "⚡",
+    title: "Fast-Track Process",
+    description: "Skip the learning curve with our proven step-by-step system"
+  },
+  {
+    icon: "🛡️",
+    title: "Risk-Free Guarantee",
+    description: "Money-back guarantee if we can't deliver on our promises"
+  },
+  {
+    icon: "👥",
+    title: "Expert Team",
+    description: "Certified immigration lawyers and relocation specialists"
+  }
+];
+
+export default function HomePage({ user }) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleChecklistSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
+    // TODO: Integrate with email service
+  };
+
+  const handleGetStarted = () => {
+    if (user) {
+      navigate("/profile");
+    } else {
+      navigate("/register");
+    }
+  };
+
+  const handleBookConsultation = () => {
+    // TODO: Integrate with booking system
+    navigate("/contact");
   };
 
 
@@ -36,112 +87,724 @@ export default function HomePage({ user, onLogin, onLogout }) {
     <div style={layout}>
       <style>{`
         body { margin: 0 !important; padding: 0 !important; }
-        .services-dropdown { transition: opacity 0.2s; }
-        .services-dropdown.open { display: block !important; opacity: 1; }
-        .services-dropdown.closed { display: none !important; opacity: 0; }
+        .pulse-animation {
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); }
+        }
+        .cta-button {
+          background: linear-gradient(135deg, #0070f3 0%, #0051cc 100%);
+          transition: all 0.3s ease;
+          transform: translateY(0);
+        }
+        .cta-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 112, 243, 0.3);
+        }
+        .secondary-button {
+          background: transparent;
+          color: #0070f3;
+          border: 2px solid #0070f3;
+          transition: all 0.3s ease;
+        }
+        .secondary-button:hover {
+          background: #0070f3;
+          color: white;
+        }
+        .stat-card {
+          transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+          transform: translateY(-5px);
+        }
+        .benefit-card {
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .benefit-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
       `}</style>
+
       {/* Hero Section */}
       <header style={heroHeader}>
         <img src="/hero_section.jpg" alt="Relocation to Portugal" style={heroImage} />
-        {/* Overlay */}
         <div style={heroOverlay} />
-        {/* Hero Content */}
         <div style={heroContent}>
-          <h1 style={{ fontSize: '2.8rem', fontWeight: 900, margin: 0, letterSpacing: 1, pointerEvents: 'auto' }}>Your life in Europe, made easy</h1>
-          <p style={{ color: '#fff', fontSize: '1.3rem', margin: '1.5rem 0 2.5rem 0', maxWidth: 600, pointerEvents: 'auto' }}>
-            TechAnchor is your digital relocation companion for Portugal. We simplify your move with expert support, transparent pricing, and a seamless online experience.
+          <div style={{ marginBottom: '2rem' }}>
+            <span style={{ 
+              background: 'rgba(0, 112, 243, 0.1)', 
+              color: '#0070f3', 
+              padding: '8px 16px', 
+              borderRadius: '20px', 
+              fontSize: '14px',
+              fontWeight: '600',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              ✨ #1 Portugal Relocation Service
+            </span>
+          </div>
+          
+          <h1 style={{ 
+            fontSize: '3.2rem', 
+            fontWeight: 900, 
+            margin: '0 0 1rem 0', 
+            letterSpacing: '1px', 
+            pointerEvents: 'auto',
+            lineHeight: '1.1'
+          }}>
+            Move to Portugal in
+            <span style={{ color: '#0070f3' }}> 90 Days</span>
+            <br />or Less
+          </h1>
+          
+          <p style={{ 
+            color: '#fff', 
+            fontSize: '1.4rem', 
+            margin: '1.5rem 0 3rem 0', 
+            maxWidth: 650, 
+            pointerEvents: 'auto',
+            lineHeight: '1.5',
+            fontWeight: '300'
+          }}>
+            Skip months of research and bureaucracy. Our proven system has helped <strong>5,000+ people</strong> relocate to Portugal with a <strong>99% success rate</strong>. 
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 24, pointerEvents: 'auto' }}>
-            <button style={{ ...buttonStyle, padding: '18px 40px', fontSize: 20, boxShadow: '0 2px 8px #2228' }} onClick={onLogin}>
-              Start to relocate
+          
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: 20, 
+            pointerEvents: 'auto',
+            flexWrap: 'wrap'
+          }}>
+            <button 
+              className="cta-button"
+              style={{ 
+                ...buttonStyle, 
+                padding: '20px 40px', 
+                fontSize: 18,
+                fontWeight: 700,
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                border: 'none',
+                minWidth: '200px'
+              }} 
+              onClick={handleGetStarted}
+            >
+              🚀 Start My Journey
+            </button>
+            
+            <button 
+              className="secondary-button"
+              style={{ 
+                padding: '20px 40px', 
+                fontSize: 18,
+                fontWeight: 600,
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                color: '#fff',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                minWidth: '200px',
+                cursor: 'pointer'
+              }} 
+              onClick={handleBookConsultation}
+            >
+              📞 Free Consultation
             </button>
           </div>
-        </div>
-        <div style={{ marginTop: 40, color: '#fff', fontSize: 18, fontWeight: 500, position: 'absolute', bottom: 16, left: 0, width: '100%', textAlign: 'center', textShadow: '0 2px 8px #2228', zIndex: 2 }}>
-          <span>5,000+ relocations completed · 99% success rate · Avg. visa time: 3 months</span>
+
+          <div style={{ 
+            marginTop: '3rem', 
+            color: 'rgba(255, 255, 255, 0.9)', 
+            fontSize: '14px',
+            pointerEvents: 'auto'
+          }}>
+            ⭐ 4.9/5 stars from 1,200+ reviews | 🔒 Money-back guarantee
+          </div>
         </div>
       </header>
 
-      {/* Value Proposition & Features */}
-      <section id="services" style={section}>
-        <div style={card}>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: 16 }}>Why TechAnchor?</h2>
-          <ul style={{ color: '#444', fontSize: 18, margin: 0, padding: 0, listStyle: 'none', lineHeight: 2 }}>
-            <li>✔️ Dedicated case managers</li>
-            <li>✔️ Multilingual support</li>
-            <li>✔️ Free online relocation tool (AnchorMove)</li>
-            <li>✔️ Transparent, affordable pricing</li>
-            <li>✔️ Country-specific checklists</li>
-            <li>✔️ Human support, not just software</li>
-          </ul>
+      {/* Social Proof Stats */}
+      <section style={{ 
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '4rem 2rem',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h3 style={{ 
+            fontSize: '1.8rem', 
+            marginBottom: '3rem',
+            fontWeight: '600'
+          }}>
+            Trusted by thousands of successful relocators
+          </h3>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+            gap: '2rem'
+          }}>
+            {stats.map((stat, i) => (
+              <div 
+                key={i} 
+                className="stat-card"
+                style={{ 
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: '15px',
+                  padding: '2rem 1rem',
+                  backdropFilter: 'blur(10px)'
+                }}
+              >
+                <div style={{ 
+                  fontSize: '3rem', 
+                  fontWeight: '900',
+                  marginBottom: '0.5rem',
+                  color: '#fff'
+                }}>
+                  {stat.number}
+                </div>
+                <div style={{ 
+                  fontSize: '1rem',
+                  opacity: 0.9
+                }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-  <div style={card}>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: 16 }}>Who is it for?</h2>
-          <ul style={{ color: '#444', fontSize: 18, margin: 0, padding: 0, listStyle: 'none', lineHeight: 2 }}>
-            <li>• Digital nomads & remote workers</li>
-            <li>• Entrepreneurs & freelancers</li>
-            <li>• Professionals & students</li>
-            <li>• Retirees & families</li>
-            <li>• Passive income individuals</li>
-          </ul>
+      </section>
+
+      {/* Benefits Section */}
+      <section style={{ 
+        padding: '6rem 2rem',
+        background: '#fff',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 style={{ 
+            fontSize: '3rem', 
+            fontWeight: '800', 
+            marginBottom: '1rem',
+            color: '#222'
+          }}>
+            Why Choose TechAnchor?
+          </h2>
+          <p style={{ 
+            fontSize: '1.2rem', 
+            color: '#666',
+            marginBottom: '4rem',
+            maxWidth: '600px',
+            margin: '0 auto 4rem auto'
+          }}>
+            We've perfected the relocation process so you don't have to figure it out yourself
+          </p>
+          
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+            gap: '2rem'
+          }}>
+            {benefits.map((benefit, i) => (
+              <div 
+                key={i}
+                className="benefit-card"
+                style={{ 
+                  background: '#fff',
+                  borderRadius: '20px',
+                  padding: '3rem 2rem',
+                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+                  border: '1px solid #f0f0f0',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{ 
+                  fontSize: '3rem', 
+                  marginBottom: '1rem'
+                }}>
+                  {benefit.icon}
+                </div>
+                <h3 style={{ 
+                  fontSize: '1.4rem', 
+                  fontWeight: '700',
+                  marginBottom: '1rem',
+                  color: '#222'
+                }}>
+                  {benefit.title}
+                </h3>
+                <p style={{ 
+                  color: '#666',
+                  lineHeight: '1.6',
+                  fontSize: '1rem'
+                }}>
+                  {benefit.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-  <div style={card}>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: 16 }}>What do we offer?</h2>
-          <ul style={{ color: '#444', fontSize: 18, margin: 0, padding: 0, listStyle: 'none', lineHeight: 2 }}>
-            <li>• Personal consultation</li>
-            <li>• Visa & residency guidance</li>
-            <li>• Document & appointment handling</li>
-            <li>• Legal/admin support</li>
-            <li>• Online progress tracking</li>
-            <li>• Community forum</li>
-          </ul>
+      </section>
+
+      {/* Process Section */}
+      <section style={{ 
+        padding: '6rem 2rem',
+        background: 'linear-gradient(135deg, #f8f9fb 0%, #e9ecef 100%)'
+      }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ 
+            fontSize: '3rem', 
+            fontWeight: '800', 
+            marginBottom: '1rem',
+            color: '#222'
+          }}>
+            Your Journey in 3 Simple Steps
+          </h2>
+          <p style={{ 
+            fontSize: '1.2rem', 
+            color: '#666',
+            marginBottom: '4rem'
+          }}>
+            From consultation to celebration, we guide you every step of the way
+          </p>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '3rem'
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ 
+                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                color: 'white',
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2rem',
+                fontWeight: '800',
+                margin: '0 auto 2rem auto'
+              }}>
+                1
+              </div>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem' }}>
+                Free Consultation
+              </h3>
+              <p style={{ color: '#666', lineHeight: '1.6' }}>
+                We analyze your situation and create a personalized relocation strategy tailored to your needs and timeline.
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ 
+                background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+                color: 'white',
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2rem',
+                fontWeight: '800',
+                margin: '0 auto 2rem auto'
+              }}>
+                2
+              </div>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem' }}>
+                Expert Execution
+              </h3>
+              <p style={{ color: '#666', lineHeight: '1.6' }}>
+                Our team handles all paperwork, appointments, and bureaucracy while you track progress in real-time.
+              </p>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ 
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                color: 'white',
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2rem',
+                fontWeight: '800',
+                margin: '0 auto 2rem auto'
+              }}>
+                3
+              </div>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem' }}>
+                Welcome to Portugal
+              </h3>
+              <p style={{ color: '#666', lineHeight: '1.6' }}>
+                Celebrate your successful move with ongoing support as you settle into your new life in Portugal.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '4rem' }}>
+            <button 
+              className="cta-button"
+              style={{ 
+                ...buttonStyle, 
+                padding: '18px 40px', 
+                fontSize: 18,
+                fontWeight: 700,
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                border: 'none'
+              }} 
+              onClick={handleGetStarted}
+            >
+              Start Your Journey Today →
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Immigration Checklist CTA */}
-  <section id="checklist" style={{ maxWidth: 900, margin: '4rem auto', background: '#eaf4ff', borderRadius: 18, padding: '3rem 2rem', textAlign: 'center', boxShadow: '0 2px 8px #e0e0e0' }}>
-        <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: 18 }}>Get your free Portugal immigration checklist</h2>
-        <p style={{ color: '#444', fontSize: 18, marginBottom: 24 }}>Enter your email and we'll send you our step-by-step checklist to make your move to Portugal smooth and stress-free.</p>
+      <section style={{ 
+        maxWidth: '900px', 
+        margin: '6rem auto', 
+        background: 'linear-gradient(135deg, #eaf4ff 0%, #dbeafe 100%)', 
+        borderRadius: '24px', 
+        padding: '4rem 3rem', 
+        textAlign: 'center', 
+        boxShadow: '0 8px 30px rgba(0, 112, 243, 0.1)',
+        border: '1px solid rgba(0, 112, 243, 0.1)'
+      }}>
+        <div style={{ marginBottom: '2rem' }}>
+          <span style={{ 
+            background: 'rgba(0, 112, 243, 0.1)', 
+            color: '#0070f3', 
+            padding: '8px 16px', 
+            borderRadius: '20px', 
+            fontSize: '14px',
+            fontWeight: '600',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            🎁 FREE RESOURCE
+          </span>
+        </div>
+        
+        <h2 style={{ 
+          fontSize: '2.5rem', 
+          fontWeight: '900', 
+          marginBottom: '1rem',
+          color: '#222',
+          lineHeight: '1.2'
+        }}>
+          Get Your Portugal Immigration Checklist
+        </h2>
+        
+        <p style={{ 
+          color: '#555', 
+          fontSize: '1.2rem', 
+          marginBottom: '3rem',
+          lineHeight: '1.6',
+          maxWidth: '600px',
+          margin: '0 auto 3rem auto'
+        }}>
+          Download our comprehensive <strong>step-by-step checklist</strong> that has helped thousands successfully relocate to Portugal. Everything you need to know in one place.
+        </p>
+        
         {submitted ? (
-          <div style={{ color: '#0070f3', fontWeight: 700, fontSize: 18, marginTop: 24 }}>Thank you! Your checklist is on its way.</div>
+          <div style={{ 
+            background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+            color: 'white',
+            fontWeight: '700', 
+            fontSize: '1.2rem', 
+            padding: '2rem',
+            borderRadius: '15px',
+            marginTop: '2rem'
+          }}>
+            🎉 Success! Check your email for your free checklist and exclusive relocation tips!
+          </div>
         ) : (
-          <form onSubmit={handleChecklistSubmit} style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 24, flexWrap: 'wrap' }}>
+          <form onSubmit={handleChecklistSubmit} style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: 16, 
+            marginTop: '2rem', 
+            flexWrap: 'wrap',
+            maxWidth: '500px',
+            margin: '2rem auto 0 auto'
+          }}>
             <input
               type="email"
               required
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              style={{ padding: '14px 18px', borderRadius: 8, border: '1px solid #bbb', fontSize: 18, minWidth: 260 }}
+              style={{ 
+                padding: '16px 20px', 
+                borderRadius: '12px', 
+                border: '2px solid #e5e7eb', 
+                fontSize: '16px', 
+                minWidth: '280px',
+                flex: '1',
+                fontFamily: 'inherit'
+              }}
             />
-            <button type="submit" style={{ ...buttonStyle, padding: '14px 38px', fontSize: 18 }}>
-              Get Checklist
+            <button 
+              type="submit" 
+              className="cta-button"
+              style={{ 
+                ...buttonStyle, 
+                padding: '16px 32px', 
+                fontSize: '16px',
+                fontWeight: '700',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                border: 'none',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Get Free Checklist 📋
             </button>
           </form>
         )}
+        
+        <p style={{ 
+          fontSize: '14px', 
+          color: '#666', 
+          marginTop: '1.5rem'
+        }}>
+          📧 No spam, ever. Unsubscribe anytime. Used by 10,000+ relocators.
+        </p>
       </section>
 
       {/* Testimonials */}
-  <section id="community" style={{ maxWidth: 900, margin: '4rem auto', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: 18 }}>What our clients say</h2>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, justifyContent: 'center' }}>
-          {testimonials.map((t, i) => (
-            <div key={i} style={{ background: '#fff', borderRadius: 18, boxShadow: '0 2px 8px #e0e0e0', padding: 32, maxWidth: 320, minWidth: 260, flex: '1 1 260px', textAlign: 'left' }}>
-              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>{t.name}</div>
-              <div style={{ color: '#555', fontSize: 16, marginBottom: 12, fontStyle: 'italic' }}>&ldquo;{t.quote}&rdquo;</div>
-              <div style={{ color: '#f5b301', fontWeight: 700, fontSize: 16 }}>{'★'.repeat(Math.round(t.rating))}{t.rating % 1 ? '½' : ''}</div>
-            </div>
-          ))}
+      <section style={{ 
+        padding: '6rem 2rem',
+        background: '#fff',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 style={{ 
+            fontSize: '3rem', 
+            fontWeight: '900', 
+            marginBottom: '1rem',
+            color: '#222'
+          }}>
+            Success Stories
+          </h2>
+          <p style={{ 
+            fontSize: '1.2rem', 
+            color: '#666',
+            marginBottom: '4rem'
+          }}>
+            Real people, real results. See what our clients say about their relocation journey.
+          </p>
+          
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
+            gap: '2rem'
+          }}>
+            {testimonials.map((t, i) => (
+              <div 
+                key={i} 
+                style={{ 
+                  background: '#fff', 
+                  borderRadius: '20px', 
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)', 
+                  padding: '3rem 2rem', 
+                  textAlign: 'left',
+                  border: '1px solid #f0f0f0',
+                  position: 'relative'
+                }}
+              >
+                <div style={{ 
+                  color: '#f59e0b', 
+                  fontSize: '24px', 
+                  marginBottom: '1rem'
+                }}>
+                  {'★'.repeat(Math.round(t.rating))}
+                </div>
+                
+                <p style={{ 
+                  color: '#333', 
+                  fontSize: '1.1rem', 
+                  marginBottom: '2rem', 
+                  fontStyle: 'italic',
+                  lineHeight: '1.6'
+                }}>
+                  "{t.quote}"
+                </p>
+                
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between',
+                  paddingTop: '1rem',
+                  borderTop: '1px solid #f0f0f0'
+                }}>
+                  <div>
+                    <div style={{ 
+                      fontWeight: '700', 
+                      fontSize: '1.1rem',
+                      color: '#222',
+                      marginBottom: '0.25rem'
+                    }}>
+                      {t.name}
+                    </div>
+                    <div style={{ 
+                      color: '#666', 
+                      fontSize: '0.9rem'
+                    }}>
+                      📍 {t.location}
+                    </div>
+                  </div>
+                  <div style={{ 
+                    background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                    color: 'white',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '20px',
+                    fontSize: '0.8rem',
+                    fontWeight: '600'
+                  }}>
+                    {t.visa}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: '4rem' }}>
+            <button 
+              className="cta-button"
+              style={{ 
+                ...buttonStyle, 
+                padding: '18px 40px', 
+                fontSize: 18,
+                fontWeight: 700,
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                border: 'none'
+              }} 
+              onClick={handleBookConsultation}
+            >
+              Book Your Free Consultation →
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Disclaimer */}
-  <footer style={footerStyle}>
-        <div style={{ marginBottom: 10 }}>
-          TechAnchor is not a law firm, tax advisor, or investment firm. We connect you with certified professionals as needed.
+      {/* Final CTA Section */}
+      <section style={{ 
+        background: 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)',
+        padding: '6rem 2rem',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{ 
+            fontSize: '3rem', 
+            fontWeight: '900', 
+            marginBottom: '1rem',
+            lineHeight: '1.2'
+          }}>
+            Ready to Start Your Portugal Journey?
+          </h2>
+          
+          <p style={{ 
+            fontSize: '1.3rem', 
+            marginBottom: '3rem',
+            opacity: 0.9,
+            lineHeight: '1.6'
+          }}>
+            Join thousands of successful relocators who chose TechAnchor. 
+            <br />Your new life in Portugal is just 90 days away.
+          </p>
+
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: 20, 
+            flexWrap: 'wrap',
+            marginBottom: '3rem'
+          }}>
+            <button 
+              className="cta-button"
+              style={{ 
+                background: 'white',
+                color: '#1e3a8a',
+                border: 'none',
+                padding: '20px 40px', 
+                fontSize: 18,
+                fontWeight: 700,
+                borderRadius: '12px',
+                minWidth: '200px',
+                cursor: 'pointer'
+              }} 
+              onClick={handleGetStarted}
+            >
+              🚀 Get Started Now
+            </button>
+            
+            <button 
+              style={{ 
+                background: 'transparent',
+                color: 'white',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                padding: '20px 40px', 
+                fontSize: 18,
+                fontWeight: 600,
+                borderRadius: '12px',
+                minWidth: '200px',
+                cursor: 'pointer'
+              }} 
+              onClick={handleBookConsultation}
+            >
+              📞 Schedule Call
+            </button>
+          </div>
+
+          <div style={{ 
+            fontSize: '14px',
+            opacity: 0.8
+          }}>
+            ✅ 30-day money-back guarantee  •  ✅ No hidden fees  •  ✅ Expert support included
+          </div>
         </div>
-        <div>
-          &copy; {new Date().getFullYear()} TechAnchor. All rights reserved.
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        ...footerStyle,
+        background: '#f8f9fb',
+        padding: '3rem 2rem',
+        textAlign: 'center',
+        borderTop: '1px solid #e5e7eb'
+      }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <div style={{ 
+            marginBottom: '1.5rem',
+            fontSize: '14px',
+            color: '#666',
+            lineHeight: '1.6'
+          }}>
+            <strong>Legal Disclaimer:</strong> TechAnchor is not a law firm, tax advisor, or investment firm. 
+            We connect you with certified professionals as needed and provide relocation coordination services.
+          </div>
+          <div style={{ 
+            fontSize: '14px',
+            color: '#888'
+          }}>
+            &copy; {new Date().getFullYear()} TechAnchor. All rights reserved. 
+            <span style={{ margin: '0 1rem' }}>•</span>
+            Made with ❤️ for future Portuguese residents
+          </div>
         </div>
       </footer>
     </div>

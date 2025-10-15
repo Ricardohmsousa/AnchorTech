@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Header } from "../../../components";
-import CollaboratorProfilePage from "./CollaboratorProfilePage";
-import CasePage from "./CasePage";
+import CollaboratorProfilePage from "../pages/CollaboratorProfilePage";
+import { CasePage } from "../../cases";
 
 function CollaboratorApp({ user, onHome, onLogout }) {
   const [page, setPage] = useState("profile");
