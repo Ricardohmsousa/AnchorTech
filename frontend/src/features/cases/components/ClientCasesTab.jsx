@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { API_BASE_URL } from "../../../lib/config";
+import { API_BASE_URL } from "../../../lib";
 
 function ClientCasesTab({ user, onSelectCase }) {
   const [cases, setCases] = useState([]);

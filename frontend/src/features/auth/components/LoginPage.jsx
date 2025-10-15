@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { layout, navBar, navLink, card, button as buttonStyle } from "../../../styles/sharedStyles";
-import { API_BASE_URL } from "../../../lib/config";
+import { API_BASE_URL } from "../../../lib";
 
 export default function LoginPage({ onLogin, onRegister }) {
   const [username, setUsername] = useState("");
