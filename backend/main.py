@@ -378,12 +378,20 @@ def _serialize_case(case: dict, id: str = None):
     # Fetch client name if user_id exists
     case["client_name"] = None
     if case.get("user_id"):
+        print(f"[_serialize_case] Fetching client for user_id: {case['user_id']}")
         client_doc = db.collection("users").document(case["user_id"]).get()
         if client_doc.exists:
             client_data = client_doc.to_dict()
             # Use name if available, fallback to username
-            case["client_name"] = client_data.get("name") or client_data.get("username", "Unknown Client")
+            client_name = client_data.get("name") or client_data.get("username", "Unknown Client")
+            case["client_name"] = client_name
+            print(f"[_serialize_case] Client name resolved: {client_name}")
+        else:
+            print(f"[_serialize_case] Client document not found for user_id: {case['user_id']}")
+    else:
+        print(f"[_serialize_case] No user_id in case: {case}")
     
+    print(f"[_serialize_case] Final case data - client_name: {case.get('client_name')}, collaborator_name: {case.get('collaborator_name')}")
     return case
 
 @app.post("/cases", response_model=CaseResponse)
