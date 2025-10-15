@@ -169,6 +169,15 @@ const ChatTab = ({ user }) => {
             <>
               <div style={chatStyles.chatHeader}>
                 <h3>Case #{selectedCase.id.slice(0, 8)} - Messages</h3>
+                {/* Show conversation context based on user type */}
+                {messages.length > 0 && (
+                  <div style={chatStyles.conversationContext}>
+                    {user.user_type === 'collaborator' 
+                      ? `💬 Chatting with client: ${messages[0].client_name || 'Unknown Client'}`
+                      : `💬 Chatting with collaborator: ${messages[0].collaborator_name || 'Unassigned'}`
+                    }
+                  </div>
+                )}
               </div>
               
               <div style={chatStyles.messagesContainer}>
@@ -286,6 +295,12 @@ const chatStyles = {
     padding: '15px 20px',
     borderBottom: '1px solid #ddd',
     backgroundColor: '#f8f9fa',
+  },
+  conversationContext: {
+    fontSize: '14px',
+    color: '#666',
+    marginTop: '5px',
+    fontStyle: 'italic',
   },
   messagesContainer: {
     flex: 1,
