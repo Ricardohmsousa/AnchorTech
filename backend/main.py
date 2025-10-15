@@ -375,6 +375,15 @@ def _serialize_case(case: dict, id: str = None):
             # Use name if available, fallback to username
             case["collaborator_name"] = collaborator_data.get("name") or collaborator_data.get("username", "Unknown Collaborator")
     
+    # Fetch client name if user_id exists
+    case["client_name"] = None
+    if case.get("user_id"):
+        client_doc = db.collection("users").document(case["user_id"]).get()
+        if client_doc.exists:
+            client_data = client_doc.to_dict()
+            # Use name if available, fallback to username
+            case["client_name"] = client_data.get("name") or client_data.get("username", "Unknown Client")
+    
     return case
 
 @app.post("/cases", response_model=CaseResponse)

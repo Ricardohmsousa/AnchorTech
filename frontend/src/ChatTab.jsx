@@ -155,9 +155,12 @@ const ChatTab = ({ user }) => {
               <div style={chatStyles.caseTitle}>Case #{caseItem.id.slice(0, 8)}</div>
               <div style={chatStyles.caseStatus}>Status: {caseItem.status}</div>
               <div style={chatStyles.collaboratorInfo}>
-                {caseItem.collaborator_id 
-                  ? `With ${caseItem.collaborator_name || 'Collaborator'}` 
-                  : 'Unassigned'}
+                {user.user_type === 'collaborator' 
+                  ? (caseItem.client_name ? `Client: ${caseItem.client_name}` : 'Unknown Client')
+                  : (caseItem.collaborator_id 
+                      ? `With ${caseItem.collaborator_name || 'Collaborator'}` 
+                      : 'Unassigned')
+                }
               </div>
             </div>
           ))}
