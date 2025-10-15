@@ -56,6 +56,7 @@ const ChatTab = ({ user }) => {
         const data = await response.json();
         if (user.user_type === 'collaborator') {
           // For collaborators, show all their assigned cases
+          console.log(data)
           setCases(data || []);
         } else {
           // For clients, only show cases with assigned collaborators
