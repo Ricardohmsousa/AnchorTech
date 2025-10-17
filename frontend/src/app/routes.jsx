@@ -5,42 +5,40 @@ import { Routes, Route } from "react-router-dom";
 import { LoginPage, RegisterPage, AuthGuard } from "../features/auth";
 import { CasePage } from "../features/cases";
 import { ProfilePage, CollaboratorApp } from "../features/profile";
-import { GetNifPage, NifServicePage, NifServicePresentationPage, BankAccountService } from "../features/business-services";
+import { GetNifPage, NifServicePage, NifServicePresentationPage, BankAccountService, VisaGuidanceService } from "../features/business-services";
 
 // Shared component imports
 import { HomePage, ContactPage } from "../components";
 
-const AppRoutes = ({ user, setUser, navigate }) => {
+const AppRoutes = ({ navigate }) => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage user={user} />} />
-      <Route path="/login" element={<LoginPage onLogin={data => { setUser(data); navigate("/profile"); }} onRegister={() => navigate("/register")} />} />
-      <Route path="/register" element={<RegisterPage onBack={() => navigate("/login")} onRegister={data => { setUser(data); navigate("/profile"); }} />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       
       {/* Protected Routes */}
       <Route path="/getnif" element={
-        <AuthGuard user={user}>
-          <GetNifPage user={user} onBack={() => navigate("/profile")} />
+        <AuthGuard>
+          <GetNifPage onBack={() => navigate("/profile")} />
         </AuthGuard>
       } />
       <Route path="/profile" element={
-        <AuthGuard user={user}>
-          {user && user.user_type === "collaborator"
-            ? <CollaboratorApp user={user} onHome={() => navigate("/")} />
-            : <ProfilePage user={user} onHome={() => navigate("/")} onGetNif={() => navigate("/getnif")} />
-          }
+        <AuthGuard>
+          <ProfilePage onHome={() => navigate("/")} onGetNif={() => navigate("/getnif")} />
         </AuthGuard>
       } />
       <Route path="/case/:caseId" element={
-        <AuthGuard user={user}>
-          <CasePage user={user} />
+        <AuthGuard>
+          <CasePage />
         </AuthGuard>
       } />
       
-      {/* Public Routes */}
+      {/* Public Service Routes */}
       <Route path="/services/nif" element={<NifServicePage />} />
       <Route path="/services/getnif" element={<NifServicePresentationPage />} />
       <Route path="/services/bank-account" element={<BankAccountService />} />
+      <Route path="/services/visa-guidance" element={<VisaGuidanceService />} />
       <Route path="/contact" element={<ContactPage />} />
     </Routes>
   );

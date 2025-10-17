@@ -26,6 +26,17 @@ if (isDevelopment && window.location.hostname === 'localhost') {
 // For production, set REACT_APP_STRIPE_PUBLISHABLE_KEY in Railway environment variables
 export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
+// Firebase configuration
+// Add these environment variables to your .env file and Railway deployment
+export const FIREBASE_CONFIG = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
+};
+
 // Debug logging - show what environment variables are available
 console.log('=== CONFIG DEBUG ===');
 console.log('Environment:', process.env.NODE_ENV);
@@ -43,7 +54,18 @@ if (!process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY) {
   console.warn('Go to Railway → Frontend Service → Variables → Add Variable');
 }
 
+if (!process.env.REACT_APP_FIREBASE_API_KEY) {
+  console.warn('⚠️ Firebase configuration not found!');
+  console.warn('Please add Firebase environment variables:');
+  console.warn('- REACT_APP_FIREBASE_API_KEY');
+  console.warn('- REACT_APP_FIREBASE_AUTH_DOMAIN');
+  console.warn('- REACT_APP_FIREBASE_PROJECT_ID');
+  console.warn('- REACT_APP_FIREBASE_STORAGE_BUCKET');
+  console.warn('- REACT_APP_FIREBASE_MESSAGING_SENDER_ID');
+  console.warn('- REACT_APP_FIREBASE_APP_ID');
+}
+
 console.log('==================');
 
 // Export configuration
-export { API_BASE_URL };
+export { API_BASE_URL, FIREBASE_CONFIG };

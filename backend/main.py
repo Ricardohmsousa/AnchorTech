@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from dotenv import load_dotenv
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, auth as firebase_auth
 import os
 import shutil
 import jwt
@@ -182,6 +182,78 @@ def login(data: LoginRequest):
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
     return {"username": user_data["username"], "id": user.id, "user_type": user_data.get("user_type", "client"), "token": token}
+
+@app.post("/firebase-auth")
+def firebase_auth_login(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """
+    Verify Firebase ID token and return backend JWT token
+    """
+    if not credentials:
+        raise HTTPException(status_code=401, detail="No authorization header")
+    
+    firebase_token = credentials.credentials
+    
+    try:
+        # Verify Firebase ID token
+        decoded_token = firebase_auth.verify_id_token(firebase_token)
+        firebase_uid = decoded_token['uid']
+        email = decoded_token.get('email')
+        display_name = decoded_token.get('name', email.split('@')[0] if email else 'User')
+        
+        # Check if user exists in Firestore, create if not
+        users_ref = db.collection("users")
+        query = list(users_ref.where("firebase_uid", "==", firebase_uid).limit(1).stream())
+        
+        if not query:
+            # Create new user in Firestore
+            doc_ref = users_ref.document()
+            user_data = {
+                "firebase_uid": firebase_uid,
+                "email": email,
+                "username": display_name,
+                "name": display_name,
+                "user_type": "client",  # Default to client
+                "created_at": datetime.utcnow()
+            }
+            doc_ref.set(user_data)
+            user_id = doc_ref.id
+        else:
+            # Get existing user
+            user_doc = query[0]
+            user_data = user_doc.to_dict()
+            user_id = user_doc.id
+        
+        # Generate JWT token for backend authorization
+        payload = {
+            "user_id": user_id,
+            "firebase_uid": firebase_uid,
+            "email": email,
+            "username": user_data.get("username", display_name),
+            "user_type": user_data.get("user_type", "client"),
+            "exp": datetime.utcnow() + timedelta(seconds=JWT_EXP_DELTA_SECONDS)
+        }
+        
+        backend_jwt = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+        
+        return {
+            "access_token": backend_jwt,
+            "token_type": "bearer",
+            "user": {
+                "id": user_id,
+                "firebase_uid": firebase_uid,
+                "email": email,
+                "username": user_data.get("username", display_name),
+                "name": user_data.get("name", display_name),
+                "user_type": user_data.get("user_type", "client")
+            }
+        }
+        
+    except firebase_auth.InvalidIdTokenError:
+        raise HTTPException(status_code=401, detail="Invalid Firebase token")
+    except firebase_auth.ExpiredIdTokenError:
+        raise HTTPException(status_code=401, detail="Firebase token expired")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Authentication failed: {str(e)}")
 
 @app.post("/register", response_model=UserResponse)
 def register(data: RegisterRequest):

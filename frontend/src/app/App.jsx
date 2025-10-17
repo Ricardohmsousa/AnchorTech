@@ -1,5 +1,9 @@
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+// Firebase Authentication Provider
+import AuthProvider from "./providers/AuthProvider";
 
 // App routing
 import AppRoutes from "./routes";
@@ -7,45 +11,25 @@ import AppRoutes from "./routes";
 // Shared component imports
 import { Header } from "../components";
 
-import { useNavigate } from "react-router-dom";
-
-
-
-
 function App() {
-  const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
-  });
-  const navigate = useNavigate();
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [user]);
+function AppContent() {
+  const navigate = useNavigate();
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header
-        user={user}
-        onLogin={() => {
-          if (user) navigate("/profile");
-          else navigate("/login");
-        }}
-        onLogout={() => {
-          setUser(null);
-          navigate("/");
-        }}
+        onLogin={() => navigate("/login")}
+        onLogout={() => navigate("/")}
       />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <AppRoutes 
-          user={user} 
-          setUser={setUser} 
-          navigate={navigate} 
-        />
+        <AppRoutes navigate={navigate} />
       </div>
     </div>
   );

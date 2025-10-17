@@ -1,31 +1,68 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../app/providers/AuthProvider';
 
-const AuthGuard = ({ children, user, redirectTo = '/login' }) => {
+const AuthGuard = ({ children, redirectTo = '/login' }) => {
   const navigate = useNavigate();
+  const { currentUser, loading, isAuthenticated } = useAuth();
 
   useEffect(() => {
+    // Don't redirect if still loading authentication state
+    if (loading) {
+      return;
+    }
+
     // Check if user is not logged in
-    if (!user) {
+    if (!isAuthenticated || !currentUser) {
       console.log('[AuthGuard] User not authenticated, redirecting to login');
       navigate(redirectTo);
       return;
     }
 
-    // Check if user data is invalid (missing required fields)
-    if (!user.id || !user.username || !user.user_type) {
-      console.log('[AuthGuard] Invalid user data, redirecting to login');
-      localStorage.removeItem('user'); // Clear invalid user data
-      navigate(redirectTo);
-      return;
-    }
+    console.log('[AuthGuard] User authenticated:', currentUser.email);
+  }, [currentUser, loading, isAuthenticated, navigate, redirectTo]);
 
-    console.log('[AuthGuard] User authenticated:', user.username, user.user_type);
-  }, [user, navigate, redirectTo]);
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '4px solid #f3f3f3', 
+            borderTop: '4px solid #0070f3', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 16px'
+          }}></div>
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   // Don't render children if user is not authenticated
-  if (!user || !user.id || !user.username || !user.user_type) {
-    return <div>Redirecting to login...</div>;
+  if (!isAuthenticated || !currentUser) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        Redirecting to login...
+      </div>
+    );
   }
 
   return children;

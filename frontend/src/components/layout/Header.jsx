@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/providers/AuthProvider";
 import { navBar, navLink, button as buttonStyle } from "../../styles/sharedStyles";
 
-export default function Header({ user, onLogin, onLogout }) {
+export default function Header({ onLogin, onLogout }) {
+  const { currentUser, logout, isAuthenticated } = useAuth();
   const [servicesOpen, setServicesOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const navigate = useNavigate();
@@ -72,8 +74,8 @@ export default function Header({ user, onLogin, onLogout }) {
             </div>
           )}
         </div>
-  <a href="/contact" style={{ ...navLink, fontFamily: 'Inter, sans-serif' }}>Contact</a>
-        {user ? (
+  <a href="/contact" style={{ ...navLink, fontFamily: 'Lato, sans-serif' }}>Contact</a>
+        {isAuthenticated && currentUser ? (
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <button
               style={{ ...buttonStyle, marginLeft: 16 }}
@@ -81,7 +83,7 @@ export default function Header({ user, onLogin, onLogout }) {
               aria-haspopup="true"
               aria-expanded={accountOpen}
             >
-              {`Hi, ${user.username}`}
+              {`Hi, ${currentUser.displayName || currentUser.email?.split('@')[0] || 'User'}`}
             </button>
             {accountOpen && (
               <div
@@ -112,9 +114,14 @@ export default function Header({ user, onLogin, onLogout }) {
                 </button>
                 <button
                   style={{ ...buttonStyle, width: '100%', background: 'none', color: '#d32f2f', border: 'none', borderRadius: 0, boxShadow: 'none', textAlign: 'left', padding: '12px 20px', fontWeight: 600, cursor: 'pointer' }}
-                  onClick={() => {
+                  onClick={async () => {
                     setAccountOpen(false);
-                    if (onLogout) onLogout();
+                    try {
+                      await logout();
+                      if (onLogout) onLogout();
+                    } catch (error) {
+                      console.error('Logout failed:', error);
+                    }
                   }}
                 >
                   Logout
