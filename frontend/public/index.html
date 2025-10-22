@@ -81,12 +81,20 @@
     }
     </script>
     
-    <!-- Runtime Environment Variables (fallback) -->
+    <!-- Runtime Environment Variables (will be replaced during build) -->
     <script>
-      // Fallback empty ENV object if env.js fails to load
-      window.ENV = window.ENV || {};
+      window.ENV = {
+        REACT_APP_API_URL: 'REACT_APP_API_URL_PLACEHOLDER',
+        REACT_APP_STRIPE_PUBLISHABLE_KEY: 'REACT_APP_STRIPE_PUBLISHABLE_KEY_PLACEHOLDER',
+        REACT_APP_FIREBASE_API_KEY: 'REACT_APP_FIREBASE_API_KEY_PLACEHOLDER',
+        REACT_APP_FIREBASE_AUTH_DOMAIN: 'REACT_APP_FIREBASE_AUTH_DOMAIN_PLACEHOLDER',
+        REACT_APP_FIREBASE_PROJECT_ID: 'REACT_APP_FIREBASE_PROJECT_ID_PLACEHOLDER',
+        REACT_APP_FIREBASE_STORAGE_BUCKET: 'REACT_APP_FIREBASE_STORAGE_BUCKET_PLACEHOLDER',
+        REACT_APP_FIREBASE_MESSAGING_SENDER_ID: 'REACT_APP_FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER',
+        REACT_APP_FIREBASE_APP_ID: 'REACT_APP_FIREBASE_APP_ID_PLACEHOLDER'
+      };
+      console.log("Runtime env loaded:", window.ENV);
     </script>
-    <script src="/env.js" onerror="console.warn('env.js not found, using build-time variables')"></script>
   </head>
   <body>
     <div id="root"></div>
