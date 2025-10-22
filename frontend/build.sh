@@ -23,16 +23,3 @@ export REACT_APP_FIREBASE_APP_ID=${REACT_APP_FIREBASE_APP_ID}
 
 # Run the webpack build
 npm run webpack-build
-
-# Replace placeholders in the built HTML file with actual environment variables
-echo "Injecting runtime environment variables into HTML..."
-sed -i "s|REACT_APP_API_URL_PLACEHOLDER|${REACT_APP_API_URL}|g" build/index.html
-sed -i "s|REACT_APP_STRIPE_PUBLISHABLE_KEY_PLACEHOLDER|${REACT_APP_STRIPE_PUBLISHABLE_KEY}|g" build/index.html
-sed -i "s|REACT_APP_FIREBASE_API_KEY_PLACEHOLDER|${REACT_APP_FIREBASE_API_KEY}|g" build/index.html
-sed -i "s|REACT_APP_FIREBASE_AUTH_DOMAIN_PLACEHOLDER|${REACT_APP_FIREBASE_AUTH_DOMAIN}|g" build/index.html
-sed -i "s|REACT_APP_FIREBASE_PROJECT_ID_PLACEHOLDER|${REACT_APP_FIREBASE_PROJECT_ID}|g" build/index.html
-sed -i "s|REACT_APP_FIREBASE_STORAGE_BUCKET_PLACEHOLDER|${REACT_APP_FIREBASE_STORAGE_BUCKET}|g" build/index.html
-sed -i "s|REACT_APP_FIREBASE_MESSAGING_SENDER_ID_PLACEHOLDER|${REACT_APP_FIREBASE_MESSAGING_SENDER_ID}|g" build/index.html
-sed -i "s|REACT_APP_FIREBASE_APP_ID_PLACEHOLDER|${REACT_APP_FIREBASE_APP_ID}|g" build/index.html
-
-echo "Environment variables injected into build/index.html"
