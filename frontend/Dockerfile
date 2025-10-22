@@ -34,6 +34,16 @@ RUN npm install
 # Copy application code
 COPY . .
 
+# Copy the start script and make it executable
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh && \
+    echo "=== FILES IN /app ===" && \
+    ls -la /app/ && \
+    echo "=== start.sh details ===" && \
+    ls -la /app/start.sh && \
+    echo "=== start.sh content preview ===" && \
+    head -5 /app/start.sh
+
 # Build the application for production (now with env vars available)
 RUN echo "=== BUILD TIME DEBUG ===" && \
     echo "REACT_APP_API_URL: $REACT_APP_API_URL" && \
@@ -46,12 +56,8 @@ RUN echo "=== BUILD TIME DEBUG ===" && \
 # Install serve globally and python3 for runtime replacement
 RUN npm install -g serve && apk add --no-cache python3
 
-# Copy the start script
-COPY start.sh ./
-RUN chmod +x start.sh
-
 # Expose port
 EXPOSE 3000
 
 # Use start.sh which handles environment variable replacement then starts server
-CMD ["./start.sh"]
+CMD ["/app/start.sh"]
