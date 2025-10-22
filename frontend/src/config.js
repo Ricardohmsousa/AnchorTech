@@ -24,11 +24,11 @@ if (isDevelopment && window.location.hostname === 'localhost') {
 
 // Stripe configuration
 // For production, set REACT_APP_STRIPE_PUBLISHABLE_KEY in Railway environment variables
-export const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
 // Firebase configuration
 // Add these environment variables to your .env file and Railway deployment
-export const FIREBASE_CONFIG = {
+const FIREBASE_CONFIG = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
@@ -43,9 +43,13 @@ console.log('Environment:', process.env.NODE_ENV);
 console.log('Hostname:', window.location.hostname);
 console.log('Raw REACT_APP_API_URL:', process.env.REACT_APP_API_URL || 'NOT SET');
 console.log('Raw REACT_APP_STRIPE_PUBLISHABLE_KEY:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY ? 'SET' : 'NOT SET');
+console.log('Raw REACT_APP_FIREBASE_API_KEY:', process.env.REACT_APP_FIREBASE_API_KEY ? 'SET' : 'NOT SET');
+console.log('Raw REACT_APP_FIREBASE_AUTH_DOMAIN:', process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || 'NOT SET');
+console.log('Raw REACT_APP_FIREBASE_PROJECT_ID:', process.env.REACT_APP_FIREBASE_PROJECT_ID || 'NOT SET');
 console.log('Final API_BASE_URL:', API_BASE_URL);
 console.log('Final Stripe key available:', !!STRIPE_PUBLISHABLE_KEY);
 console.log('Final Stripe key length:', STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.length : 0);
+console.log('Final Firebase config valid:', !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId));
 
 // If environment variables are missing, show instructions
 if (!process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY) {
@@ -68,4 +72,4 @@ if (!process.env.REACT_APP_FIREBASE_API_KEY) {
 console.log('==================');
 
 // Export configuration
-export { API_BASE_URL, FIREBASE_CONFIG };
+export { API_BASE_URL, FIREBASE_CONFIG, STRIPE_PUBLISHABLE_KEY };
