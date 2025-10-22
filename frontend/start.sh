@@ -77,6 +77,10 @@ echo "=== After Replacement ==="
 grep -o "__REACT_APP_[A-Z_]*__" build/index.html | sort | uniq || echo "No placeholders found (good!)"
 
 echo "Environment variable injection complete"
+
+# Start the server
+echo "Starting server on port ${PORT:-3000}..."
+exec serve -s build -l ${PORT:-3000}
 echo "REACT_APP_FIREBASE_AUTH_DOMAIN: ${REACT_APP_FIREBASE_AUTH_DOMAIN:-not set}"
 echo "REACT_APP_FIREBASE_PROJECT_ID: ${REACT_APP_FIREBASE_PROJECT_ID:-not set}"
 
