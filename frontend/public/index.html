@@ -81,8 +81,12 @@
     }
     </script>
     
-    <!-- Runtime Environment Variables -->
-    <script src="/env.js"></script>
+    <!-- Runtime Environment Variables (fallback) -->
+    <script>
+      // Fallback empty ENV object if env.js fails to load
+      window.ENV = window.ENV || {};
+    </script>
+    <script src="/env.js" onerror="console.warn('env.js not found, using build-time variables')"></script>
   </head>
   <body>
     <div id="root"></div>
