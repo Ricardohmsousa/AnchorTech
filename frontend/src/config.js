@@ -8,7 +8,7 @@ function getEnvVar(name) {
   }
   
   // Then try runtime environment variable from window.ENV
-  if (window.ENV && window.ENV[name] && !window.ENV[name].includes('_PLACEHOLDER')) {
+  if (typeof window !== 'undefined' && window.ENV && window.ENV[name] && !window.ENV[name].includes('_PLACEHOLDER')) {
     return window.ENV[name];
   }
   
@@ -56,16 +56,18 @@ const FIREBASE_CONFIG = {
 console.log('=== CONFIG DEBUG ===');
 console.log('Environment:', process.env.NODE_ENV);
 console.log('Hostname:', window.location.hostname);
-console.log('Raw REACT_APP_API_URL:', process.env.REACT_APP_API_URL || 'NOT SET');
-console.log('Runtime REACT_APP_API_URL:', window.ENV?.REACT_APP_API_URL || 'NOT SET');
-console.log('Raw REACT_APP_STRIPE_PUBLISHABLE_KEY:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY ? 'SET' : 'NOT SET');
-console.log('Runtime REACT_APP_STRIPE_PUBLISHABLE_KEY:', window.ENV?.REACT_APP_STRIPE_PUBLISHABLE_KEY ? 'SET' : 'NOT SET');
-console.log('Raw REACT_APP_FIREBASE_API_KEY:', process.env.REACT_APP_FIREBASE_API_KEY ? 'SET' : 'NOT SET');
-console.log('Runtime REACT_APP_FIREBASE_API_KEY:', window.ENV?.REACT_APP_FIREBASE_API_KEY ? 'SET' : 'NOT SET');
-console.log('Raw REACT_APP_FIREBASE_AUTH_DOMAIN:', process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || 'NOT SET');
-console.log('Runtime REACT_APP_FIREBASE_AUTH_DOMAIN:', window.ENV?.REACT_APP_FIREBASE_AUTH_DOMAIN || 'NOT SET');
-console.log('Raw REACT_APP_FIREBASE_PROJECT_ID:', process.env.REACT_APP_FIREBASE_PROJECT_ID || 'NOT SET');
-console.log('Runtime REACT_APP_FIREBASE_PROJECT_ID:', window.ENV?.REACT_APP_FIREBASE_PROJECT_ID || 'NOT SET');
+console.log('window.ENV exists:', !!window.ENV);
+console.log('window.ENV contents:', window.ENV);
+console.log('Raw process.env.REACT_APP_API_URL:', process.env.REACT_APP_API_URL || 'NOT SET');
+console.log('Raw process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY ? 'SET' : 'NOT SET');
+console.log('Raw process.env.REACT_APP_FIREBASE_API_KEY:', process.env.REACT_APP_FIREBASE_API_KEY ? 'SET' : 'NOT SET');
+console.log('Runtime window.ENV.REACT_APP_API_URL:', window.ENV?.REACT_APP_API_URL || 'NOT SET');
+console.log('Runtime window.ENV.REACT_APP_STRIPE_PUBLISHABLE_KEY:', window.ENV?.REACT_APP_STRIPE_PUBLISHABLE_KEY ? 'SET' : 'NOT SET');
+console.log('Runtime window.ENV.REACT_APP_FIREBASE_API_KEY:', window.ENV?.REACT_APP_FIREBASE_API_KEY ? 'SET' : 'NOT SET');
+console.log('Runtime window.ENV.REACT_APP_FIREBASE_AUTH_DOMAIN:', window.ENV?.REACT_APP_FIREBASE_AUTH_DOMAIN || 'NOT SET');
+console.log('Runtime window.ENV.REACT_APP_FIREBASE_PROJECT_ID:', window.ENV?.REACT_APP_FIREBASE_PROJECT_ID || 'NOT SET');
+console.log('getEnvVar test for STRIPE:', getEnvVar('REACT_APP_STRIPE_PUBLISHABLE_KEY'));
+console.log('getEnvVar test for FIREBASE_API_KEY:', getEnvVar('REACT_APP_FIREBASE_API_KEY'));
 console.log('Final API_BASE_URL:', API_BASE_URL);
 console.log('Final Stripe key available:', !!STRIPE_PUBLISHABLE_KEY);
 console.log('Final Stripe key length:', STRIPE_PUBLISHABLE_KEY ? STRIPE_PUBLISHABLE_KEY.length : 0);
