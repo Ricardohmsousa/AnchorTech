@@ -481,13 +481,59 @@ export default function HomePage({ user }) {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
+        
+        /* Enhanced parallax animations */
+        @keyframes fadeInOut {
+          0%, 100% { opacity: 0; }
+          50% { opacity: 1; }
+        }
+        
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+        
+        /* Enhanced scroll behavior */
+        html {
+          scroll-behavior: smooth;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          html {
+            scroll-behavior: auto;
+          }
+        }
+        
+        /* Performance optimizations */
+        .parallax-container {
+          will-change: transform;
+          backface-visibility: hidden;
+          transform: translateZ(0);
+        }
+        
+        .glass-morphism {
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
       `}</style>
 
       {/* Hero Section - Shuffle Grid Animation */}
       <ShuffleHero />
 
       {/* Parallax Storytelling Sections */}
-      <div style={{ background: '#fff' }}>
+      <div style={{ 
+        background: '#fff',
+        marginTop: '-2rem' 
+      }}>
         <TextParallaxContent
           imgUrl="https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
           subheading="Your Journey"
