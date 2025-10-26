@@ -158,12 +158,93 @@ export default function HomePage({ user }) {
   };
 
   return (
-    <div style={{ background: '#ffffff', minHeight: '100vh' }}>
+    <div style={{ 
+      background: '#ffffff', 
+      minHeight: '100vh',
+      width: '100%',
+      overflowX: 'hidden'
+    }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
+        /* Global responsive reset */
         * {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+          box-sizing: border-box;
+        }
+        
+        html, body {
+          overflow-x: hidden;
+          width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        
+        /* Responsive container */
+        .responsive-container {
+          width: 100%;
+          max-width: 100vw;
+          margin: 0 auto;
+          padding: 0 1rem;
+          box-sizing: border-box;
+        }
+        
+        @media (min-width: 640px) {
+          .responsive-container {
+            padding: 0 1.5rem;
+          }
+        }
+        
+        @media (min-width: 1024px) {
+          .responsive-container {
+            padding: 0 2rem;
+          }
+        }
+        
+        @media (min-width: 1280px) {
+          .responsive-container {
+            max-width: 1280px;
+            padding: 0 2rem;
+          }
+        }
+        
+        /* Prevent horizontal overflow */
+        img, video, canvas, svg {
+          max-width: 100%;
+          height: auto;
+        }
+        
+        /* Grid responsiveness */
+        .responsive-grid {
+          display: grid;
+          gap: 1.5rem;
+          grid-template-columns: 1fr;
+        }
+        
+        @media (min-width: 640px) {
+          .responsive-grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        
+        @media (min-width: 768px) {
+          .responsive-grid {
+            gap: 2rem;
+          }
+          
+          .responsive-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+        
+        @media (min-width: 1024px) {
+          .responsive-grid {
+            gap: 2.5rem;
+          }
+          
+          .responsive-grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+          }
         }
         
         .section-title {
@@ -456,93 +537,157 @@ export default function HomePage({ user }) {
       {/* Social Proof Stats - Enhanced with better spacing and modern design */}
       <section style={{
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-        padding: '8rem 2rem',
-        position: 'relative'
+        padding: 'clamp(4rem, 8vw, 8rem) 1rem',
+        position: 'relative',
+        overflow: 'hidden',
+        width: '100%'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ marginBottom: '1rem' }}>
+        {/* Background pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(0, 112, 243, 0.05) 0%, transparent 50%),
+                           radial-gradient(circle at 75% 75%, rgba(0, 212, 255, 0.05) 0%, transparent 50%)`,
+          pointerEvents: 'none'
+        }} />
+        
+        <div className="responsive-container" style={{ 
+          maxWidth: '1400px', 
+          margin: '0 auto', 
+          textAlign: 'center',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          {/* Badge */}
+          <div style={{ marginBottom: '2rem' }}>
             <span style={{ 
-              background: 'rgba(0, 112, 243, 0.1)', 
+              background: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%)', 
               color: '#0070f3', 
-              padding: '8px 20px', 
-              borderRadius: '25px', 
+              padding: '12px 28px', 
+              borderRadius: '30px', 
               fontSize: '14px',
               fontWeight: '700',
               textTransform: 'uppercase',
-              letterSpacing: '1px'
+              letterSpacing: '1.5px',
+              border: '1px solid rgba(0, 112, 243, 0.2)',
+              fontFamily: 'Inter, sans-serif',
+              display: 'inline-block',
+              backdropFilter: 'blur(10px)'
             }}>
-              Trusted by Thousands
+              ✨ Proven Track Record
             </span>
           </div>
           
+          {/* Main Heading */}
           <h2 style={{ 
-            fontSize: '3rem', 
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
             fontWeight: '800',
-            marginBottom: '1rem',
+            marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
             color: '#1a202c',
-            letterSpacing: '-0.02em',
-            fontFamily: 'Inter, sans-serif'
-          }} className="section-title">
-            The Numbers Speak for Themselves
+            letterSpacing: '-0.03em',
+            fontFamily: 'Inter, sans-serif',
+            lineHeight: '1.1',
+            background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            The Numbers Tell Our Story
           </h2>
           
+          {/* Subtitle */}
           <p style={{
-            fontSize: '1.25rem',
+            fontSize: 'clamp(1rem, 3vw, 1.25rem)',
             color: '#64748b',
-            marginBottom: '4rem',
-            maxWidth: '600px',
-            margin: '0 auto 4rem auto',
+            marginBottom: 'clamp(3rem, 6vw, 5rem)',
+            maxWidth: 'min(700px, 90vw)',
+            margin: '0 auto',
+            marginBottom: 'clamp(3rem, 6vw, 5rem)',
             fontWeight: '400',
-            lineHeight: '1.6',
+            lineHeight: '1.7',
             fontFamily: 'Inter, sans-serif'
-          }} className="section-subtitle">
-            Join thousands of successful relocators who chose the smart path to Portugal
+          }}>
+            Join thousands of successful relocators who chose the proven path to Portugal
           </p>
           
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-            gap: '2rem',
-            marginBottom: '4rem'
+          {/* Stats Grid */}
+          <div className="responsive-grid" style={{ 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', 
+            gap: 'clamp(1.5rem, 4vw, 2.5rem)',
+            marginBottom: 'clamp(3rem, 6vw, 5rem)',
+            display: 'grid'
           }}>
             {stats.map((stat, i) => (
               <div 
                 key={i} 
-                className="stat-card"
                 style={{ 
-                  background: '#ffffff',
-                  borderRadius: '20px',
-                  padding: '3rem 2rem',
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-                  border: '1px solid #e2e8f0',
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: '24px',
+                  padding: 'clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 2.5rem)',
+                  boxShadow: '0 10px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.8)',
                   position: 'relative',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-8px)';
+                  e.target.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.9)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.8)';
                 }}
               >
+                {/* Gradient accent line */}
                 <div style={{
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   right: 0,
                   height: '4px',
-                  background: 'linear-gradient(90deg, #0070f3, #00d4ff)'
+                  background: `linear-gradient(135deg, ${i % 2 === 0 ? '#0070f3' : '#00d4ff'} 0%, ${i % 2 === 0 ? '#00d4ff' : '#0070f3'} 100%)`
                 }} />
+                
+                {/* Icon */}
+                <div style={{
+                  width: '60px',
+                  height: '60px',
+                  background: `linear-gradient(135deg, ${i % 2 === 0 ? 'rgba(0, 112, 243, 0.1)' : 'rgba(0, 212, 255, 0.1)'} 0%, ${i % 2 === 0 ? 'rgba(0, 212, 255, 0.1)' : 'rgba(0, 112, 243, 0.1)'} 100%)`,
+                  borderRadius: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 2rem auto',
+                  fontSize: '24px'
+                }}>
+                  {i === 0 ? '🎯' : i === 1 ? '📊' : i === 2 ? '⚡' : '🛡️'}
+                </div>
+                
+                {/* Number */}
                 <div style={{ 
-                  fontSize: '3.5rem', 
+                  fontSize: 'clamp(2rem, 6vw, 3.5rem)', 
                   fontWeight: '800',
                   marginBottom: '1rem',
                   color: '#0070f3',
                   fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '-0.02em'
+                  letterSpacing: '-0.02em',
+                  lineHeight: '1'
                 }}>
                   {stat.number}
                 </div>
+                
+                {/* Label */}
                 <div style={{ 
-                  fontSize: '1.125rem',
-                  fontWeight: '500',
-                  color: '#475569',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
+                  fontWeight: '600',
+                  color: '#334155',
                   fontFamily: 'Inter, sans-serif',
-                  lineHeight: '1.5'
+                  lineHeight: '1.4'
                 }}>
                   {stat.label}
                 </div>
@@ -550,35 +695,57 @@ export default function HomePage({ user }) {
             ))}
           </div>
           
-          {/* Client Logos Section */}
+          {/* Trust Indicators */}
           <div style={{
-            background: '#ffffff',
-            borderRadius: '20px',
-            padding: '3rem 2rem',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
-            border: '1px solid #e2e8f0'
+            background: 'rgba(255, 255, 255, 0.8)',
+            borderRadius: '24px',
+            padding: '3.5rem 2.5rem',
+            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.06)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            backdropFilter: 'blur(20px)'
           }}>
             <p style={{
-              fontSize: '1rem',
+              fontSize: '1.125rem',
               color: '#64748b',
-              marginBottom: '2rem',
-              fontWeight: '600'
+              marginBottom: '2.5rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif'
             }}>
-              Empowering relocations to Portugal's fastest growing communities
+              Trusted by Portugal's leading relocation communities
             </p>
             <div style={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: '3rem',
-              flexWrap: 'wrap',
-              opacity: 0.7
+              gap: '2rem',
+              flexWrap: 'wrap'
             }}>
-              {/* Placeholder for client logos */}
-              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Portugal Tech Hub</div>
-              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Lisbon Expat Network</div>
-              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Porto Business Council</div>
-              <div style={{ padding: '1rem 2rem', background: '#f8fafc', borderRadius: '12px', fontSize: '14px', fontWeight: '600', color: '#64748b' }}>Digital Nomad Community</div>
+              {[
+                { name: 'Portugal Tech Hub', icon: '💻' },
+                { name: 'Lisbon Expat Network', icon: '🌍' },
+                { name: 'Porto Business Council', icon: '🏢' },
+                { name: 'Golden Visa Group', icon: '🏆' }
+              ].map((partner, i) => (
+                <div 
+                  key={i} 
+                  style={{ 
+                    padding: '1rem 1.5rem', 
+                    background: 'rgba(248, 250, 252, 0.8)', 
+                    borderRadius: '16px', 
+                    fontSize: '14px', 
+                    fontWeight: '600', 
+                    color: '#64748b',
+                    fontFamily: 'Inter, sans-serif',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    border: '1px solid rgba(226, 232, 240, 0.5)'
+                  }}
+                >
+                  <span>{partner.icon}</span>
+                  {partner.name}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -654,347 +821,292 @@ export default function HomePage({ user }) {
         </div>
       </section>
 
-      {/* Process Section - Vertical Timeline */}
+      {/* Process Section - Enhanced Modern Design */}
       <section style={{ 
-        padding: '6rem 2rem',
-        background: 'linear-gradient(135deg, #f8f9fb 0%, #e9ecef 100%)',
-        position: 'relative'
+        padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 2rem)',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
-          {/* Header Area */}
-          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-            <div style={{ marginBottom: '1rem' }}>
+        {/* Background Pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(0, 112, 243, 0.03) 0%, transparent 50%),
+                           radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+                           radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.02) 0%, transparent 50%)`,
+          pointerEvents: 'none'
+        }} />
+
+        <div className="responsive-container" style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          position: 'relative',
+          zIndex: 1
+        }}>
+          {/* Enhanced Header */}
+          <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
+            <div style={{ marginBottom: '2rem' }}>
               <span style={{ 
+                background: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%)',
                 color: '#0070f3', 
+                padding: '12px 28px',
+                borderRadius: '30px',
                 fontSize: '14px',
                 fontWeight: '700',
                 textTransform: 'uppercase',
-                letterSpacing: '2px'
+                letterSpacing: '1.5px',
+                border: '1px solid rgba(0, 112, 243, 0.2)',
+                fontFamily: 'Inter, sans-serif',
+                display: 'inline-block',
+                backdropFilter: 'blur(10px)'
               }}>
-                HOW TO GET STARTED
+                🚀 Your Path to Portugal
               </span>
             </div>
             <h2 style={{ 
-              fontSize: '3rem', 
+              fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
               fontWeight: '800', 
-              marginBottom: '1rem',
+              marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
               color: '#1a202c',
-              lineHeight: '1.2',
+              lineHeight: '1.1',
               fontFamily: 'Inter, sans-serif',
-              letterSpacing: '-0.025em'
-            }} className="section-title">
-              Get Started in Three Simple Steps
+              letterSpacing: '-0.03em',
+              background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>
+              Three Simple Steps to Success
             </h2>
             <p style={{ 
-              fontSize: '1.25rem', 
+              fontSize: 'clamp(1rem, 3vw, 1.25rem)', 
               color: '#64748b',
-              lineHeight: '1.6',
-              maxWidth: '500px',
+              lineHeight: '1.7',
+              maxWidth: 'min(600px, 90vw)',
               margin: '0 auto',
+              marginBottom: 'clamp(3rem, 6vw, 5rem)',
               fontFamily: 'Inter, sans-serif',
               fontWeight: '400'
-            }} className="section-subtitle">
-              From consultation to celebration, we guide you every step of the way
+            }}>
+              From first consultation to Portugal celebration – we guide you through every milestone
             </p>
           </div>
 
-          {/* Vertical Timeline Container */}
-          <div style={{ position: 'relative' }}>
-            {/* Central Vertical Line */}
-            <div style={{
-              position: 'absolute',
-              left: '50%',
-              top: '0',
-              bottom: '0',
-              width: '2px',
-              background: 'linear-gradient(180deg, #0070f3 0%, #10b981 50%, #f59e0b 100%)',
-              transform: 'translateX(-50%)',
-              zIndex: 1
-            }} />
-
-            {/* Step 1 - Left Side */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              marginBottom: '6rem',
-              position: 'relative'
-            }}>
-              {/* Content Block - Left */}
-              <div style={{ 
-                width: '45%', 
-                paddingRight: '3rem',
-                textAlign: 'right'
-              }}>
-                <div style={{ 
-                  background: '#ffffff',
-                  borderRadius: '16px',
-                  padding: '2.5rem',
-                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
-                  border: '1px solid #e2e8f0'
-                }}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <span style={{ 
-                      color: '#0070f3', 
-                      fontSize: '12px',
-                      fontWeight: '700',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px'
-                    }}>
-                      Step 1
-                    </span>
-                  </div>
-                  <h3 style={{ 
-                    fontSize: '1.5rem', 
-                    fontWeight: '700', 
-                    marginBottom: '1rem',
-                    color: '#222'
-                  }}>
-                    Create Your Free Account
-                  </h3>
-                  <p style={{ 
-                    color: '#666', 
-                    lineHeight: '1.6',
-                    fontSize: '1rem'
-                  }}>
-                    Sign up in minutes and complete our assessment. We'll analyze your situation and create a personalized relocation strategy.
-                  </p>
-                </div>
-              </div>
-
-              {/* Central Node */}
-              <div style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '20px',
-                height: '20px',
-                background: '#0070f3',
-                borderRadius: '50%',
-                border: '4px solid #ffffff',
-                boxShadow: '0 0 0 4px rgba(0, 112, 243, 0.2)',
-                zIndex: 2
-              }} />
-
-              {/* Illustration - Right */}
-              <div style={{ 
-                width: '45%', 
-                paddingLeft: '3rem'
-              }}>
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.8)',
-                  borderRadius: '12px',
-                  padding: '2rem',
-                  height: '200px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid #e2e8f0',
-                  fontSize: '14px',
-                  color: '#666',
-                  fontStyle: 'italic'
+          {/* Enhanced Steps Grid */}
+          <div className="responsive-grid" style={{
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+            gap: 'clamp(2rem, 4vw, 3rem)',
+            marginBottom: 'clamp(3rem, 6vw, 5rem)',
+            display: 'grid'
+          }}>
+            {[
+              {
+                step: '01',
+                color: '#0070f3',
+                title: 'Strategy & Assessment',
+                description: 'Complete our smart assessment and get a personalized relocation roadmap tailored to your unique situation and goals.',
+                icon: '🎯',
+                bgGradient: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%)',
+                features: ['Free consultation', 'Personalized plan', 'Document checklist']
+              },
+              {
+                step: '02', 
+                color: '#10b981',
+                title: 'Expert Execution',
+                description: 'Our certified team handles all paperwork, appointments, and bureaucracy while you track progress in real-time.',
+                icon: '⚡',
+                bgGradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%)',
+                features: ['24/7 tracking', 'Expert handling', 'Regular updates']
+              },
+              {
+                step: '03',
+                color: '#f59e0b', 
+                title: 'Portugal Welcome',
+                description: 'Celebrate your successful move with ongoing support as you settle into your new life and join our community.',
+                icon: '🎉',
+                bgGradient: 'linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%)',
+                features: ['Settlement support', 'Community access', 'Ongoing help']
+              }
+            ].map((item, i) => (
+              <div 
+                key={i}
+                style={{
+                  background: `linear-gradient(135deg, ${item.bgGradient}, rgba(255, 255, 255, 0.1))`,
+                  borderRadius: '24px',
+                  padding: 'clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)',
+                  boxShadow: `0 8px 32px ${item.color}15, 0 0 0 1px ${item.color}20`,
+                  border: `1px solid ${item.color}30`,
+                  backdropFilter: 'blur(20px)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
                 }}
-                role="img"
-                aria-label="Dashboard screenshot showing account creation interface"
-                >
-                  [Dashboard Screenshot - Account Creation]
-                </div>
-              </div>
-            </div>
-
-            {/* Step 2 - Right Side */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              marginBottom: '6rem',
-              position: 'relative'
-            }}>
-              {/* Illustration - Left */}
-              <div style={{ 
-                width: '45%', 
-                paddingRight: '3rem'
-              }}>
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.8)',
-                  borderRadius: '12px',
-                  padding: '2rem',
-                  height: '200px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid #e2e8f0',
-                  fontSize: '14px',
-                  color: '#666',
-                  fontStyle: 'italic'
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-8px)';
+                  e.target.style.boxShadow = `0 16px 48px ${item.color}25, 0 0 0 1px ${item.color}40`;
                 }}
-                role="img"
-                aria-label="Progress tracking interface showing relocation status"
-                >
-                  [Progress Tracking Interface]
-                </div>
-              </div>
-
-              {/* Central Node */}
-              <div style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '20px',
-                height: '20px',
-                background: '#10b981',
-                borderRadius: '50%',
-                border: '4px solid #ffffff',
-                boxShadow: '0 0 0 4px rgba(16, 185, 129, 0.2)',
-                zIndex: 2
-              }} />
-
-              {/* Content Block - Right */}
-              <div style={{ 
-                width: '45%', 
-                paddingLeft: '3rem',
-                textAlign: 'left'
-              }}>
-                <div style={{ 
-                  background: '#ffffff',
-                  borderRadius: '16px',
-                  padding: '2.5rem',
-                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
-                  border: '1px solid #e2e8f0'
-                }}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <span style={{ 
-                      color: '#10b981', 
-                      fontSize: '12px',
-                      fontWeight: '700',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px'
-                    }}>
-                      Step 2
-                    </span>
-                  </div>
-                  <h3 style={{ 
-                    fontSize: '1.5rem', 
-                    fontWeight: '700', 
-                    marginBottom: '1rem',
-                    color: '#222'
-                  }}>
-                    Expert Execution
-                  </h3>
-                  <p style={{ 
-                    color: '#666', 
-                    lineHeight: '1.6',
-                    fontSize: '1rem'
-                  }}>
-                    Our team handles all paperwork and appointments. Track your progress in real-time through our dashboard.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 3 - Left Side */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              marginBottom: '4rem',
-              position: 'relative'
-            }}>
-              {/* Content Block - Left */}
-              <div style={{ 
-                width: '45%', 
-                paddingRight: '3rem',
-                textAlign: 'right'
-              }}>
-                <div style={{ 
-                  background: '#ffffff',
-                  borderRadius: '16px',
-                  padding: '2.5rem',
-                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
-                  border: '1px solid #e2e8f0'
-                }}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <span style={{ 
-                      color: '#f59e0b', 
-                      fontSize: '12px',
-                      fontWeight: '700',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px'
-                    }}>
-                      Step 3
-                    </span>
-                  </div>
-                  <h3 style={{ 
-                    fontSize: '1.5rem', 
-                    fontWeight: '700', 
-                    marginBottom: '1rem',
-                    color: '#222'
-                  }}>
-                    Welcome to Portugal
-                  </h3>
-                  <p style={{ 
-                    color: '#666', 
-                    lineHeight: '1.6',
-                    fontSize: '1rem'
-                  }}>
-                    Celebrate your successful move! Receive ongoing support as you settle into your new life in Portugal.
-                  </p>
-                </div>
-              </div>
-
-              {/* Central Node */}
-              <div style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '20px',
-                height: '20px',
-                background: '#f59e0b',
-                borderRadius: '50%',
-                border: '4px solid #ffffff',
-                boxShadow: '0 0 0 4px rgba(245, 158, 11, 0.2)',
-                zIndex: 2
-              }} />
-
-              {/* Illustration - Right */}
-              <div style={{ 
-                width: '45%', 
-                paddingLeft: '3rem'
-              }}>
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = `0 8px 32px ${item.color}15, 0 0 0 1px ${item.color}20`;
+                }}
+              >
+                {/* Subtle overlay for depth */}
                 <div style={{
-                  background: 'rgba(255, 255, 255, 0.8)',
-                  borderRadius: '12px',
-                  padding: '2rem',
-                  height: '200px',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: `linear-gradient(135deg, transparent 0%, ${item.color}08 100%)`,
+                  pointerEvents: 'none'
+                }} />
+
+                {/* Step Number */}
+                <div style={{
+                  position: 'absolute',
+                  top: '1.5rem',
+                  right: '1.5rem',
+                  fontSize: '4rem',
+                  fontWeight: '800',
+                  color: item.color,
+                  opacity: 0.15,
+                  lineHeight: '1',
+                  fontFamily: 'Inter, sans-serif'
+                }}>
+                  {item.step}
+                </div>
+
+                {/* Icon */}
+                <div style={{
+                  width: 'clamp(60px, 12vw, 80px)',
+                  height: 'clamp(60px, 12vw, 80px)',
+                  background: `linear-gradient(135deg, ${item.color}15 0%, ${item.color}25 100%)`,
+                  borderRadius: '20px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  border: '1px solid #e2e8f0',
-                  fontSize: '14px',
-                  color: '#666',
-                  fontStyle: 'italic'
+                  marginBottom: '2rem',
+                  fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+                  border: `2px solid ${item.color}20`,
+                  position: 'relative',
+                  zIndex: 1
                 }}>
-                  [Success Celebration & Support Hub]
+                  {item.icon}
+                </div>
+
+                {/* Content */}
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    marginBottom: '1rem'
+                  }}>
+                    <span style={{
+                      background: item.color,
+                      color: 'white',
+                      padding: '6px 12px',
+                      borderRadius: '20px',
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                      fontFamily: 'Inter, sans-serif'
+                    }}>
+                      Step {i + 1}
+                    </span>
+                  </div>
+
+                  <h3 style={{
+                    fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+                    fontWeight: '700',
+                    marginBottom: '1rem',
+                    color: '#1e293b',
+                    fontFamily: 'Inter, sans-serif',
+                    lineHeight: '1.3'
+                  }}>
+                    {item.title}
+                  </h3>
+
+                  <p style={{
+                    color: '#475569',
+                    lineHeight: '1.6',
+                    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+                    marginBottom: '2rem',
+                    fontFamily: 'Inter, sans-serif'
+                  }}>
+                    {item.description}
+                  </p>
+
+                  {/* Features List */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.75rem'
+                  }}>
+                    {item.features.map((feature, idx) => (
+                      <div 
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          fontSize: '0.875rem',
+                          color: '#334155',
+                          fontWeight: '500',
+                          fontFamily: 'Inter, sans-serif'
+                        }}
+                      >
+                        <div style={{
+                          width: '6px',
+                          height: '6px',
+                          background: item.color,
+                          borderRadius: '50%',
+                          flexShrink: 0
+                        }} />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Process Visualization */}
+          {/* Success Timeline */}
           <div style={{
-            background: '#ffffff',
-            borderRadius: '20px',
-            padding: '3rem 2rem',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
-            border: '1px solid #e2e8f0',
-            marginTop: '2rem'
+            background: 'rgba(255, 255, 255, 0.8)',
+            borderRadius: '24px',
+            padding: '3rem 2.5rem',
+            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.06)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            backdropFilter: 'blur(20px)',
+            marginBottom: '4rem'
           }}>
-            <h4 style={{ 
-              textAlign: 'center',
-              marginBottom: '2rem',
-              color: '#222',
-              fontSize: '1.3rem',
-              fontWeight: '700'
-            }}>
-              Your Relocation Journey
-            </h4>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+              <h4 style={{
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                color: '#1a202c',
+                marginBottom: '0.5rem',
+                fontFamily: 'Inter, sans-serif'
+              }}>
+                Your Complete Journey
+              </h4>
+              <p style={{
+                color: '#64748b',
+                fontSize: '1rem',
+                fontFamily: 'Inter, sans-serif'
+              }}>
+                Track every milestone from consultation to celebration
+              </p>
+            </div>
+            
             <ProgressIndicator 
               currentStep={2}
               steps={[
@@ -1006,46 +1118,51 @@ export default function HomePage({ user }) {
               ]}
               size="small"
             />
-            <p style={{
-              textAlign: 'center',
-              color: '#666',
-              fontSize: '14px',
-              marginTop: '1rem'
-            }}>
-              Track your progress every step of the way
-            </p>
           </div>
 
-          {/* CTA Button */}
-          <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+          {/* Enhanced CTA */}
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ marginBottom: '2rem' }}>
+              <p style={{
+                fontSize: '1.125rem',
+                color: '#64748b',
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '500'
+              }}>
+                Ready to start your Portugal journey?
+              </p>
+            </div>
             <button 
-              className="cta-button"
               style={{ 
-                ...buttonStyle, 
-                padding: '18px 40px', 
-                fontSize: 18,
-                fontWeight: 700,
-                borderRadius: '12px',
                 background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
-                border: 'none'
+                border: 'none',
+                color: 'white',
+                padding: '18px 36px',
+                borderRadius: '16px',
+                fontSize: '1.125rem',
+                fontWeight: '700',
+                fontFamily: 'Inter, sans-serif',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 8px 24px rgba(0, 112, 243, 0.3)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.75rem'
               }} 
               onClick={handleGetStarted}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px) scale(1.02)';
+                e.target.style.boxShadow = '0 12px 32px rgba(0, 112, 243, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0) scale(1)';
+                e.target.style.boxShadow = '0 8px 24px rgba(0, 112, 243, 0.3)';
+              }}
             >
-              Start Your Journey Today →
+              Start Your Journey Today
+              <span style={{ fontSize: '1.25rem' }}>→</span>
             </button>
           </div>
-        </div>
-        
-        {/* Footer Tag */}
-        <div style={{
-          position: 'absolute',
-          bottom: '2rem',
-          right: '2rem',
-          fontSize: '12px',
-          color: '#999',
-          fontWeight: '500'
-        }}>
-          Design Item—005
         </div>
       </section>
 
@@ -1217,51 +1334,105 @@ export default function HomePage({ user }) {
 
       {/* Testimonials */}
       <section style={{ 
-        padding: '4rem 0',
-        background: '#fff'
+        padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 2rem)',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem', textAlign: 'center', marginBottom: '4rem' }}>
+        {/* Background Pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(0, 112, 243, 0.03) 0%, transparent 50%),
+                           radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+                           radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.02) 0%, transparent 50%)`,
+          pointerEvents: 'none'
+        }} />
+        
+        <div className="responsive-container" style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          textAlign: 'center', 
+          marginBottom: 'clamp(3rem, 6vw, 4rem)',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          {/* Enhanced Badge */}
+          <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
+            <span style={{ 
+              background: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%)',
+              color: '#0070f3', 
+              padding: 'clamp(10px, 2vw, 12px) clamp(20px, 4vw, 28px)',
+              borderRadius: '30px',
+              fontSize: 'clamp(12px, 2.5vw, 14px)',
+              fontWeight: '700',
+              textTransform: 'uppercase',
+              letterSpacing: '1.5px',
+              border: '1px solid rgba(0, 112, 243, 0.2)',
+              fontFamily: 'Inter, sans-serif',
+              display: 'inline-block',
+              backdropFilter: 'blur(10px)'
+            }}>
+              ⭐ Client Success Stories
+            </span>
+          </div>
+          
           <h2 style={{ 
-            fontSize: '3rem', 
-            fontWeight: '900', 
-            marginBottom: '1rem',
-            color: '#222',
-            fontFamily: 'Inter, sans-serif'
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
+            fontWeight: '800',
+            marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
+            color: '#1a202c',
+            letterSpacing: '-0.03em',
+            fontFamily: 'Inter, sans-serif',
+            lineHeight: '1.1',
+            background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
           }}>
             Success Stories
           </h2>
           <p style={{ 
-            fontSize: '1.2rem', 
-            color: '#666',
-            fontFamily: 'Inter, sans-serif'
+            fontSize: 'clamp(1rem, 3vw, 1.25rem)', 
+            color: '#64748b',
+            fontFamily: 'Inter, sans-serif',
+            lineHeight: '1.7',
+            maxWidth: 'min(700px, 90vw)',
+            margin: '0 auto',
+            fontWeight: '400'
           }}>
-            Real people, real results. See what our clients say about their relocation journey.
+            Real people, real results. See what our clients say about their relocation journey to Portugal.
           </p>
         </div>
         
-        <AnimatedTestimonials 
-          testimonials={testimonials} 
-          autoplay={true}
-        />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <AnimatedTestimonials 
+            testimonials={testimonials} 
+            autoplay={true}
+          />
+        </div>
       </section>
 
       {/* FAQ Section with Schema Markup */}
       <section style={{ 
-        padding: '6rem 2rem',
+        padding: 'clamp(4rem, 8vw, 6rem) clamp(1rem, 4vw, 2rem)',
         background: '#f8f9fb'
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+        <div className="responsive-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(3rem, 6vw, 4rem)' }}>
             <h2 style={{ 
-              fontSize: '3rem', 
+              fontSize: 'clamp(2rem, 5vw, 3rem)', 
               fontWeight: '900', 
-              marginBottom: '1rem',
+              marginBottom: 'clamp(1rem, 3vw, 1rem)',
               color: '#222'
             }} className="section-title">
               Frequently Asked Questions
             </h2>
             <p style={{ 
-              fontSize: '1.2rem', 
+              fontSize: 'clamp(1rem, 3vw, 1.2rem)', 
               color: '#666',
               lineHeight: '1.6'
             }}>
