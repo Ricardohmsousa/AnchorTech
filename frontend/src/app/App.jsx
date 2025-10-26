@@ -2,8 +2,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-// Firebase Authentication Provider
-import AuthProvider from "./providers/AuthProvider";
+// COMMENTED OUT: Firebase Authentication Provider
+// import AuthProvider from "./providers/AuthProvider";
 
 // App routing
 import AppRoutes from "./routes";
@@ -13,9 +13,10 @@ import { Header } from "../components";
 
 function App() {
   return (
-    <AuthProvider>
+    // COMMENTED OUT: AuthProvider wrapper
+    // <AuthProvider>
       <AppContent />
-    </AuthProvider>
+    // </AuthProvider>
   );
 }
 
@@ -25,8 +26,9 @@ function AppContent() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header
-        onLogin={() => navigate("/login")}
-        onLogout={() => navigate("/")}
+        /* COMMENTED OUT: Auth functionality */
+        /* onLogin={() => navigate("/login")}
+        onLogout={() => navigate("/")} */
       />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <AppRoutes navigate={navigate} />

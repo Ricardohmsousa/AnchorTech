@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressIndicator from "../ProgressIndicator";
+import { AnimatedTestimonials } from "../AnimatedTestimonials";
+import ShuffleHero from "../ShuffleHero";
+import { TextParallaxContent, ContentSection } from "../TextParallax";
 
 import { layout, heroHeader, heroImage, heroOverlay, heroContent, section, card, footer as footerStyle, button as buttonStyle } from "../../styles/sharedStyles";
 
@@ -11,21 +14,40 @@ const testimonials = [
     location: "Lisbon, Portugal",
     quote: "TechAnchor made my move to Portugal seamless. My case manager was always available and the process was so much easier than I expected!",
     rating: 5,
-    visa: "D7 Visa"
+    visa: "D7 Visa",
+    src: "https://images.unsplash.com/photo-1494790108755-2616b612b3bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
   },
   {
     name: "James T.",
     location: "Porto, Portugal", 
     quote: "I got my visa in just 3 months. The online tracker and support team were fantastic.",
     rating: 5,
-    visa: "Digital Nomad Visa"
+    visa: "Digital Nomad Visa",
+    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
   },
   {
     name: "Elena R.",
     location: "Cascais, Portugal",
     quote: "The AnchorMove tool helped me plan every step. Highly recommended for anyone relocating!",
     rating: 4.8,
-    visa: "Golden Visa"
+    visa: "Golden Visa",
+    src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    name: "Carlos M.",
+    location: "Braga, Portugal",
+    quote: "From document preparation to finding housing, TechAnchor handled everything. Now my family and I are living our dream in Portugal.",
+    rating: 5,
+    visa: "Family Reunification",
+    src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    name: "Sophie L.",
+    location: "Faro, Portugal", 
+    quote: "The investment guidance for my Golden Visa was exceptional. Professional, transparent, and efficient throughout the entire process.",
+    rating: 5,
+    visa: "Golden Visa",
+    src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
   }
 ];
 
@@ -138,6 +160,56 @@ export default function HomePage({ user }) {
   return (
     <div style={{ background: '#ffffff', minHeight: '100vh' }}>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+        
+        .section-title {
+          font-family: 'Inter', sans-serif;
+          font-weight: 800;
+          letter-spacing: -0.025em;
+          line-height: 1.1;
+        }
+        
+        .section-subtitle {
+          font-family: 'Inter', sans-serif;
+          font-weight: 500;
+          line-height: 1.6;
+          color: #64748b;
+        }
+        
+        .body-text {
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+          line-height: 1.6;
+          color: #475569;
+        }
+        
+        .accent-text {
+          font-family: 'Inter', sans-serif;
+          font-weight: 600;
+          color: #0070f3;
+        }
+        
+        .cta-button {
+          font-family: 'Inter', sans-serif;
+          font-weight: 600;
+          letter-spacing: 0.025em;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+          font-family: 'Inter', sans-serif;
+          font-weight: 700;
+          letter-spacing: -0.025em;
+        }
+        
+        p {
+          font-family: 'Inter', sans-serif;
+          font-weight: 400;
+          line-height: 1.6;
+        }
         body { margin: 0 !important; padding: 0 !important; }
         
         .floating-element {
@@ -330,227 +402,56 @@ export default function HomePage({ user }) {
         }
       `}</style>
 
-      {/* Hero Section - Enhanced with more breathing space and modern layout */}
-      <section style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Background Elements */}
-        <div style={{
-          position: 'absolute',
-          top: '10%',
-          right: '5%',
-          width: '200px',
-          height: '200px',
-          background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '50%',
-          filter: 'blur(40px)'
-        }} className="floating-element" />
-        <div style={{
-          position: 'absolute',
-          bottom: '20%',
-          left: '10%',
-          width: '150px',
-          height: '150px',
-          background: 'rgba(255, 255, 255, 0.08)',
-          borderRadius: '50%',
-          filter: 'blur(30px)'
-        }} className="floating-element" />
-        
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: '0 2rem',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '4rem',
-          alignItems: 'center',
-          minHeight: '80vh'
-        }} className="hero-grid">
-          {/* Left Column - Content */}
-          <div className="fade-in-up">
-            <div style={{ marginBottom: '2rem' }}>
-              <span style={{ 
-                background: 'rgba(255, 255, 255, 0.15)', 
-                color: '#ffffff', 
-                padding: '12px 24px', 
-                borderRadius: '50px', 
-                fontSize: '14px',
-                fontWeight: '700',
-                textTransform: 'uppercase',
-                letterSpacing: '1.5px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)'
-              }}>
-                ✨ Portugal's #1 Relocation Platform
-              </span>
-            </div>
-            
-            <h1 style={{ 
-              fontSize: '4.5rem', 
-              fontWeight: '900', 
-              margin: '0 0 2rem 0', 
-              letterSpacing: '-2px', 
-              color: '#ffffff',
-              lineHeight: '1.1'
-            }} className="hero-title">
-              Your Gateway to
-              <br />
-              <span className="gradient-text" style={{ 
-                background: 'linear-gradient(135deg, #00d4ff 0%, #ffffff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
-                Portugal
-              </span>
-              <br />
-              Awaits
-            </h1>
-            
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.9)', 
-              fontSize: '1.3rem', 
-              margin: '0 0 3rem 0', 
-              maxWidth: '550px',
-              lineHeight: '1.6',
-              fontWeight: '400'
-            }} className="hero-subtitle">
-              Join <strong>5,000+ successful relocators</strong> who chose the smart way to move. Our proven system eliminates the guesswork with a <strong>99% success rate</strong> and <strong>average 90-day timeline</strong>.
-            </p>
-            
-            <div style={{ 
-              display: 'flex', 
-              gap: '1.5rem', 
-              marginBottom: '3rem',
-              flexWrap: 'wrap'
-            }} className="cta-buttons">
-              <button 
-                className="cta-button"
-                style={{ 
-                  padding: '18px 36px', 
-                  fontSize: '18px',
-                  fontWeight: '700',
-                  borderRadius: '16px',
-                  border: 'none',
-                  color: '#ffffff',
-                  cursor: 'pointer',
-                  minWidth: '220px'
-                }} 
-                onClick={handleGetStarted}
-                aria-label="Start your Portugal relocation journey"
-              >
-                🚀 Start Your Journey
-              </button>
-              
-              <button 
-                className="secondary-button"
-                style={{ 
-                  padding: '18px 36px', 
-                  fontSize: '18px',
-                  fontWeight: '600',
-                  borderRadius: '16px',
-                  cursor: 'pointer',
-                  minWidth: '220px'
-                }} 
-                onClick={handleBookConsultation}
-                aria-label="Book a free consultation call"
-              >
-                📞 Book Free Call
-              </button>
-            </div>
+      {/* Hero Section - Shuffle Grid Animation */}
+      <ShuffleHero />
 
-            {/* Trust Indicators */}
-            <div style={{ 
-              display: 'flex',
-              alignItems: 'center',
-              gap: '2rem',
-              color: 'rgba(255, 255, 255, 0.9)', 
-              fontSize: '15px',
-              flexWrap: 'wrap'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span>⭐⭐⭐⭐⭐</span>
-                <span><strong>4.9/5</strong> (1,200+ reviews)</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span>🔒</span>
-                <span>Money-back guarantee</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span>⚡</span>
-                <span>90-day average timeline</span>
-              </div>
-            </div>
-          </div>
-          
-          {/* Right Column - Visual Mockup */}
-          <div style={{
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.1)',
-              borderRadius: '24px',
-              padding: '2rem',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 25px 50px rgba(0, 0, 0, 0.1)',
-              maxWidth: '400px',
-              width: '100%'
-            }} className="floating-element">
-              <div style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                borderRadius: '16px',
-                padding: '1.5rem',
-                marginBottom: '1rem',
-                color: '#333'
-              }}>
-                <h4 style={{ margin: '0 0 1rem 0', fontWeight: '700', color: '#0070f3' }}>Your Relocation Dashboard</h4>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                  <span style={{ fontSize: '14px', color: '#666' }}>Progress</span>
-                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#10b981' }}>78% Complete</span>
-                </div>
-                <div style={{
-                  background: '#f0f0f0',
-                  height: '8px',
-                  borderRadius: '4px',
-                  marginBottom: '1.5rem'
-                }}>
-                  <div style={{
-                    background: 'linear-gradient(90deg, #10b981, #0070f3)',
-                    height: '100%',
-                    width: '78%',
-                    borderRadius: '4px'
-                  }} />
-                </div>
-                <div style={{ fontSize: '13px', color: '#666' }}>
-                  ✅ Documentation submitted<br/>
-                  ✅ Appointment scheduled<br/>
-                  🔄 Processing application<br/>
-                  ⏳ Awaiting approval
-                </div>
-              </div>
-              
-              <div style={{
-                background: 'rgba(255, 255, 255, 0.9)',
-                borderRadius: '12px',
-                padding: '1rem',
-                fontSize: '13px',
-                color: '#333'
-              }}>
-                <strong style={{ color: '#0070f3' }}>Next Step:</strong> Schedule your appointment at the Portuguese consulate
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Parallax Storytelling Sections */}
+      <div style={{ background: '#fff' }}>
+        <TextParallaxContent
+          imgUrl="https://images.unsplash.com/photo-1583422409516-2895a77efded?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+          subheading="Your Journey"
+          heading="Start with Confidence"
+        >
+          <ContentSection
+            title="Expert Guidance Every Step of the Way"
+            content={[
+              "Our proven system has helped over 5,000 families successfully relocate to Portugal. From the initial consultation to receiving your residency card, we provide personalized support tailored to your unique situation.",
+              "With a 99% success rate and average 90-day processing time, you can trust our expertise to make your Portuguese dream a reality."
+            ]}
+            buttonText="Start Your Application"
+          />
+        </TextParallaxContent>
+
+        <TextParallaxContent
+          imgUrl="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+          subheading="Documentation"
+          heading="Simplified Process"
+        >
+          <ContentSection
+            title="No More Paperwork Confusion"
+            content={[
+              "Navigate the complex Portuguese bureaucracy with ease. Our document preparation service ensures all your paperwork is correctly formatted, translated, and apostilled according to Portuguese requirements.",
+              "We handle the technical details so you can focus on planning your new life in Portugal."
+            ]}
+            buttonText="View Document Checklist"
+          />
+        </TextParallaxContent>
+
+        <TextParallaxContent
+          imgUrl="https://images.unsplash.com/photo-1570393952005-681c3f178294?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+          subheading="Settlement"
+          heading="Your New Home Awaits"
+        >
+          <ContentSection
+            title="Beyond Visas - Complete Relocation Support"
+            content={[
+              "Once your visa is approved, our support continues. From finding the perfect neighborhood to setting up utilities and opening bank accounts, we ensure a smooth transition to Portuguese life.",
+              "Join our thriving community of relocated families who now call Portugal home."
+            ]}
+            buttonText="Explore Settlement Services"
+          />
+        </TextParallaxContent>
+      </div>
 
       {/* Social Proof Stats - Enhanced with better spacing and modern design */}
       <section style={{
@@ -576,21 +477,25 @@ export default function HomePage({ user }) {
           
           <h2 style={{ 
             fontSize: '3rem', 
-            fontWeight: '900',
+            fontWeight: '800',
             marginBottom: '1rem',
             color: '#1a202c',
-            letterSpacing: '-1px'
-          }}>
+            letterSpacing: '-0.02em',
+            fontFamily: 'Inter, sans-serif'
+          }} className="section-title">
             The Numbers Speak for Themselves
           </h2>
           
           <p style={{
-            fontSize: '1.2rem',
+            fontSize: '1.25rem',
             color: '#64748b',
             marginBottom: '4rem',
             maxWidth: '600px',
-            margin: '0 auto 4rem auto'
-          }}>
+            margin: '0 auto 4rem auto',
+            fontWeight: '400',
+            lineHeight: '1.6',
+            fontFamily: 'Inter, sans-serif'
+          }} className="section-subtitle">
             Join thousands of successful relocators who chose the smart path to Portugal
           </p>
           
@@ -624,16 +529,20 @@ export default function HomePage({ user }) {
                 }} />
                 <div style={{ 
                   fontSize: '3.5rem', 
-                  fontWeight: '900',
+                  fontWeight: '800',
                   marginBottom: '1rem',
-                  color: '#0070f3'
+                  color: '#0070f3',
+                  fontFamily: 'Inter, sans-serif',
+                  letterSpacing: '-0.02em'
                 }}>
                   {stat.number}
                 </div>
                 <div style={{ 
-                  fontSize: '1.1rem',
-                  color: '#64748b',
-                  fontWeight: '600'
+                  fontSize: '1.125rem',
+                  fontWeight: '500',
+                  color: '#475569',
+                  fontFamily: 'Inter, sans-serif',
+                  lineHeight: '1.5'
                 }}>
                   {stat.label}
                 </div>
@@ -769,18 +678,22 @@ export default function HomePage({ user }) {
               fontSize: '3rem', 
               fontWeight: '800', 
               marginBottom: '1rem',
-              color: '#222',
-              lineHeight: '1.2'
-            }}>
+              color: '#1a202c',
+              lineHeight: '1.2',
+              fontFamily: 'Inter, sans-serif',
+              letterSpacing: '-0.025em'
+            }} className="section-title">
               Get Started in Three Simple Steps
             </h2>
             <p style={{ 
-              fontSize: '1.2rem', 
-              color: '#666',
+              fontSize: '1.25rem', 
+              color: '#64748b',
               lineHeight: '1.6',
               maxWidth: '500px',
-              margin: '0 auto'
-            }}>
+              margin: '0 auto',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '400'
+            }} className="section-subtitle">
               From consultation to celebration, we guide you every step of the way
             </p>
           </div>
@@ -1304,119 +1217,32 @@ export default function HomePage({ user }) {
 
       {/* Testimonials */}
       <section style={{ 
-        padding: '6rem 2rem',
-        background: '#fff',
-        textAlign: 'center'
+        padding: '4rem 0',
+        background: '#fff'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem', textAlign: 'center', marginBottom: '4rem' }}>
           <h2 style={{ 
             fontSize: '3rem', 
             fontWeight: '900', 
             marginBottom: '1rem',
-            color: '#222'
+            color: '#222',
+            fontFamily: 'Inter, sans-serif'
           }}>
             Success Stories
           </h2>
           <p style={{ 
             fontSize: '1.2rem', 
             color: '#666',
-            marginBottom: '4rem'
+            fontFamily: 'Inter, sans-serif'
           }}>
             Real people, real results. See what our clients say about their relocation journey.
           </p>
-          
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
-            gap: '2rem'
-          }}>
-            {testimonials.map((t, i) => (
-              <div 
-                key={i} 
-                style={{ 
-                  background: '#fff', 
-                  borderRadius: '20px', 
-                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)', 
-                  padding: '3rem 2rem', 
-                  textAlign: 'left',
-                  border: '1px solid #f0f0f0',
-                  position: 'relative'
-                }}
-              >
-                <div style={{ 
-                  color: '#f59e0b', 
-                  fontSize: '24px', 
-                  marginBottom: '1rem'
-                }}>
-                  {'★'.repeat(Math.round(t.rating))}
-                </div>
-                
-                <p style={{ 
-                  color: '#333', 
-                  fontSize: '1.1rem', 
-                  marginBottom: '2rem', 
-                  fontStyle: 'italic',
-                  lineHeight: '1.6'
-                }}>
-                  "{t.quote}"
-                </p>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'space-between',
-                  paddingTop: '1rem',
-                  borderTop: '1px solid #f0f0f0'
-                }}>
-                  <div>
-                    <div style={{ 
-                      fontWeight: '700', 
-                      fontSize: '1.1rem',
-                      color: '#222',
-                      marginBottom: '0.25rem'
-                    }}>
-                      {t.name}
-                    </div>
-                    <div style={{ 
-                      color: '#666', 
-                      fontSize: '0.9rem'
-                    }}>
-                      📍 {t.location}
-                    </div>
-                  </div>
-                  <div style={{ 
-                    background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
-                    color: 'white',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '20px',
-                    fontSize: '0.8rem',
-                    fontWeight: '600'
-                  }}>
-                    {t.visa}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ marginTop: '4rem' }}>
-            <button 
-              className="cta-button"
-              style={{ 
-                ...buttonStyle, 
-                padding: '18px 40px', 
-                fontSize: 18,
-                fontWeight: 700,
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
-                border: 'none'
-              }} 
-              onClick={handleBookConsultation}
-            >
-              Book Your Free Consultation →
-            </button>
-          </div>
         </div>
+        
+        <AnimatedTestimonials 
+          testimonials={testimonials} 
+          autoplay={true}
+        />
       </section>
 
       {/* FAQ Section with Schema Markup */}

@@ -71,8 +71,9 @@ export default function Header({ onLogin, onLogout }) {
                 if (!e.currentTarget.contains(e.relatedTarget)) setServicesOpen(false);
               }}
             >
-              <a href="/services/getnif" style={{ ...navLink, display: 'block', padding: '12px 20px' }} onClick={() => setServicesOpen(false)}>Get NIF</a>
-              <a href="/services/bank-account" style={{ ...navLink, display: 'block', padding: '12px 20px' }} onClick={() => setServicesOpen(false)}>Get Bank Account</a>
+              {/* COMMENTED OUT: NIF and Bank Account services */}
+              {/* <a href="/services/getnif" style={{ ...navLink, display: 'block', padding: '12px 20px' }} onClick={() => setServicesOpen(false)}>Get NIF</a>
+              <a href="/services/bank-account" style={{ ...navLink, display: 'block', padding: '12px 20px' }} onClick={() => setServicesOpen(false)}>Get Bank Account</a> */}
             </div>
           )}
         </div>
