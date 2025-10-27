@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import AppRoutes from "./routes";
 
 // Shared component imports
-import { Header } from "../components";
+import { Header, CookieConsent } from "../components";
 
 function App() {
   return (
@@ -33,6 +33,7 @@ function AppContent() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <AppRoutes navigate={navigate} />
       </div>
+      <CookieConsent />
     </div>
   );
 }

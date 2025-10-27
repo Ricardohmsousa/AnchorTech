@@ -302,7 +302,7 @@ const OverlayCopy = ({ subheading, heading }) => {
   );
 };
 
-const ContentSection = ({ title, content, buttonText = "Learn More" }) => {
+const ContentSection = ({ title, content, buttonText = "Learn More", onClick }) => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-20%" });
   const prefersReducedMotion = useReducedMotion();
@@ -404,6 +404,7 @@ const ContentSection = ({ title, content, buttonText = "Learn More" }) => {
           minWidth: '200px',
           justifyContent: 'center'
         }}
+        onClick={onClick}
         onMouseEnter={(e) => {
           e.target.style.transform = 'translateY(-2px) scale(1.02)';
           e.target.style.boxShadow = '0 8px 24px rgba(0, 112, 243, 0.4)';

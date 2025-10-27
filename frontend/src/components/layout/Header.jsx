@@ -9,136 +9,261 @@ export default function Header({ onLogin, onLogout }) {
   // const { currentUser, logout, isAuthenticated } = useAuth();
   const [servicesOpen, setServicesOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   
   const handleHomeNavigation = () => {
     navigate('/');
+    setMobileMenuOpen(false);
   };
   
   return (
-    <nav style={navBar}>
-      <div
-        style={{ fontFamily: 'Lato, sans-serif', fontWeight: 900, fontSize: 28, color: '#0070f3', letterSpacing: 1, cursor: 'pointer' }}
-        onClick={handleHomeNavigation}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleHomeNavigation();
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile { display: flex !important; }
+          .mobile-menu { 
+            display: ${mobileMenuOpen ? 'block' : 'none'} !important;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 1rem;
           }
-        }}
-        tabIndex={0}
-        role="button"
-        aria-label="Go to home page"
-      >
-        TechAnchor
-      </div>
-      <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-        <div style={{ position: 'relative' }}>
-          <button
-            style={{
-              ...buttonStyle,
-              fontFamily: 'Lato, sans-serif',
-              background: '#fff',
-              color: '#222',
-              border: 'none',
-              fontWeight: 700,
-              fontSize: 16,
-              padding: '10px 24px',
-              cursor: 'pointer',
-              boxShadow: 'none'
+        }
+        @media (min-width: 769px) {
+          .nav-desktop { display: flex !important; }
+          .nav-mobile { display: none !important; }
+          .mobile-menu { display: none !important; }
+        }
+      `}</style>
+      
+      <nav style={{
+        ...navBar,
+        flexWrap: 'wrap',
+        position: 'relative'
+      }}>
+        {/* Main navbar content */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          width: '100%'
+        }}>
+          {/* Logo */}
+          <div
+            style={{ 
+              fontFamily: 'Lato, sans-serif', 
+              fontWeight: 900, 
+              fontSize: 28, 
+              color: '#0070f3', 
+              letterSpacing: 1, 
+              cursor: 'pointer' 
             }}
-            onClick={() => setServicesOpen((open) => !open)}
-            aria-haspopup="true"
-            aria-expanded={servicesOpen}
+            onClick={handleHomeNavigation}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleHomeNavigation();
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label="Go to home page"
           >
-            Services ▼
-          </button>
-          {servicesOpen && (
-            <div
-              className="services-dropdown open"
-              style={{
-                position: 'absolute',
-                top: '110%',
-                left: 0,
-                background: '#fff',
-                boxShadow: '0 2px 8px #e0e0e0',
-                borderRadius: 8,
-                minWidth: 180,
-                zIndex: 100,
-              }}
-              tabIndex={-1}
-              onBlur={e => {
-                if (!e.currentTarget.contains(e.relatedTarget)) setServicesOpen(false);
-              }}
-            >
-              {/* COMMENTED OUT: NIF and Bank Account services */}
-              {/* <a href="/services/getnif" style={{ ...navLink, display: 'block', padding: '12px 20px' }} onClick={() => setServicesOpen(false)}>Get NIF</a>
-              <a href="/services/bank-account" style={{ ...navLink, display: 'block', padding: '12px 20px' }} onClick={() => setServicesOpen(false)}>Get Bank Account</a> */}
-            </div>
-          )}
-        </div>
-  <a href="/contact" style={{ ...navLink, fontFamily: 'Lato, sans-serif' }}>Contact</a>
-        {/* COMMENTED OUT: Firebase Auth Login/Logout Logic */}
-        {/* {isAuthenticated && currentUser ? (
-          <div style={{ position: 'relative', display: 'inline-block' }}>
-            <button
-              style={{ ...buttonStyle, marginLeft: 16 }}
-              onClick={() => setAccountOpen((open) => !open)}
-              aria-haspopup="true"
-              aria-expanded={accountOpen}
-            >
-              {`Hi, ${currentUser.displayName || currentUser.email?.split('@')[0] || 'User'}`}
-            </button>
-            {accountOpen && (
-              <div
-                className="services-dropdown open"
-                style={{
-                  position: 'absolute',
-                  top: '110%',
-                  right: 0,
-                  background: '#fff',
-                  boxShadow: '0 2px 8px #e0e0e0',
-                  borderRadius: 8,
-                  minWidth: 140,
-                  zIndex: 100,
-                }}
-                tabIndex={-1}
-                onBlur={e => {
-                  if (!e.currentTarget.contains(e.relatedTarget)) setAccountOpen(false);
-                }}
-              >
-                <button
-                  style={{ ...buttonStyle, width: '100%', background: 'none', color: '#0070f3', border: 'none', borderRadius: 0, boxShadow: 'none', textAlign: 'left', padding: '12px 20px', fontWeight: 600, cursor: 'pointer' }}
-                  onClick={() => {
-                    setAccountOpen(false);
-                    window.location.pathname = '/profile';
-                  }}
-                >
-                  Profile
-                </button>
-                <button
-                  style={{ ...buttonStyle, width: '100%', background: 'none', color: '#d32f2f', border: 'none', borderRadius: 0, boxShadow: 'none', textAlign: 'left', padding: '12px 20px', fontWeight: 600, cursor: 'pointer' }}
-                  onClick={async () => {
-                    setAccountOpen(false);
-                    try {
-                      await logout();
-                      if (onLogout) onLogout();
-                    } catch (error) {
-                      console.error('Logout failed:', error);
-                    }
-                  }}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+            TechAnchor
           </div>
-        ) : (
-          <button style={{ ...buttonStyle, marginLeft: 16 }} onClick={onLogin}>
-            Login
+
+          {/* Desktop Navigation */}
+          <div className="nav-desktop" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+            <div style={{ position: 'relative' }}>
+              <button
+                style={{
+                  ...buttonStyle,
+                  fontFamily: 'Lato, sans-serif',
+                  background: '#fff',
+                  color: '#222',
+                  border: 'none',
+                  fontWeight: 700,
+                  fontSize: 16,
+                  padding: '10px 24px',
+                  cursor: 'pointer',
+                  boxShadow: 'none'
+                }}
+                onClick={() => setServicesOpen((open) => !open)}
+                aria-haspopup="true"
+                aria-expanded={servicesOpen}
+              >
+                Services ▼
+              </button>
+              {servicesOpen && (
+                <div
+                  className="services-dropdown open"
+                  style={{
+                    position: 'absolute',
+                    top: '110%',
+                    left: 0,
+                    background: '#fff',
+                    boxShadow: '0 2px 8px #e0e0e0',
+                    borderRadius: 8,
+                    minWidth: 180,
+                    zIndex: 100,
+                  }}
+                  tabIndex={-1}
+                  onBlur={e => {
+                    if (!e.currentTarget.contains(e.relatedTarget)) setServicesOpen(false);
+                  }}
+                >
+                  <button 
+                    onClick={() => { navigate('/application'); setServicesOpen(false); }}
+                    style={{ ...navLink, display: 'block', padding: '12px 20px', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                  >
+                    Start Application
+                  </button>
+                  <button 
+                    onClick={() => { navigate('/services'); setServicesOpen(false); }}
+                    style={{ ...navLink, display: 'block', padding: '12px 20px', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                  >
+                    Settlement Services
+                  </button>
+                </div>
+              )}
+            </div>
+            <button 
+              onClick={() => navigate('/about')}
+              style={{ 
+                ...navLink, 
+                fontFamily: 'Lato, sans-serif',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#333',
+                textDecoration: 'none'
+              }}
+            >
+              About
+            </button>
+            <button 
+              onClick={() => navigate('/contact')}
+              style={{ 
+                ...navLink, 
+                fontFamily: 'Lato, sans-serif',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#333',
+                textDecoration: 'none'
+              }}
+            >
+              Contact
+            </button>
+          </div>
+
+          {/* Mobile hamburger menu */}
+          <button 
+            className="nav-mobile"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              display: 'none',
+              background: 'none',
+              border: 'none',
+              fontSize: '24px',
+              cursor: 'pointer',
+              padding: '8px'
+            }}
+            aria-label="Toggle mobile menu"
+          >
+            {mobileMenuOpen ? '✕' : '☰'}
           </button>
-        )} */}
-      </div>
-    </nav>
+        </div>
+
+        {/* Mobile Menu */}
+        <div className="mobile-menu" style={{ display: 'none' }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem'
+          }}>
+            <button
+              onClick={() => {
+                navigate('/application');
+                setMobileMenuOpen(false);
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '12px 0',
+                textAlign: 'left',
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#333',
+                cursor: 'pointer'
+              }}
+            >
+              Start Application
+            </button>
+            <button
+              onClick={() => {
+                navigate('/services');
+                setMobileMenuOpen(false);
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '12px 0',
+                textAlign: 'left',
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#333',
+                cursor: 'pointer'
+              }}
+            >
+              Services
+            </button>
+            <button
+              onClick={() => {
+                navigate('/about');
+                setMobileMenuOpen(false);
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '12px 0',
+                textAlign: 'left',
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#333',
+                cursor: 'pointer'
+              }}
+            >
+              About
+            </button>
+            <button
+              onClick={() => {
+                navigate('/contact');
+                setMobileMenuOpen(false);
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '12px 0',
+                textAlign: 'left',
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#333',
+                cursor: 'pointer'
+              }}
+            >
+              Contact
+            </button>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }

@@ -1,10 +1,11 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressIndicator from "../ProgressIndicator";
 import { AnimatedTestimonials } from "../AnimatedTestimonials";
 import ShuffleHero from "../ShuffleHero";
 import { TextParallaxContent, ContentSection } from "../TextParallax";
+import Footer from "./Footer";
 
 import { layout, heroHeader, heroImage, heroOverlay, heroContent, section, card, footer as footerStyle, button as buttonStyle } from "../../styles/sharedStyles";
 
@@ -141,16 +142,38 @@ export default function HomePage({ user }) {
       setSubmitted(true);
       setIsLoading(false);
       // TODO: Integrate with email service
+      
+      // Redirect to documents page after 2 seconds
+      setTimeout(() => {
+        navigate("/documents");
+      }, 2000);
     }, 1500);
   };
 
   const handleGetStarted = () => {
-    if (user) {
-      navigate("/profile");
-    } else {
-      navigate("/register");
+    navigate("/application");
+  };
+
+  const handleDocumentChecklistClick = () => {
+    // Scroll to the email capture section
+    const checklistSection = document.getElementById('checklist-section');
+    if (checklistSection) {
+      checklistSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Listen for scroll to checklist event from header
+  useEffect(() => {
+    const handleScrollToChecklist = () => {
+      handleDocumentChecklistClick();
+    };
+
+    window.addEventListener('scrollToChecklist', handleScrollToChecklist);
+    
+    return () => {
+      window.removeEventListener('scrollToChecklist', handleScrollToChecklist);
+    };
+  }, []);
 
   const handleBookConsultation = () => {
     // TODO: Integrate with booking system
@@ -524,6 +547,68 @@ export default function HomePage({ user }) {
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
         }
+        
+        /* Footer responsive grid */
+        .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: clamp(3rem, 6vw, 4rem) clamp(1.5rem, 3vw, 3rem);
+        }
+        
+        @media (min-width: 768px) {
+          .footer-grid {
+            grid-template-columns: repeat(6, 1fr);
+          }
+        }
+        
+        .footer-company {
+          grid-column: span 2;
+        }
+        
+        @media (min-width: 768px) {
+          .footer-company {
+            grid-column: span 3;
+          }
+        }
+        
+        @media (min-width: 1024px) {
+          .footer-company {
+            grid-column: span 2;
+            padding-right: 2rem;
+          }
+        }
+        
+        .footer-newsletter {
+          grid-column: span 2;
+        }
+        
+        @media (min-width: 768px) {
+          .footer-newsletter {
+            grid-column: span 1;
+          }
+        }
+        
+        @media (min-width: 1024px) {
+          .footer-newsletter {
+            grid-column: span 2;
+            padding-left: 2rem;
+          }
+        }
+        
+        .footer-bottom {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+        
+        @media (min-width: 768px) {
+          .footer-bottom {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+          }
+        }
       `}</style>
 
       {/* Hero Section - Shuffle Grid Animation */}
@@ -546,6 +631,7 @@ export default function HomePage({ user }) {
               "With a 99% success rate and average 90-day processing time, you can trust our expertise to make your Portuguese dream a reality."
             ]}
             buttonText="Start Your Application"
+            onClick={() => navigate("/application")}
           />
         </TextParallaxContent>
 
@@ -560,7 +646,8 @@ export default function HomePage({ user }) {
               "Navigate the complex Portuguese bureaucracy with ease. Our document preparation service ensures all your paperwork is correctly formatted, translated, and apostilled according to Portuguese requirements.",
               "We handle the technical details so you can focus on planning your new life in Portugal."
             ]}
-            buttonText="View Document Checklist"
+            buttonText="Get Document Checklist"
+            onClick={handleDocumentChecklistClick}
           />
         </TextParallaxContent>
 
@@ -576,6 +663,7 @@ export default function HomePage({ user }) {
               "Join our thriving community of relocated families who now call Portugal home."
             ]}
             buttonText="Explore Settlement Services"
+            onClick={() => navigate("/services")}
           />
         </TextParallaxContent>
       </div>
@@ -1213,7 +1301,9 @@ export default function HomePage({ user }) {
       </section>
 
       {/* Immigration Checklist CTA */}
-      <section style={{ 
+      <section 
+        id="checklist-section"
+        style={{ 
         maxWidth: '900px', 
         margin: '6rem auto', 
         background: 'linear-gradient(135deg, #eaf4ff 0%, #dbeafe 100%)', 
@@ -1674,34 +1764,7 @@ export default function HomePage({ user }) {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer style={{
-        ...footerStyle,
-        background: '#f8f9fb',
-        padding: '3rem 2rem',
-        textAlign: 'center',
-        borderTop: '1px solid #e5e7eb'
-      }}>
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <div style={{ 
-            marginBottom: '1.5rem',
-            fontSize: '14px',
-            color: '#666',
-            lineHeight: '1.6'
-          }}>
-            <strong>Legal Disclaimer:</strong> TechAnchor is not a law firm, tax advisor, or investment firm. 
-            We connect you with certified professionals as needed and provide relocation coordination services.
-          </div>
-          <div style={{ 
-            fontSize: '14px',
-            color: '#888'
-          }}>
-            &copy; {new Date().getFullYear()} TechAnchor. All rights reserved. 
-            <span style={{ margin: '0 1rem' }}>•</span>
-            Made with ❤️ for future Portuguese residents
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 } 

@@ -11,10 +11,35 @@ import { Routes, Route } from "react-router-dom";
 // Shared component imports
 import { HomePage, ContactPage } from "../components";
 
+// New page imports
+import ApplicationPage from "../components/pages/ApplicationPage";
+import DocumentChecklistPage from "../components/pages/DocumentChecklistPage";
+import SettlementServicesPage from "../components/pages/SettlementServicesPage";
+import AboutPage from "../components/pages/AboutPage";
+import PaymentPage from "../components/pages/PaymentPage";
+import PaymentSuccessPage from "../components/pages/PaymentSuccessPage";
+import PrivacyPolicyPage from "../components/pages/PrivacyPolicyPage";
+import TermsOfServicePage from "../components/pages/TermsOfServicePage";
+import CookiePolicyPage from "../components/pages/CookiePolicyPage";
+
 const AppRoutes = ({ navigate }) => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      
+      {/* New page routes */}
+      <Route path="/application" element={<ApplicationPage />} />
+      <Route path="/documents" element={<DocumentChecklistPage />} />
+      <Route path="/services" element={<SettlementServicesPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/payment-success" element={<PaymentSuccessPage />} />
+      <Route path="/privacy" element={<PrivacyPolicyPage />} />
+      <Route path="/terms" element={<TermsOfServicePage />} />
+      <Route path="/cookies" element={<CookiePolicyPage />} />
+      
+      <Route path="/contact" element={<ContactPage />} />
+      
       {/* COMMENTED OUT: Auth routes */}
       {/* <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} /> */}

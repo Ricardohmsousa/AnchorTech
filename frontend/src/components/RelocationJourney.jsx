@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const RelocationJourney = () => {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { threshold: 0.3 });
@@ -302,6 +304,7 @@ const RelocationJourney = () => {
           style={{ textAlign: 'center' }}
         >
           <button
+            onClick={() => navigate('/application')}
             style={{
               background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
               color: 'white',

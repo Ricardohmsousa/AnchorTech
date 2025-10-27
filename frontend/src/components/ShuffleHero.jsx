@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const ShuffleHero = () => {
+  const navigate = useNavigate();
   return (
     <section style={{
       width: '100%',
@@ -14,6 +16,7 @@ const ShuffleHero = () => {
       margin: '0',
       minHeight: '80vh'
     }}>
+      
       <style>{`
         @media (min-width: 768px) {
           .shuffle-hero-section {
@@ -65,7 +68,7 @@ const ShuffleHero = () => {
           font-size: 2.5rem;
           font-weight: 700;
           line-height: 1.1;
-          color: #1a1a1a;
+          color: #000000;
           margin-bottom: 1.5rem;
         }
         .shuffle-hero-text {
@@ -87,7 +90,7 @@ const ShuffleHero = () => {
             textTransform: 'uppercase',
             letterSpacing: '0.05em'
           }}>
-            ✨ Portugal's #1 Relocation Platform
+            🏆 Portugal's #1 Relocation Platform
           </span>
           <h1 className="shuffle-hero-title">
             Your Gateway to
@@ -120,6 +123,7 @@ const ShuffleHero = () => {
               boxShadow: '0 4px 14px 0 rgba(0, 112, 243, 0.3)',
               minWidth: '220px'
             }}
+            onClick={() => navigate('/application')}
             onMouseEnter={(e) => {
               e.target.style.transform = 'scale(1.05)';
               e.target.style.boxShadow = '0 6px 20px 0 rgba(0, 112, 243, 0.4)';
@@ -142,6 +146,7 @@ const ShuffleHero = () => {
               transition: 'all 0.2s ease',
               minWidth: '220px'
             }}
+            onClick={() => navigate('/contact')}
             onMouseEnter={(e) => {
               e.target.style.background = '#0070f3';
               e.target.style.color = 'white';
