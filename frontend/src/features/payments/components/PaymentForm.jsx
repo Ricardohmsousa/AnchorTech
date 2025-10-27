@@ -30,7 +30,7 @@ if (stripePromise) {
     });
 }
 
-const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading }) => {
+const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading, packageInfo }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -122,7 +122,11 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       };
       const requestBody = {
         amount: amount,
-        service_type: 'nif_application',
+        service_type: packageInfo?.service_type || 'nif_application',
+        package_name: packageInfo?.name || null,
+        package_id: packageInfo?.id || null,
+        customer_name: cardholderName || null,
+        customer_email: packageInfo?.customer_email || null
       };
 
       console.log('🔄 Making payment request...');
@@ -165,6 +169,27 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         setPaymentError(error.message);
         setLoading(false);
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        // Record additional purchase details
+        try {
+          await fetch(`${API_BASE_URL}/purchases/record`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...getAuthHeaders(),
+            },
+            body: JSON.stringify({
+              payment_intent_id: paymentIntent.id,
+              customer_name: cardholderName,
+              customer_email: packageInfo?.customer_email,
+              billing_address: packageInfo?.billing_address,
+              service_details: packageInfo?.description || `${packageInfo?.name} - ${packageInfo?.service_type}`
+            })
+          });
+        } catch (recordError) {
+          console.warn('Failed to record purchase details:', recordError);
+          // Don't fail the payment flow if recording fails
+        }
+        
         setLoading(false); // ensure we stop the spinner after success
         onSuccess(paymentIntent);
       } else {
@@ -480,7 +505,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
   );
 };
 
-const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
+const PaymentForm = ({ amount, onSuccess, onError, onCancel, packageInfo }) => {
   const [loading, setLoading] = useState(false);
 
   if (!stripePromise) {
@@ -537,6 +562,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           onCancel={onCancel}
           loading={loading}
           setLoading={setLoading}
+          packageInfo={packageInfo}
         />
 
         <div style={{ marginTop: 16, fontSize: 12, color: '#999', textAlign: 'center' }}>

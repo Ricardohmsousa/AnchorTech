@@ -9,6 +9,8 @@ from firebase_admin import credentials, firestore, auth as firebase_auth
 import os
 import shutil
 import jwt
+import sqlite3
+import json
 from datetime import datetime, timedelta
 import stripe
 
@@ -124,9 +126,104 @@ if not firebase_admin._apps:
 
 db = firestore.client()
 
+# Purchase management functions
+def create_purchase_record(user_id: str, payment_intent_data: dict, payment_request: dict = None):
+    """Create a purchase record in Firestore"""
+    try:
+        purchase_data = {
+            'user_id': user_id,
+            'service_type': payment_intent_data.get('metadata', {}).get('service_type', 'unknown'),
+            'package_name': payment_request.get('package_name') if payment_request else None,
+            'package_id': payment_request.get('package_id') if payment_request else None,
+            'amount': payment_intent_data.get('amount', 0),
+            'currency': payment_intent_data.get('currency', 'eur').upper(),
+            'payment_intent_id': payment_intent_data.get('id'),
+            'stripe_payment_method_id': payment_intent_data.get('payment_method'),
+            'payment_status': payment_intent_data.get('status', 'pending'),
+            'customer_name': payment_request.get('customer_name') if payment_request else None,
+            'customer_email': payment_request.get('customer_email') if payment_request else None,
+            'billing_address': payment_request.get('billing_address') if payment_request else None,
+            'service_details': payment_request.get('service_details') if payment_request else None,
+            'metadata': json.dumps(payment_intent_data.get('metadata', {})),
+            'purchased_at': firestore.SERVER_TIMESTAMP,
+            'created_at': firestore.SERVER_TIMESTAMP,
+            'updated_at': firestore.SERVER_TIMESTAMP
+        }
+        
+        # Add the purchase to Firestore
+        purchase_ref = db.collection('purchases').add(purchase_data)
+        return purchase_ref[1].id  # Return the document ID
+        
+    except Exception as e:
+        print(f"Error creating purchase record: {str(e)}")
+        return None
 
+def get_user_purchases(user_id: str):
+    """Get all purchases for a user"""
+    try:
+        purchases_ref = db.collection('purchases')
+        query = purchases_ref.where('user_id', '==', user_id).order_by('purchased_at', direction=firestore.Query.DESCENDING)
+        purchases = []
+        
+        for doc in query.stream():
+            purchase_data = doc.to_dict()
+            purchase_data['id'] = doc.id
+            # Convert timestamps to ISO format
+            if purchase_data.get('purchased_at'):
+                purchase_data['purchased_at'] = purchase_data['purchased_at'].isoformat()
+            if purchase_data.get('created_at'):
+                purchase_data['created_at'] = purchase_data['created_at'].isoformat()
+            if purchase_data.get('updated_at'):
+                purchase_data['updated_at'] = purchase_data['updated_at'].isoformat()
+            purchases.append(purchase_data)
+        
+        return purchases
+    except Exception as e:
+        print(f"Error getting user purchases: {str(e)}")
+        return []
 
-class RegisterRequest(BaseModel):
+def get_purchase_by_payment_intent(payment_intent_id: str):
+    """Get purchase by payment intent ID"""
+    try:
+        purchases_ref = db.collection('purchases')
+        query = purchases_ref.where('payment_intent_id', '==', payment_intent_id).limit(1)
+        
+        for doc in query.stream():
+            purchase_data = doc.to_dict()
+            purchase_data['id'] = doc.id
+            return purchase_data
+        
+        return None
+    except Exception as e:
+        print(f"Error getting purchase by payment intent: {str(e)}")
+        return None
+
+def update_purchase_status(payment_intent_id: str, new_status: str, payment_data: dict = None):
+    """Update purchase status and payment data"""
+    try:
+        purchases_ref = db.collection('purchases')
+        query = purchases_ref.where('payment_intent_id', '==', payment_intent_id).limit(1)
+        
+        for doc in query.stream():
+            update_data = {
+                'payment_status': new_status,
+                'updated_at': firestore.SERVER_TIMESTAMP
+            }
+            
+            # Update additional payment data if provided
+            if payment_data:
+                if payment_data.get('payment_method'):
+                    update_data['stripe_payment_method_id'] = payment_data['payment_method']
+                if payment_data.get('metadata'):
+                    update_data['metadata'] = json.dumps(payment_data['metadata'])
+            
+            doc.reference.update(update_data)
+            return True
+        
+        return False
+    except Exception as e:
+        print(f"Error updating purchase status: {str(e)}")
+        return False
     username: str
     name: Optional[str] = None
     password: str
@@ -135,6 +232,12 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     username: str
     password: str
+
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+    name: Optional[str] = None
+    user_type: str
 
 class UserResponse(BaseModel):
     username: str
@@ -145,6 +248,32 @@ class UserResponse(BaseModel):
 class PaymentIntentRequest(BaseModel):
     amount: int  # Amount in cents
     service_type: str
+    package_name: Optional[str] = None
+    package_id: Optional[str] = None
+    customer_name: Optional[str] = None
+    customer_email: Optional[str] = None
+
+class PurchaseRequest(BaseModel):
+    payment_intent_id: str
+    customer_name: Optional[str] = None
+    customer_email: Optional[str] = None
+    billing_address: Optional[str] = None
+    service_details: Optional[str] = None
+
+class PurchaseResponse(BaseModel):
+    id: int
+    user_id: str
+    service_type: str
+    package_name: Optional[str] = None
+    package_id: Optional[str] = None
+    amount: int
+    currency: str
+    payment_intent_id: str
+    payment_status: str
+    customer_name: Optional[str] = None
+    customer_email: Optional[str] = None
+    purchased_at: str
+    created_at: str
 
 class CaseCreateRequest(BaseModel):
     user_id: str
@@ -299,17 +428,39 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
         if not stripe.api_key:
             raise HTTPException(status_code=500, detail="Payment system not configured - missing Stripe key")
         
+        # Enhanced metadata for the payment intent
+        metadata = {
+            'service_type': payment_request.service_type,
+            'user_id': token_data["user_id"]
+        }
+        
+        if payment_request.package_name:
+            metadata['package_name'] = payment_request.package_name
+        if payment_request.package_id:
+            metadata['package_id'] = payment_request.package_id
+        if payment_request.customer_name:
+            metadata['customer_name'] = payment_request.customer_name
+        if payment_request.customer_email:
+            metadata['customer_email'] = payment_request.customer_email
+        
         # Create a PaymentIntent with the order amount and currency
         intent = stripe.PaymentIntent.create(
             amount=payment_request.amount,
             currency='eur',
-            metadata={
-                'service_type': payment_request.service_type,
-                'user_id': token_data["user_id"]
-            }
+            metadata=metadata
         )
         
-        return {"client_secret": intent.client_secret}
+        # Create initial purchase record in Firestore (status: pending)
+        purchase_id = create_purchase_record(
+            user_id=token_data["user_id"],
+            payment_intent_data=intent,
+            payment_request=payment_request.dict()
+        )
+        
+        if not purchase_id:
+            print(f"Warning: Failed to create purchase record for payment intent {intent.id}")
+        
+        return {"client_secret": intent.client_secret, "payment_intent_id": intent.id}
     except stripe.error.StripeError as e:
         raise HTTPException(status_code=400, detail=f"Stripe error: {str(e)}")
     except Exception as e:
@@ -321,13 +472,28 @@ def verify_payment(payment_intent_id: str, token_data: dict = Depends(verify_jwt
         # Retrieve the payment intent from Stripe
         intent = stripe.PaymentIntent.retrieve(payment_intent_id)
         
+        # Update the purchase record with the latest payment status
+        update_success = update_purchase_status(
+            payment_intent_id=payment_intent_id,
+            new_status=intent.status,
+            payment_data=intent
+        )
+        
+        if not update_success:
+            print(f"Warning: Failed to update purchase record for payment intent {payment_intent_id}")
+        
         if intent.status == 'succeeded':
-            # Payment was successful
+            # Payment was successful - get the purchase record for additional details
+            purchase = get_purchase_by_payment_intent(payment_intent_id)
+            
             return {
                 "status": "succeeded",
                 "amount": intent.amount,
                 "currency": intent.currency,
-                "metadata": intent.metadata
+                "metadata": intent.metadata,
+                "purchase_id": purchase.get('id') if purchase else None,
+                "service_type": intent.metadata.get('service_type'),
+                "package_name": intent.metadata.get('package_name')
             }
         else:
             return {"status": intent.status}
@@ -335,6 +501,122 @@ def verify_payment(payment_intent_id: str, token_data: dict = Depends(verify_jwt
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to verify payment")
+
+# Purchase management endpoints
+@app.get("/purchases", response_model=List[PurchaseResponse])
+def get_user_purchases_endpoint(token_data: dict = Depends(verify_jwt_token)):
+    """Get all purchases for the authenticated user"""
+    try:
+        purchases = get_user_purchases(token_data["user_id"])
+        return purchases
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve purchases: {str(e)}")
+
+@app.get("/purchases/{purchase_id}")
+def get_purchase_detail(purchase_id: str, token_data: dict = Depends(verify_jwt_token)):
+    """Get detailed information about a specific purchase"""
+    try:
+        purchase_ref = db.collection('purchases').document(purchase_id)
+        purchase_doc = purchase_ref.get()
+        
+        if not purchase_doc.exists:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+        
+        purchase_data = purchase_doc.to_dict()
+        
+        # Verify the purchase belongs to the authenticated user
+        if purchase_data.get('user_id') != token_data["user_id"]:
+            raise HTTPException(status_code=403, detail="Access denied to this purchase")
+        
+        purchase_data['id'] = purchase_doc.id
+        
+        # Convert timestamps to ISO format
+        if purchase_data.get('purchased_at'):
+            purchase_data['purchased_at'] = purchase_data['purchased_at'].isoformat()
+        if purchase_data.get('created_at'):
+            purchase_data['created_at'] = purchase_data['created_at'].isoformat()
+        if purchase_data.get('updated_at'):
+            purchase_data['updated_at'] = purchase_data['updated_at'].isoformat()
+        
+        return purchase_data
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve purchase details: {str(e)}")
+
+@app.post("/purchases/record")
+def record_successful_purchase(purchase_request: PurchaseRequest, token_data: dict = Depends(verify_jwt_token)):
+    """Record additional details for a successful purchase"""
+    try:
+        # Get the existing purchase record
+        purchase = get_purchase_by_payment_intent(purchase_request.payment_intent_id)
+        
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase record not found")
+        
+        # Verify the purchase belongs to the authenticated user
+        if purchase.get('user_id') != token_data["user_id"]:
+            raise HTTPException(status_code=403, detail="Access denied to this purchase")
+        
+        # Update the purchase with additional details
+        update_data = {
+            'updated_at': firestore.SERVER_TIMESTAMP
+        }
+        
+        if purchase_request.customer_name:
+            update_data['customer_name'] = purchase_request.customer_name
+        if purchase_request.customer_email:
+            update_data['customer_email'] = purchase_request.customer_email
+        if purchase_request.billing_address:
+            update_data['billing_address'] = purchase_request.billing_address
+        if purchase_request.service_details:
+            update_data['service_details'] = purchase_request.service_details
+        
+        # Update the purchase in Firestore
+        purchase_ref = db.collection('purchases').document(purchase['id'])
+        purchase_ref.update(update_data)
+        
+        return {"message": "Purchase details updated successfully", "purchase_id": purchase['id']}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update purchase details: {str(e)}")
+
+@app.get("/admin/purchases")
+def get_all_purchases_admin(token_data: dict = Depends(verify_jwt_token)):
+    """Get all purchases for admin users"""
+    # Check if user is admin (you might want to add admin role checking)
+    user_ref = db.collection("users").document(token_data["user_id"])
+    user_doc = user_ref.get()
+    
+    if not user_doc.exists:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user_data = user_doc.to_dict()
+    if user_data.get("user_type") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        purchases_ref = db.collection('purchases')
+        query = purchases_ref.order_by('purchased_at', direction=firestore.Query.DESCENDING)
+        purchases = []
+        
+        for doc in query.stream():
+            purchase_data = doc.to_dict()
+            purchase_data['id'] = doc.id
+            # Convert timestamps to ISO format
+            if purchase_data.get('purchased_at'):
+                purchase_data['purchased_at'] = purchase_data['purchased_at'].isoformat()
+            if purchase_data.get('created_at'):
+                purchase_data['created_at'] = purchase_data['created_at'].isoformat()
+            if purchase_data.get('updated_at'):
+                purchase_data['updated_at'] = purchase_data['updated_at'].isoformat()
+            purchases.append(purchase_data)
+        
+        return {"purchases": purchases, "total": len(purchases)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve all purchases: {str(e)}")
 
 def _serialize_case(case: dict, id: str = None):
     # Helper to convert Firestore timestamps to ISO strings
