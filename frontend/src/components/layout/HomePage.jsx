@@ -151,7 +151,7 @@ export default function HomePage({ user }) {
   };
 
   const handleGetStarted = () => {
-    navigate("/application");
+    navigate("/services");
   };
 
   const handleDocumentChecklistClick = () => {
@@ -631,7 +631,7 @@ export default function HomePage({ user }) {
               "With a 99% success rate and average 90-day processing time, you can trust our expertise to make your Portuguese dream a reality."
             ]}
             buttonText="Start Your Application"
-            onClick={() => navigate("/application")}
+            onClick={() => navigate("/services")}
           />
         </TextParallaxContent>
 

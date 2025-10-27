@@ -123,7 +123,7 @@ const ShuffleHero = () => {
               boxShadow: '0 4px 14px 0 rgba(0, 112, 243, 0.3)',
               minWidth: '220px'
             }}
-            onClick={() => navigate('/application')}
+            onClick={() => navigate('/services')}
             onMouseEnter={(e) => {
               e.target.style.transform = 'scale(1.05)';
               e.target.style.boxShadow = '0 6px 20px 0 rgba(0, 112, 243, 0.4)';

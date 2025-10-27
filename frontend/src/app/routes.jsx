@@ -12,7 +12,6 @@ import { Routes, Route } from "react-router-dom";
 import { HomePage, ContactPage } from "../components";
 
 // New page imports
-import ApplicationPage from "../components/pages/ApplicationPage";
 import DocumentChecklistPage from "../components/pages/DocumentChecklistPage";
 import SettlementServicesPage from "../components/pages/SettlementServicesPage";
 import AboutPage from "../components/pages/AboutPage";
@@ -28,7 +27,6 @@ const AppRoutes = ({ navigate }) => {
       <Route path="/" element={<HomePage />} />
       
       {/* New page routes */}
-      <Route path="/application" element={<ApplicationPage />} />
       <Route path="/documents" element={<DocumentChecklistPage />} />
       <Route path="/services" element={<SettlementServicesPage />} />
       <Route path="/about" element={<AboutPage />} />

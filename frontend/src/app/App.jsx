@@ -2,6 +2,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// Analytics
+import { usePageTracking } from "../hooks/useAnalytics";
+
 // COMMENTED OUT: Firebase Authentication Provider
 // import AuthProvider from "./providers/AuthProvider";
 
@@ -22,6 +25,9 @@ function App() {
 
 function AppContent() {
   const navigate = useNavigate();
+  
+  // Track page views automatically
+  usePageTracking();
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

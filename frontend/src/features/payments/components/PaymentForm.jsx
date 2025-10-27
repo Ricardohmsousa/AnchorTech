@@ -8,6 +8,7 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { useAnalytics } from '../../../hooks/useAnalytics';
 const STRIPE_PUBLISHABLE_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shimmering-communication-production.up.railway.app';
 import { button as buttonStyle } from '../../../styles/sharedStyles';
@@ -33,6 +34,7 @@ if (stripePromise) {
 const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoading, packageInfo }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const { trackConversion, trackEvent, trackBusinessEvent } = useAnalytics();
 
   const [paymentError, setPaymentError] = useState(null);
   const [cardholderName, setCardholderName] = useState('');
@@ -110,6 +112,9 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
     event.preventDefault();
     if (!stripe || !elements) return;
 
+    // Track payment attempt
+    trackEvent('payment_attempted', 'payment', packageInfo?.name || 'unknown_package');
+
     setLoading(true);
     setPaymentError(null);
 
@@ -166,9 +171,15 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
       });
 
       if (error) {
+        // Track payment failure
+        trackEvent('payment_failed', 'payment', packageInfo?.name || 'unknown_package');
         setPaymentError(error.message);
         setLoading(false);
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        // Track successful payment/conversion
+        trackConversion('purchase', amount / 100, 'EUR'); // Convert cents to euros
+        trackBusinessEvent('purchase_completed', packageInfo?.service_type || 'nif_application', packageInfo?.name);
+        
         // Record additional purchase details
         try {
           await fetch(`${API_BASE_URL}/purchases/record`, {
@@ -193,6 +204,8 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         setLoading(false); // ensure we stop the spinner after success
         onSuccess(paymentIntent);
       } else {
+        // Track unexpected payment state
+        trackEvent('payment_unexpected_state', 'payment', packageInfo?.name || 'unknown_package');
         // Unexpected state
         setLoading(false);
         onError(new Error('Payment did not complete. Please try again.'));

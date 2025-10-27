@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAnalytics } from "../../../hooks/useAnalytics";
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://shimmering-communication-production.up.railway.app';
 import { PaymentFormWidget } from "../../payments";
 
@@ -28,6 +29,8 @@ const NIF_SERVICE_PRICE = 4999; // €49.99 in cents
 
 
 function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
+  const { trackServiceView, trackPricingInteraction, trackEvent } = useAnalytics();
+  
   const [currentStep, setCurrentStep] = useState(propCaseId ? 1 : 0); // Start at payment if new, or documents if existing case
   const [passportFile, setPassportFile] = useState(null);
   const [addressFile, setAddressFile] = useState(null);
@@ -50,6 +53,11 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
       return;
     }
   }, [user, navigate]);
+
+  // Track service page view
+  useEffect(() => {
+    trackServiceView('NIF Application Service');
+  }, [trackServiceView]);
 
   const handlePassportChange = (e) => {
     setPassportFile(e.target.files && e.target.files[0] ? e.target.files[0] : null);

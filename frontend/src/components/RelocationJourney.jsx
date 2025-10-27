@@ -304,7 +304,7 @@ const RelocationJourney = () => {
           style={{ textAlign: 'center' }}
         >
           <button
-            onClick={() => navigate('/application')}
+            onClick={() => navigate('/services')}
             style={{
               background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
               color: 'white',

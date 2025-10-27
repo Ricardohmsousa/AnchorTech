@@ -7,7 +7,6 @@ import { navBar, navLink, button as buttonStyle } from "../../styles/sharedStyle
 export default function Header({ onLogin, onLogout }) {
   // COMMENTED OUT: Firebase Auth
   // const { currentUser, logout, isAuthenticated } = useAuth();
-  const [servicesOpen, setServicesOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -81,59 +80,23 @@ export default function Header({ onLogin, onLogout }) {
 
           {/* Desktop Navigation */}
           <div className="nav-desktop" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <div style={{ position: 'relative' }}>
-              <button
-                style={{
-                  ...buttonStyle,
-                  fontFamily: 'Lato, sans-serif',
-                  background: '#fff',
-                  color: '#222',
-                  border: 'none',
-                  fontWeight: 700,
-                  fontSize: 16,
-                  padding: '10px 24px',
-                  cursor: 'pointer',
-                  boxShadow: 'none'
-                }}
-                onClick={() => setServicesOpen((open) => !open)}
-                aria-haspopup="true"
-                aria-expanded={servicesOpen}
-              >
-                Services ▼
-              </button>
-              {servicesOpen && (
-                <div
-                  className="services-dropdown open"
-                  style={{
-                    position: 'absolute',
-                    top: '110%',
-                    left: 0,
-                    background: '#fff',
-                    boxShadow: '0 2px 8px #e0e0e0',
-                    borderRadius: 8,
-                    minWidth: 180,
-                    zIndex: 100,
-                  }}
-                  tabIndex={-1}
-                  onBlur={e => {
-                    if (!e.currentTarget.contains(e.relatedTarget)) setServicesOpen(false);
-                  }}
-                >
-                  <button 
-                    onClick={() => { navigate('/application'); setServicesOpen(false); }}
-                    style={{ ...navLink, display: 'block', padding: '12px 20px', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
-                  >
-                    Start Application
-                  </button>
-                  <button 
-                    onClick={() => { navigate('/services'); setServicesOpen(false); }}
-                    style={{ ...navLink, display: 'block', padding: '12px 20px', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
-                  >
-                    Settlement Services
-                  </button>
-                </div>
-              )}
-            </div>
+            <button 
+              onClick={() => navigate('/services')}
+              style={{ 
+                ...buttonStyle,
+                fontFamily: 'Lato, sans-serif',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#333',
+                textDecoration: 'none',
+                fontWeight: 400,
+                fontSize: 16,
+                padding: '10px 0'
+              }}
+            >
+              Services
+            </button>
             <button 
               onClick={() => navigate('/about')}
               style={{ 
@@ -143,7 +106,10 @@ export default function Header({ onLogin, onLogout }) {
                 border: 'none',
                 cursor: 'pointer',
                 color: '#333',
-                textDecoration: 'none'
+                textDecoration: 'none',
+                fontWeight: 400,
+                fontSize: 16,
+                padding: '10px 0'
               }}
             >
               About
@@ -157,7 +123,10 @@ export default function Header({ onLogin, onLogout }) {
                 border: 'none',
                 cursor: 'pointer',
                 color: '#333',
-                textDecoration: 'none'
+                textDecoration: 'none',
+                fontWeight: 400,
+                fontSize: 16,
+                padding: '10px 0'
               }}
             >
               Contact
@@ -191,24 +160,6 @@ export default function Header({ onLogin, onLogout }) {
           }}>
             <button
               onClick={() => {
-                navigate('/application');
-                setMobileMenuOpen(false);
-              }}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: '12px 0',
-                textAlign: 'left',
-                fontSize: '16px',
-                fontWeight: '600',
-                color: '#333',
-                cursor: 'pointer'
-              }}
-            >
-              Start Application
-            </button>
-            <button
-              onClick={() => {
                 navigate('/services');
                 setMobileMenuOpen(false);
               }}
@@ -218,9 +169,10 @@ export default function Header({ onLogin, onLogout }) {
                 padding: '12px 0',
                 textAlign: 'left',
                 fontSize: '16px',
-                fontWeight: '600',
+                fontWeight: '400',
                 color: '#333',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontFamily: 'Lato, sans-serif'
               }}
             >
               Services
@@ -236,9 +188,10 @@ export default function Header({ onLogin, onLogout }) {
                 padding: '12px 0',
                 textAlign: 'left',
                 fontSize: '16px',
-                fontWeight: '600',
+                fontWeight: '400',
                 color: '#333',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontFamily: 'Lato, sans-serif'
               }}
             >
               About
@@ -254,9 +207,10 @@ export default function Header({ onLogin, onLogout }) {
                 padding: '12px 0',
                 textAlign: 'left',
                 fontSize: '16px',
-                fontWeight: '600',
+                fontWeight: '400',
                 color: '#333',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontFamily: 'Lato, sans-serif'
               }}
             >
               Contact

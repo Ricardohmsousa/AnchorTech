@@ -192,9 +192,9 @@ const Footer = () => {
                 gap: '1rem'
               }}>
                 {[
-                  { text: 'Visa Applications', path: '/application', action: 'navigate' },
-                  { text: 'Document Checklist', path: null, action: 'scroll' },
                   { text: 'Settlement Services', path: '/services', action: 'navigate' },
+                  { text: 'Document Checklist', path: null, action: 'scroll' },
+                  { text: 'About Us', path: '/about', action: 'navigate' },
                   { text: 'Contact Us', path: '/contact', action: 'navigate' }
                 ].map((item, index) => (
                   <li key={index}>
