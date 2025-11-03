@@ -10,11 +10,26 @@ const PaymentPage = () => {
   const [paymentCompleted, setPaymentCompleted] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [discountError, setDiscountError] = useState('');
 
   // Get payment details from URL parameters
   const serviceName = searchParams.get('service') || 'Unknown Service';
   const price = parseInt(searchParams.get('price')) || 0;
   const type = searchParams.get('type') || 'service'; // 'service' or 'package'
+
+  // Discount codes configuration (in production, this would come from backend)
+  const validDiscountCodes = {
+    'WELCOME10': { percent: 10, description: '10% off' },
+    'INFLUENCER15': { percent: 15, description: '15% off' },
+    'PARTNER20': { percent: 20, description: '20% off' },
+    'VIP25': { percent: 25, description: '25% off' }
+  };
+
+  // Calculate final price
+  const finalPrice = discountApplied ? price - discountAmount : price;
 
   // Service details mapping for better descriptions
   const serviceDescriptions = {
@@ -100,6 +115,36 @@ const PaymentPage = () => {
     features: ['Professional consultation', 'Document assistance', 'Ongoing support']
   };
 
+  // Handle discount code application
+  const handleApplyDiscount = () => {
+    const code = discountCode.trim().toUpperCase();
+    
+    if (!code) {
+      setDiscountError('Please enter a discount code');
+      return;
+    }
+
+    const discount = validDiscountCodes[code];
+    
+    if (discount) {
+      const calculatedDiscount = Math.round((price * discount.percent) / 100);
+      setDiscountAmount(calculatedDiscount);
+      setDiscountApplied(true);
+      setDiscountError('');
+    } else {
+      setDiscountError('Invalid discount code');
+      setDiscountApplied(false);
+      setDiscountAmount(0);
+    }
+  };
+
+  const handleRemoveDiscount = () => {
+    setDiscountCode('');
+    setDiscountApplied(false);
+    setDiscountAmount(0);
+    setDiscountError('');
+  };
+
   // Payment handlers
   const handlePaymentSuccess = (paymentIntentData) => {
     setPaymentCompleted(true);
@@ -108,17 +153,34 @@ const PaymentPage = () => {
     // Store payment success in localStorage for confirmation
     localStorage.setItem('paymentSuccess', JSON.stringify({
       service: serviceName,
-      amount: price,
+      amount: finalPrice,
+      originalAmount: price,
+      discountCode: discountApplied ? discountCode.trim().toUpperCase() : null,
+      discountAmount: discountApplied ? discountAmount : 0,
       paymentIntent: paymentIntentData.id,
       timestamp: new Date().toISOString()
     }));
+
+    // TODO: Send to backend to track discount code usage for influencer payouts
+    // Example: 
+    // await fetch('/api/payments/record-discount', {
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     paymentIntentId: paymentIntentData.id,
+    //     discountCode: discountCode.trim().toUpperCase(),
+    //     service: serviceName,
+    //     amount: finalPrice,
+    //     discountAmount: discountAmount
+    //   })
+    // });
 
     // Redirect to success page after a short delay
     setTimeout(() => {
       navigate('/payment-success', { 
         state: { 
           service: serviceName, 
-          amount: price, 
+          amount: finalPrice,
+          discountApplied: discountApplied,
           type: type 
         } 
       });
@@ -313,6 +375,129 @@ const PaymentPage = () => {
               </div>
             </div>
 
+            {/* Discount Code Section */}
+            <div style={{
+              background: '#ffffff',
+              padding: '1.5rem',
+              borderRadius: '8px',
+              border: '1px solid #e2e8f0',
+              marginBottom: '1.5rem'
+            }}>
+              <h3 style={{
+                fontSize: '1.125rem',
+                fontWeight: '600',
+                color: '#1f2937',
+                marginBottom: '1rem'
+              }}>
+                Discount Code
+              </h3>
+              
+              {!discountApplied ? (
+                <div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <input
+                      type="text"
+                      placeholder="Enter discount code"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                      onKeyPress={(e) => e.key === 'Enter' && handleApplyDiscount()}
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '6px',
+                        fontSize: '0.875rem',
+                        outline: 'none',
+                        transition: 'border-color 0.2s',
+                      }}
+                      onFocus={(e) => e.target.style.borderColor = '#E2725B'}
+                      onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                    />
+                    <button
+                      onClick={handleApplyDiscount}
+                      disabled={!discountCode.trim()}
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        background: discountCode.trim() ? '#E2725B' : '#e2e8f0',
+                        color: discountCode.trim() ? '#ffffff' : '#9ca3af',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontWeight: '600',
+                        fontSize: '0.875rem',
+                        cursor: discountCode.trim() ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.2s',
+                        whiteSpace: 'nowrap'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (discountCode.trim()) e.currentTarget.style.background = '#A94438';
+                      }}
+                      onMouseLeave={(e) => {
+                        if (discountCode.trim()) e.currentTarget.style.background = '#E2725B';
+                      }}
+                    >
+                      Apply
+                    </button>
+                  </div>
+                  {discountError && (
+                    <p style={{
+                      color: '#dc2626',
+                      fontSize: '0.875rem',
+                      marginTop: '0.5rem',
+                      marginBottom: 0
+                    }}>
+                      {discountError}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div style={{
+                  background: '#f0fdf4',
+                  padding: '1rem',
+                  borderRadius: '6px',
+                  border: '1px solid #bbf7d0'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div>
+                      <div style={{
+                        fontWeight: '600',
+                        color: '#166534',
+                        marginBottom: '0.25rem'
+                      }}>
+                        Code Applied: {discountCode}
+                      </div>
+                      <div style={{
+                        fontSize: '0.875rem',
+                        color: '#15803d'
+                      }}>
+                        {validDiscountCodes[discountCode]?.description}
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleRemoveDiscount}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#dc2626',
+                        fontWeight: '600',
+                        fontSize: '0.875rem',
+                        cursor: 'pointer',
+                        padding: '0.5rem',
+                        transition: 'color 0.2s'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = '#991b1b'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#dc2626'}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Price Summary */}
             <div style={{
               background: '#f8fafc',
@@ -340,6 +525,19 @@ const PaymentPage = () => {
                 </span>
               </div>
               
+              {discountApplied && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: '0.5rem'
+                }}>
+                  <span style={{ color: '#16a34a' }}>Discount ({validDiscountCodes[discountCode]?.percent}%)</span>
+                  <span style={{ fontWeight: '600', color: '#16a34a' }}>
+                    -€{(discountAmount / 100).toFixed(2)}
+                  </span>
+                </div>
+              )}
+              
               <div style={{
                 borderTop: '1px solid #e2e8f0',
                 paddingTop: '0.5rem',
@@ -352,8 +550,8 @@ const PaymentPage = () => {
                   fontWeight: '700'
                 }}>
                   <span style={{ color: '#1f2937' }}>Total</span>
-                  <span style={{ color: '#0070f3' }}>
-                    €{(price / 100).toFixed(2)}
+                  <span style={{ color: '#E2725B' }}>
+                    €{((price - discountAmount) / 100).toFixed(2)}
                   </span>
                 </div>
               </div>

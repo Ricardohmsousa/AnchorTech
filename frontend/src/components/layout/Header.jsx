@@ -78,7 +78,7 @@ export default function Header({ onLogin, onLogout }) {
               onClick={() => navigate('/services')}
               style={{ 
                 ...buttonStyle,
-                fontFamily: 'Lato, sans-serif',
+                fontFamily: 'Inter, sans-serif',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
@@ -95,7 +95,7 @@ export default function Header({ onLogin, onLogout }) {
               onClick={() => navigate('/about')}
               style={{ 
                 ...navLink, 
-                fontFamily: 'Lato, sans-serif',
+                fontFamily: 'Inter, sans-serif',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
@@ -112,7 +112,7 @@ export default function Header({ onLogin, onLogout }) {
               onClick={() => navigate('/contact')}
               style={{ 
                 ...navLink, 
-                fontFamily: 'Lato, sans-serif',
+                fontFamily: 'Inter, sans-serif',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
@@ -166,7 +166,7 @@ export default function Header({ onLogin, onLogout }) {
                 fontWeight: '400',
                 color: '#333',
                 cursor: 'pointer',
-                fontFamily: 'Lato, sans-serif'
+                fontFamily: 'Inter, sans-serif'
               }}
             >
               Services
@@ -185,7 +185,7 @@ export default function Header({ onLogin, onLogout }) {
                 fontWeight: '400',
                 color: '#333',
                 cursor: 'pointer',
-                fontFamily: 'Lato, sans-serif'
+                fontFamily: 'Inter, sans-serif'
               }}
             >
               About
@@ -204,7 +204,7 @@ export default function Header({ onLogin, onLogout }) {
                 fontWeight: '400',
                 color: '#333',
                 cursor: 'pointer',
-                fontFamily: 'Lato, sans-serif'
+                fontFamily: 'Inter, sans-serif'
               }}
             >
               Contact

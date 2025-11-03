@@ -44,7 +44,7 @@ export const AnimatedTestimonials = ({
     maxWidth: '1200px',
     margin: '0 auto',
     padding: isMobile ? '3rem 1rem' : '5rem 2rem',
-    fontFamily: 'system-ui, -apple-system, sans-serif',
+    fontFamily: 'Inter, sans-serif',
     // Reset any inherited styles
     boxSizing: 'border-box',
     position: 'relative',
@@ -119,7 +119,7 @@ export const AnimatedTestimonials = ({
       // Complete style isolation wrapper
       all: 'unset',
       display: 'block',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
+      fontFamily: 'Inter, sans-serif'
     }}>
       <div style={containerStyles}>
       <div style={gridStyles}>

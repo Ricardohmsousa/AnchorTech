@@ -50,7 +50,7 @@ const ProgressIndicator = ({
                   width: '100%',
                   height: '2px',
                   background: isCompleted || (isCurrent && index < currentStep - 1)
-                    ? '#10b981'
+                    ? '#A94438'
                     : '#e5e7eb',
                   zIndex: 1
                 }}
@@ -64,7 +64,7 @@ const ProgressIndicator = ({
                 height: stepSize,
                 borderRadius: '50%',
                 background: isCompleted
-                  ? '#10b981'
+                  ? '#A94438'
                   : isCurrent
                     ? '#E2725B'
                     : '#e5e7eb',

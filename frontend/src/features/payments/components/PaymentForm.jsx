@@ -58,7 +58,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
         base: {
           fontSize: '16px',
           color: '#1a1a1a', // Changed from '#424770' to darker, more visible color
-          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+          fontFamily: 'Inter, sans-serif',
           fontSmoothing: 'antialiased',
           backgroundColor: '#ffffff', // Explicitly set white background
           '::placeholder': { 
@@ -249,7 +249,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               border: '2px solid #e0e0e0',
               borderRadius: 8,
               fontSize: 16,
-              fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+              fontFamily: 'Inter, sans-serif',
               backgroundColor: '#fff',
               boxSizing: 'border-box',
               transition: 'border-color 0.2s',

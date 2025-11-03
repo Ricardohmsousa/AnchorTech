@@ -270,16 +270,23 @@ export default function ContactPage() {
                 marginBottom: '1.5rem'
               }}
               onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-4px)';
-                e.target.style.boxShadow = '0 12px 35px rgba(0, 112, 243, 0.4)';
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 12px 35px rgba(0, 112, 243, 0.4)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 8px 25px rgba(0, 112, 243, 0.3)';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 112, 243, 0.3)';
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                <div style={{ fontSize: '2.5rem' }}>📧</div>
+                <div style={{ 
+                  fontSize: '2.5rem',
+                  background: 'transparent',
+                  lineHeight: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>📧</div>
                 <div>
                   <h3 style={{ 
                     fontSize: '1.5rem', 
@@ -327,16 +334,23 @@ export default function ContactPage() {
                     boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-2px)';
-                    e.target.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{ fontSize: '2rem' }}>{method.icon}</div>
+                    <div style={{ 
+                      fontSize: '2rem',
+                      background: 'transparent',
+                      lineHeight: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>{method.icon}</div>
                     <div>
                       <h3 style={{ 
                         fontSize: '1.125rem', 

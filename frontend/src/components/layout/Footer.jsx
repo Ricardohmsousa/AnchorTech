@@ -15,7 +15,7 @@ const Footer = () => {
         /* Footer responsive grid */
         .footer-grid {
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1.5fr;
+          grid-template-columns: 2fr 1fr 1fr 1fr;
           gap: 3rem;
           padding: 0 2rem;
         }
@@ -37,19 +37,6 @@ const Footer = () => {
             grid-column: span 1;
           }
         }
-        .footer-newsletter {
-          grid-column: span 1;
-        }
-        @media (min-width: 768px) {
-          .footer-newsletter {
-            grid-column: span 1;
-          }
-        }
-        @media (min-width: 1024px) {
-          .footer-newsletter {
-            grid-column: span 1;
-          }
-        }
         .footer-bottom {
           margin-top: 3rem;
           padding-top: 2rem;
@@ -66,9 +53,6 @@ const Footer = () => {
             gap: 2rem;
           }
           .footer-company {
-            grid-column: span 1;
-          }
-          .footer-newsletter {
             grid-column: span 1;
           }
         }
@@ -101,8 +85,8 @@ const Footer = () => {
                 Your trusted partner for relocating to Portugal. We provide expert guidance, handle complex paperwork, and ensure a smooth transition to your new life.
               </p>
 
-              {/* Social Media Links */}
-              <div style={{
+              {/* Social Media Links - Commented out */}
+              {/* <div style={{
                 display: 'flex',
                 gap: '0.75rem'
               }}>
@@ -141,7 +125,7 @@ const Footer = () => {
                     {social.icon}
                   </a>
                 ))}
-              </div>
+              </div> */}
             </div>
 
             {/* Services Column */}
@@ -168,9 +152,7 @@ const Footer = () => {
               }}>
                 {[
                   { text: 'Settlement Services', path: '/services', action: 'navigate' },
-                  { text: 'Document Checklist', path: null, action: 'scroll' },
-                  { text: 'About Us', path: '/about', action: 'navigate' },
-                  { text: 'Contact Us', path: '/contact', action: 'navigate' }
+                  { text: 'Document Checklist', path: null, action: 'scroll' }
                 ].map((item, index) => (
                   <li key={index}>
                     <button
@@ -203,7 +185,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Support Column */}
+            {/* Company Column */}
             <div>
               <h3 style={{
                 fontSize: '0.875rem',
@@ -214,7 +196,7 @@ const Footer = () => {
                 marginBottom: '1.5rem',
                 fontFamily: 'Inter, sans-serif'
               }}>
-                Support
+                Company
               </h3>
 
               <ul style={{
@@ -227,17 +209,13 @@ const Footer = () => {
               }}>
                 {[
                   { text: 'About Us', path: '/about', action: 'navigate' },
-                  { text: 'Documentation', path: null, action: 'scroll' },
-                  { text: 'Contact Support', path: '/contact', action: 'navigate' },
-                  { text: 'Privacy Policy', path: '/privacy', action: 'navigate' }
+                  { text: 'Contact', path: '/contact', action: 'navigate' }
                 ].map((item, index) => (
                   <li key={index}>
                     <button
                       onClick={() => {
                         if (item.action === 'navigate') {
                           navigate(item.path);
-                        } else if (item.action === 'scroll') {
-                          handleDocumentChecklistClick();
                         }
                       }}
                       style={{
@@ -249,11 +227,11 @@ const Footer = () => {
                         background: 'none',
                         border: 'none',
                         padding: 0,
-                        cursor: item.action !== 'none' ? 'pointer' : 'default',
+                        cursor: 'pointer',
                         textAlign: 'left'
                       }}
-                      onMouseEnter={(e) => item.action !== 'none' && (e.target.style.color = '#E2725B')}
-                      onMouseLeave={(e) => item.action !== 'none' && (e.target.style.color = '#1f2937')}
+                      onMouseEnter={(e) => e.target.style.color = '#E2725B'}
+                      onMouseLeave={(e) => e.target.style.color = '#1f2937'}
                     >
                       {item.text}
                     </button>
@@ -262,8 +240,64 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Newsletter Subscription */}
-            <div className="footer-newsletter">
+            {/* Legal Column */}
+            <div>
+              <h3 style={{
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                letterSpacing: '0.05em',
+                color: '#9ca3af',
+                textTransform: 'uppercase',
+                marginBottom: '1.5rem',
+                fontFamily: 'Inter, sans-serif'
+              }}>
+                Legal
+              </h3>
+
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem'
+              }}>
+                {[
+                  { text: 'Privacy Policy', path: '/privacy', action: 'navigate' },
+                  { text: 'Terms of Service', path: '/terms', action: 'navigate' },
+                  { text: 'Cookie Policy', path: '/cookies', action: 'navigate' }
+                ].map((item, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={() => {
+                        if (item.action === 'navigate') {
+                          navigate(item.path);
+                        }
+                      }}
+                      style={{
+                        fontSize: '1rem',
+                        color: '#1f2937',
+                        textDecoration: 'none',
+                        transition: 'color 0.2s ease',
+                        fontFamily: 'Inter, sans-serif',
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        cursor: 'pointer',
+                        textAlign: 'left'
+                      }}
+                      onMouseEnter={(e) => e.target.style.color = '#E2725B'}
+                      onMouseLeave={(e) => e.target.style.color = '#1f2937'}
+                    >
+                      {item.text}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Newsletter Subscription - Commented out */}
+            {/* <div className="footer-newsletter">
               <h3 style={{
                 fontSize: '0.875rem',
                 fontWeight: '600',
@@ -331,59 +365,41 @@ const Footer = () => {
               }}>
                 Get updates on Portuguese immigration and exclusive relocation tips.
               </p>
-            </div>
+            </div> */}
           </div>
 
           {/* Footer Bottom */}
           <div className="footer-bottom">
             <div style={{
               display: 'flex',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
               alignItems: 'center',
-              flexWrap: 'wrap',
               gap: '1rem',
-              padding: '0 2rem'
+              padding: '0 2rem',
+              textAlign: 'center',
+              maxWidth: '900px',
+              margin: '0 auto'
             }}>
+              {/* Professional Disclaimer */}
               <p style={{
-                fontSize: '0.875rem',
+                fontSize: '0.813rem',
+                color: '#64748b',
+                lineHeight: '1.7',
+                margin: 0,
+                fontFamily: 'Inter, sans-serif'
+              }}>
+                Atlantical is not a law firm and does not provide legal advice. We are a relocation consultancy service that connects clients with licensed legal professionals, immigration specialists, and service providers in Portugal.
+              </p>
+
+              {/* Copyright */}
+              <p style={{
+                fontSize: '0.813rem',
                 color: '#9ca3af',
                 margin: 0,
                 fontFamily: 'Inter, sans-serif'
               }}>
                 © 2024 Atlantical. All rights reserved.
               </p>
-              
-              <div style={{
-                display: 'flex',
-                gap: '2rem',
-                flexWrap: 'wrap'
-              }}>
-                {[
-                  { text: 'Terms of Service', path: '/terms' },
-                  { text: 'Privacy Policy', path: '/privacy' },
-                  { text: 'Cookie Policy', path: '/cookies' }
-                ].map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => navigate(item.path)}
-                    style={{
-                      fontSize: '0.875rem',
-                      color: '#9ca3af',
-                      textDecoration: 'none',
-                      transition: 'color 0.2s ease',
-                      fontFamily: 'Inter, sans-serif',
-                      background: 'none',
-                      border: 'none',
-                      padding: 0,
-                      cursor: 'pointer'
-                    }}
-                    onMouseEnter={(e) => e.target.style.color = '#E2725B'}
-                    onMouseLeave={(e) => e.target.style.color = '#9ca3af'}
-                  >
-                    {item.text}
-                  </button>
-                ))}
-              </div>
             </div>
           </div>
         </div>

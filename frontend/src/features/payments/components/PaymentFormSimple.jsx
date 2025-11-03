@@ -208,7 +208,7 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
               border: '2px solid #e0e0e0',
               borderRadius: 8,
               fontSize: 16,
-              fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+              fontFamily: 'Inter, sans-serif',
               backgroundColor: '#fff',
               boxSizing: 'border-box',
               transition: 'border-color 0.2s',

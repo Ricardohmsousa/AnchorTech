@@ -79,163 +79,25 @@ const SettlementServicesPage = () => {
     },
     {
       id: 'legal',
-      title: 'Legal Support',
+      title: 'NIF Registration',
       icon: '⚖️',
-      description: 'Navigate Portuguese legal requirements with expert guidance',
+      description: 'Get your Portuguese tax number (NIF) - essential for all activities in Portugal',
       features: [
-        'NIF registration',
-        'Residence permit applications',
-        'Contract review and translation',
-        'Legal document preparation',
-        'Court representation',
-        'Ongoing legal consultation'
+        'NIF registration assistance',
+        'Document preparation',
+        'Tax authority coordination',
+        'Fast-track processing',
+        'Digital certificate setup',
+        'NIF activation verification'
       ],
       pricing: 'From €200',
       duration: '1-2 weeks',
       included: [
         'Initial consultation',
         'Document preparation',
-        'Government filing',
+        'Tax authority filing',
         'Status tracking',
-        '6-month support'
-      ]
-    },
-    {
-      id: 'healthcare',
-      title: 'Healthcare Setup',
-      icon: '🏥',
-      description: 'Access Portuguese healthcare system and find the right medical care',
-      features: [
-        'Health system registration',
-        'Doctor and specialist referrals',
-        'Health insurance consultation',
-        'Prescription management',
-        'Emergency contact setup',
-        'Medical record transfer'
-      ],
-      pricing: 'From €100',
-      duration: '1 week',
-      included: [
-        'SNS registration',
-        'Health center assignment',
-        'Insurance comparison',
-        'Emergency planning',
-        'Ongoing support'
-      ]
-    },
-    {
-      id: 'education',
-      title: 'Education Services',
-      icon: '🎓',
-      description: 'School enrollment and educational support for families',
-      features: [
-        'School research and selection',
-        'Enrollment assistance',
-        'Document validation',
-        'Language learning programs',
-        'University guidance',
-        'Continuing education options'
-      ],
-      pricing: 'From €250',
-      duration: '2-3 weeks',
-      included: [
-        'School consultation',
-        'Application assistance',
-        'Document preparation',
-        'Interview coaching',
-        'Follow-up support'
-      ]
-    },
-    {
-      id: 'transport',
-      title: 'Transportation',
-      icon: '🚗',
-      description: 'Get mobile in Portugal with driving licenses, car purchases, and public transport',
-      features: [
-        'Driving license conversion',
-        'Car purchase assistance',
-        'Insurance comparison',
-        'Public transport guidance',
-        'Vehicle registration',
-        'Parking solutions'
-      ],
-      pricing: 'From €120',
-      duration: '1-2 weeks',
-      included: [
-        'License consultation',
-        'DMV appointments',
-        'Insurance setup',
-        'Registration assistance',
-        'Transport planning'
-      ]
-    },
-    {
-      id: 'language',
-      title: 'Language Learning',
-      icon: '🗣️',
-      description: 'Master Portuguese with personalized language learning programs',
-      features: [
-        'Private Portuguese lessons',
-        'Group classes',
-        'Business Portuguese',
-        'Certification preparation',
-        'Cultural integration',
-        'Online learning platforms'
-      ],
-      pricing: 'From €40/hour',
-      duration: 'Ongoing',
-      included: [
-        'Level assessment',
-        'Personalized curriculum',
-        'Learning materials',
-        'Progress tracking',
-        'Cultural context'
-      ]
-    },
-    {
-      id: 'business',
-      title: 'Business Setup',
-      icon: '💼',
-      description: 'Start or relocate your business to Portugal with expert guidance',
-      features: [
-        'Company registration',
-        'Business plan development',
-        'Tax registration',
-        'Accounting setup',
-        'Licensing assistance',
-        'Banking for business'
-      ],
-      pricing: 'From €500',
-      duration: '2-4 weeks',
-      included: [
-        'Business consultation',
-        'Registration process',
-        'Tax setup',
-        'Banking assistance',
-        'Ongoing support'
-      ]
-    },
-    {
-      id: 'lifestyle',
-      title: 'Lifestyle Integration',
-      icon: '🌟',
-      description: 'Integrate into Portuguese culture and build your social network',
-      features: [
-        'Cultural orientation',
-        'Social networking events',
-        'Local community connections',
-        'Hobby and interest groups',
-        'Local services guide',
-        'Expat community access'
-      ],
-      pricing: 'From €80',
-      duration: 'Ongoing',
-      included: [
-        'Cultural workshop',
-        'Community introductions',
-        'Event invitations',
-        'Local guide',
-        'Ongoing networking'
+        'NIF delivery confirmation'
       ]
     }
   ];
@@ -245,7 +107,7 @@ const SettlementServicesPage = () => {
       name: 'Essential Package',
       price: '€999',
       description: 'Perfect for individuals starting their Portugal journey',
-      services: ['Banking & Finance', 'Legal Support', 'Healthcare Setup'],
+      services: ['Banking & Finance', 'NIF Registration'],
       savings: 'Save €150',
       popular: false
     },
@@ -253,7 +115,7 @@ const SettlementServicesPage = () => {
       name: 'Family Package',
       price: '€1,799',
       description: 'Comprehensive support for families moving to Portugal',
-      services: ['Banking & Finance', 'Housing Solutions', 'Legal Support', 'Healthcare Setup', 'Education Services'],
+      services: ['Banking & Finance', 'Housing Solutions', 'NIF Registration'],
       savings: 'Save €350',
       popular: true
     },
@@ -261,7 +123,7 @@ const SettlementServicesPage = () => {
       name: 'Business Package',
       price: '€2,299',
       description: 'Complete business relocation and setup services',
-      services: ['Banking & Finance', 'Legal Support', 'Business Setup', 'Housing Solutions', 'Transportation'],
+      services: ['Banking & Finance', 'NIF Registration', 'Housing Solutions'],
       savings: 'Save €500',
       popular: false
     },
@@ -328,19 +190,19 @@ const SettlementServicesPage = () => {
           </button>
         </div>
 
-        <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '2rem', lineHeight: '1.6' }}>
+        <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '2rem', lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
           {service.description}
         </p>
 
         <div style={{ marginBottom: '2rem' }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem', fontFamily: 'Inter, sans-serif' }}>
             What's Included:
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.5rem' }}>
             {service.included.map((item, index) => (
               <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span style={{ color: '#10b981' }}>✓</span>
-                <span style={{ color: '#374151' }}>{item}</span>
+                <span style={{ color: '#374151', fontFamily: 'Inter, sans-serif' }}>{item}</span>
               </li>
             ))}
           </ul>
@@ -348,16 +210,16 @@ const SettlementServicesPage = () => {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
           <div style={{ textAlign: 'center', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B' }}>{service.pricing}</div>
-            <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Starting Price</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B', fontFamily: 'Inter, sans-serif' }}>{service.pricing}</div>
+            <div style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Starting Price</div>
           </div>
           <div style={{ textAlign: 'center', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B' }}>{service.duration}</div>
-            <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Timeline</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B', fontFamily: 'Inter, sans-serif' }}>{service.duration}</div>
+            <div style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Timeline</div>
           </div>
           <div style={{ textAlign: 'center', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B' }}>24/7</div>
-            <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Support</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B', fontFamily: 'Inter, sans-serif' }}>24/7</div>
+            <div style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Support</div>
           </div>
         </div>
 
@@ -528,7 +390,8 @@ const SettlementServicesPage = () => {
                       alignItems: 'center',
                       gap: '0.5rem',
                       fontSize: '0.875rem',
-                      color: '#374151'
+                      color: '#374151',
+                      fontFamily: 'Inter, sans-serif'
                     }}>
                       <span style={{ color: '#10b981' }}>✓</span>
                       {feature}
@@ -682,7 +545,8 @@ const SettlementServicesPage = () => {
                     <li key={idx} style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem'
+                      gap: '0.5rem',
+                      fontFamily: 'Inter, sans-serif'
                     }}>
                       <span style={{ color: pkg.popular ? 'white' : '#10b981' }}>✓</span>
                       {service}

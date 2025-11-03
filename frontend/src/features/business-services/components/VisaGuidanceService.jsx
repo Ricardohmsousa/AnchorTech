@@ -86,7 +86,7 @@ export default function VisaGuidanceService() {
 
   return (
     <div style={{ 
-      fontFamily: 'Lato, sans-serif',
+      fontFamily: 'Inter, sans-serif',
       color: '#222',
       lineHeight: '1.6'
     }}>
