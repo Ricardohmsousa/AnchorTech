@@ -15,7 +15,7 @@ const styles = `
   }
   
   .visa-cta-button {
-    background: linear-gradient(135deg, #0070f3 0%, #0053cc 100%);
+    background: linear-gradient(135deg, #E2725B 0%, #A94438 100%);
     transition: all 0.3s ease;
   }
   
@@ -200,7 +200,7 @@ export default function VisaGuidanceService() {
             gap: '2rem' 
           }}>
             <div>
-              <div style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0070f3' }}>500+</div>
+              <div style={{ fontSize: '2.5rem', fontWeight: '900', color: '#E2725B' }}>500+</div>
               <div style={{ fontSize: '16px', color: '#666' }}>Successful Visa Applications</div>
             </div>
             <div>
@@ -559,7 +559,7 @@ export default function VisaGuidanceService() {
             marginBottom: '3rem',
             lineHeight: '1.6'
           }}>
-            Join hundreds who chose TechAnchor for their Portugal visa. 
+            Join hundreds who chose Atlantical for their Portugal visa. 
             Expert guidance, transparent pricing, proven results.
           </p>
           
@@ -713,7 +713,7 @@ export default function VisaGuidanceService() {
 }
 
 export const meta = {
-  title: "Portugal Visa & Residency Guidance | TechAnchor",
+  title: "Portugal Visa & Residency Guidance | Atlantical",
   description: "Get expert support for all Portugal visa and residency types. We guide you through paperwork, eligibility, and the application process.",
   keywords: "Portugal visa help, residency permit Portugal, digital nomad visa, D7 visa, golden visa, Portugal immigration"
 };

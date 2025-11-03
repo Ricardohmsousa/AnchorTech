@@ -22,7 +22,7 @@ const TermsOfServicePage = () => {
       <div style={{ minHeight: '100vh', background: '#ffffff' }}>
         {/* Header */}
         <header className="terms-header" style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           padding: '4rem 0',
           marginBottom: '3rem'
@@ -48,7 +48,7 @@ const TermsOfServicePage = () => {
                 fontFamily: 'Inter, sans-serif'
               }}
             >
-              Terms and conditions for using TechAnchor services
+              Terms and conditions for using Atlantical services
             </motion.p>
           </div>
         </header>
@@ -70,7 +70,7 @@ const TermsOfServicePage = () => {
                 Acceptance of Terms
               </h2>
               <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#4b5563', fontFamily: 'Inter, sans-serif' }}>
-                By accessing and using TechAnchor's services, you accept and agree to be bound by the terms and provision of this agreement. 
+                By accessing and using Atlantical's services, you accept and agree to be bound by the terms and provision of this agreement. 
                 If you do not agree to abide by the above, please do not use this service.
               </p>
             </div>
@@ -86,7 +86,7 @@ const TermsOfServicePage = () => {
                 Service Description
               </h2>
               <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#4b5563', marginBottom: '1rem', fontFamily: 'Inter, sans-serif' }}>
-                TechAnchor provides relocation assistance services for individuals and families moving to Portugal, including:
+                Atlantical provides relocation assistance services for individuals and families moving to Portugal, including:
               </p>
               <ul style={{ fontSize: '1rem', lineHeight: '1.6', color: '#4b5563', marginLeft: '1.5rem', fontFamily: 'Inter, sans-serif' }}>
                 <li>Visa application assistance and consultation</li>
@@ -151,7 +151,7 @@ const TermsOfServicePage = () => {
                 Limitation of Liability
               </h2>
               <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#4b5563', fontFamily: 'Inter, sans-serif' }}>
-                TechAnchor provides consultation and assistance services but cannot guarantee specific outcomes regarding visa approvals, 
+                Atlantical provides consultation and assistance services but cannot guarantee specific outcomes regarding visa approvals, 
                 housing availability, or other third-party decisions. Our liability is limited to the fees paid for our services.
               </p>
             </div>
@@ -167,7 +167,7 @@ const TermsOfServicePage = () => {
                 Intellectual Property
               </h2>
               <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#4b5563', fontFamily: 'Inter, sans-serif' }}>
-                All content, materials, and intellectual property on our website and in our services remain the property of TechAnchor. 
+                All content, materials, and intellectual property on our website and in our services remain the property of Atlantical. 
                 Users may not reproduce, distribute, or create derivative works without explicit written permission.
               </p>
             </div>
@@ -183,7 +183,7 @@ const TermsOfServicePage = () => {
                 Termination
               </h2>
               <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#4b5563', fontFamily: 'Inter, sans-serif' }}>
-                Either party may terminate the service agreement with 30 days written notice. TechAnchor reserves the right to terminate 
+                Either party may terminate the service agreement with 30 days written notice. Atlantical reserves the right to terminate 
                 services immediately in case of breach of these terms or non-payment of fees.
               </p>
             </div>
@@ -202,7 +202,7 @@ const TermsOfServicePage = () => {
               </p>
               <div style={{ padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
                 <p style={{ fontSize: '1rem', color: '#1f2937', margin: 0, fontFamily: 'Inter, sans-serif' }}>
-                  <strong>Email:</strong> legal@techanchor.pt<br />
+                  <strong>Email:</strong> legal@atlantical.pt<br />
                   <strong>Phone:</strong> +351 123 456 789<br />
                   <strong>Address:</strong> Lisbon, Portugal
                 </p>

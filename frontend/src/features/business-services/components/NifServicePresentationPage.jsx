@@ -17,7 +17,7 @@ const styles = `
   }
   
   .nif-cta-button {
-    background: linear-gradient(135deg, #0070f3 0%, #0053cc 100%);
+    background: linear-gradient(135deg, #E2725B 0%, #0053cc 100%);
     transition: all 0.3s ease;
   }
   
@@ -88,7 +88,7 @@ export default function NifServicePresentationPage() {
         .nif-hero-title { font-size: 3.5rem; font-weight: 900; }
         .nif-feature-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .nif-feature-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12); }
-        .nif-cta-button { transition: all 0.3s ease; background: linear-gradient(135deg, #0070f3 0%, #0051cc 100%); }
+        .nif-cta-button { transition: all 0.3s ease; background: linear-gradient(135deg, #E2725B 0%, #A94438 100%); }
         .nif-cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 112, 243, 0.4); }
         
         @keyframes spin {
@@ -106,7 +106,7 @@ export default function NifServicePresentationPage() {
 
       {/* Hero Section */}
       <section style={{
-        background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+        background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
         padding: '8rem 2rem 6rem 2rem',
         color: 'white',
         position: 'relative',
@@ -156,7 +156,7 @@ export default function NifServicePresentationPage() {
             }} className="nif-hero-title">
               Get Your Portuguese
               <br />
-              <span style={{ color: '#00d4ff' }}>NIF Tax Number</span>
+              <span style={{ color: '#FFB38A' }}>NIF Tax Number</span>
             </h1>
             
             <p style={{ 
@@ -246,14 +246,14 @@ export default function NifServicePresentationPage() {
                 color: '#333',
                 textAlign: 'center'
               }}>
-                <h4 style={{ margin: '0 0 1rem 0', color: '#0070f3', fontWeight: '700' }}>NIF Application Status</h4>
+                <h4 style={{ margin: '0 0 1rem 0', color: '#E2725B', fontWeight: '700' }}>NIF Application Status</h4>
                 <div style={{ 
                   background: '#f0f9ff',
                   padding: '1rem',
                   borderRadius: '8px',
                   marginBottom: '1rem'
                 }}>
-                  <div style={{ fontSize: '24px', fontWeight: '900', color: '#0070f3' }}>123 456 789</div>
+                  <div style={{ fontSize: '24px', fontWeight: '900', color: '#E2725B' }}>123 456 789</div>
                   <div style={{ fontSize: '12px', color: '#666' }}>Your Portuguese NIF</div>
                 </div>
                 <div style={{ fontSize: '13px', color: '#10b981' }}>
@@ -421,7 +421,7 @@ export default function NifServicePresentationPage() {
             ].map((item, i) => (
               <div key={i} style={{ textAlign: 'center' }}>
                 <div style={{ 
-                  background: i === 0 ? '#0070f3' : '#e5e7eb',
+                  background: i === 0 ? '#E2725B' : '#e5e7eb',
                   color: i === 0 ? 'white' : '#666',
                   width: '60px',
                   height: '60px',
@@ -469,7 +469,7 @@ export default function NifServicePresentationPage() {
             marginBottom: '3rem',
             lineHeight: '1.6'
           }}>
-            Join thousands of expats who chose TechAnchor for their Portuguese NIF. 
+            Join thousands of expats who chose Atlantical for their Portuguese NIF. 
             Fast, secure, and hassle-free process with English support.
           </p>
           
@@ -623,7 +623,7 @@ export default function NifServicePresentationPage() {
 };
 
 export const meta = {
-  title: "Get Portuguese NIF Online | Fast & Secure | TechAnchor",
-  description: "Obtain your Portuguese NIF (tax number) online with TechAnchor. Fast, secure, and remote service for expats and newcomers. Start your application today!",
+  title: "Get Portuguese NIF Online | Fast & Secure | Atlantical",
+  description: "Obtain your Portuguese NIF (tax number) online with Atlantical. Fast, secure, and remote service for expats and newcomers. Start your application today!",
   keywords: "Portugal NIF, get NIF online, Portuguese tax number, expat Portugal, move to Portugal, NIF application"
 };

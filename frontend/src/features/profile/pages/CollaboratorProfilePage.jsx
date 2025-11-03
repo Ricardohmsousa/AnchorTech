@@ -69,7 +69,7 @@ function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
         }
         .profile-nav-btn {
           background: #fff;
-          color: #0070f3;
+          color: #E2725B;
           border: none;
           border-left: 4px solid transparent;
           border-radius: 0;
@@ -82,8 +82,8 @@ function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
         }
         .profile-nav-btn.active {
           background: #eaf4ff;
-          color: #0070f3;
-          border-left: 4px solid #0070f3;
+          color: #E2725B;
+          border-left: 4px solid #E2725B;
         }
         .profile-main-content {
           flex: 1 1 0;
@@ -118,12 +118,12 @@ function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
           </button>
         </aside>
         <main className="profile-main-content">
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 8, color: '#0070f3', textAlign: 'center' }}>Welcome, {user?.username}!</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 8, color: '#E2725B', textAlign: 'center' }}>Welcome, {user?.username}!</h1>
           <p style={{ color: '#666', marginTop: 0, textAlign: 'center', marginBottom: 32 }}>User type: {user?.user_type}</p>
           {tab === 'cases' && (
             <section style={{ ...section, justifyContent: 'center', gap: 32 }}>
               <div style={{ ...card, width: 600, textAlign: 'center', boxShadow: '0 2px 8px #e0e0e0', margin: '0 auto' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0070f3' }}>Assigned Cases</h2>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#E2725B' }}>Assigned Cases</h2>
                 {!cases || cases.length === 0 ? (
                   <div>No cases assigned.</div>
                 ) : (
@@ -134,7 +134,7 @@ function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
                           <div style={{ fontWeight: 600 }}>Case #{c.id}</div>
                           <div>Status: {c.status}</div>
                         </div>
-                        <button style={{ background: '#0070f3', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 16px', fontWeight: 600, cursor: 'pointer' }} onClick={() => onSelectCase(c.id)}>View</button>
+                        <button style={{ background: '#E2725B', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 16px', fontWeight: 600, cursor: 'pointer' }} onClick={() => onSelectCase(c.id)}>View</button>
                       </li>
                     ))}
                   </ul>
@@ -148,7 +148,7 @@ function CollaboratorProfilePage({ user, onHome, onLogout, onSelectCase }) {
             </div>
           )}
           <div style={{ textAlign: 'center', marginTop: 40 }}>
-            <button style={{ ...buttonStyle, background: '#fff', color: '#0070f3', border: '1px solid #0070f3', borderRadius: 8, fontWeight: 700, fontSize: 16 }} onClick={onHome}>Back to Home</button>
+            <button style={{ ...buttonStyle, background: '#fff', color: '#E2725B', border: '1px solid #E2725B', borderRadius: 8, fontWeight: 700, fontSize: 16 }} onClick={onHome}>Back to Home</button>
           </div>
         </main>
       </div>

@@ -213,7 +213,7 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
               boxSizing: 'border-box',
               transition: 'border-color 0.2s',
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
             required
           />
@@ -349,7 +349,7 @@ const SimpleCheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, set
           disabled={!stripe || loading}
           style={{
             ...buttonStyle,
-            backgroundColor: loading ? '#ccc' : '#0070f3',
+            backgroundColor: loading ? '#ccc' : '#E2725B',
             cursor: loading ? 'not-allowed' : 'pointer'
           }}
         >

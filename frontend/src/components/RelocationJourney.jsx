@@ -15,7 +15,7 @@ const RelocationJourney = () => {
       subtitle: "Discover Your Path",
       description: "We analyze your unique situation, goals, and timeline to create a personalized relocation strategy tailored to your needs.",
       icon: "🎯",
-      color: "#0070f3",
+      color: "#E2725B",
       gradient: "from-blue-500 to-blue-600",
       features: ["Personal assessment", "Timeline planning", "Visa recommendation", "Cost estimation"]
     },
@@ -94,7 +94,7 @@ const RelocationJourney = () => {
           <div style={{
             display: 'inline-block',
             background: 'rgba(0, 112, 243, 0.1)',
-            color: '#0070f3',
+            color: '#E2725B',
             padding: '8px 20px',
             borderRadius: '25px',
             fontSize: '14px',
@@ -147,7 +147,7 @@ const RelocationJourney = () => {
           <motion.div
             style={{
               height: '100%',
-              background: 'linear-gradient(90deg, #0070f3, #10b981, #f59e0b, #8b5cf6)',
+              background: 'linear-gradient(90deg, #E2725B, #10b981, #f59e0b, #8b5cf6)',
               borderRadius: '2px'
             }}
             initial={{ width: '0%' }}
@@ -306,7 +306,7 @@ const RelocationJourney = () => {
           <button
             onClick={() => navigate('/services')}
             style={{
-              background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+              background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
               color: 'white',
               border: 'none',
               padding: '18px 40px',

@@ -200,25 +200,25 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
                     width: 40,
                     height: 40,
                     borderRadius: '50%',
-                    background: idx <= currentStep ? '#0070f3' : '#e0e0e0',
+                    background: idx <= currentStep ? '#E2725B' : '#e0e0e0',
                     color: '#fff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontWeight: 700,
                     fontSize: 20,
-                    border: idx === currentStep ? '3px solid #0070f3' : '3px solid #e0e0e0',
+                    border: idx === currentStep ? '3px solid #E2725B' : '3px solid #e0e0e0',
                     transition: 'background 0.3s, border 0.3s',
                   }}
                 >
                   {idx + 1}
                 </div>
-                <div style={{ marginTop: 8, fontSize: 14, color: idx <= currentStep ? '#0070f3' : '#888', fontWeight: idx === currentStep ? 700 : 500, textAlign: 'center', maxWidth: 100 }}>
+                <div style={{ marginTop: 8, fontSize: 14, color: idx <= currentStep ? '#E2725B' : '#888', fontWeight: idx === currentStep ? 700 : 500, textAlign: 'center', maxWidth: 100 }}>
                   {step.title}
                 </div>
               </div>
               {idx < steps.length - 1 && (
-                <div style={{ flex: 1, height: 4, background: idx < currentStep ? '#0070f3' : '#e0e0e0', margin: '0 8px', borderRadius: 2 }} />
+                <div style={{ flex: 1, height: 4, background: idx < currentStep ? '#E2725B' : '#e0e0e0', margin: '0 8px', borderRadius: 2 }} />
               )}
             </React.Fragment>
           ))}
@@ -243,7 +243,7 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
                   marginBottom: 24,
                   border: '1px solid #e9ecef'
                 }}>
-                  <h4 style={{ margin: '0 0 8px 0', color: '#0070f3' }}>Service Price: €{(NIF_SERVICE_PRICE / 100).toFixed(2)}</h4>
+                  <h4 style={{ margin: '0 0 8px 0', color: '#E2725B' }}>Service Price: €{(NIF_SERVICE_PRICE / 100).toFixed(2)}</h4>
                   <p style={{ margin: 0, fontSize: 14, color: '#666' }}>
                     ✓ Document verification<br/>
                     ✓ Professional review<br/>
@@ -280,7 +280,7 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
                 </>
               )}
               {caseCreated && caseData && caseData.collaborator_id && (
-                <div style={{ marginTop: 12, color: '#0070f3' }}>
+                <div style={{ marginTop: 12, color: '#E2725B' }}>
                   {collaboratorUsername ? (
                     <span>Assigned Collaborator: <b>{collaboratorUsername}</b></span>
                   ) : (
@@ -325,7 +325,7 @@ function GetNifPage({ user, onBack, caseId: propCaseId, onLogout }) {
           )}
           {/* Review Step */}
           {currentStep === 2 && (
-            <div style={{ color: '#0070f3', margin: '12px 0' }}>
+            <div style={{ color: '#E2725B', margin: '12px 0' }}>
               {collaboratorUsername ? (
                 <span><b>{collaboratorUsername}</b> is reviewing your docs</span>
               ) : (

@@ -63,7 +63,7 @@ export default function ProfilePage({ user, onHome, onGetNif, onLogout }) {
         }
         .profile-nav-btn {
           background: #fff;
-          color: #0070f3;
+          color: #E2725B;
           border: none;
           border-left: 4px solid transparent;
           border-radius: 0;
@@ -76,8 +76,8 @@ export default function ProfilePage({ user, onHome, onGetNif, onLogout }) {
         }
         .profile-nav-btn.active {
           background: #eaf4ff;
-          color: #0070f3;
-          border-left: 4px solid #0070f3;
+          color: #E2725B;
+          border-left: 4px solid #E2725B;
         }
         .profile-main-content {
           flex: 1 1 0;
@@ -114,17 +114,17 @@ export default function ProfilePage({ user, onHome, onGetNif, onLogout }) {
           </button>
         </aside>
         <main className="profile-main-content">
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 8, color: '#0070f3', textAlign: 'center' }}>Welcome, {user?.username}!</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 8, color: '#E2725B', textAlign: 'center' }}>Welcome, {user?.username}!</h1>
           <p style={{ color: '#666', marginTop: 0, textAlign: 'center', marginBottom: 32 }}>User type: {user?.user_type}</p>
           {tab === 'main' && (
             <section style={{ ...section, justifyContent: 'center', gap: 32 }}>
               <div style={{ ...card, width: 320, textAlign: 'center', boxShadow: '0 2px 8px #e0e0e0' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0070f3' }}>Get NIF</h2>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#E2725B' }}>Get NIF</h2>
                 <p style={{ color: '#555', minHeight: 60 }}>Start your process to obtain a Portuguese NIF (tax number).</p>
                 <button style={{ ...buttonStyle, padding: '12px 24px', borderRadius: 8, fontWeight: 700, fontSize: 16 }} onClick={onGetNif}>Get NIF</button>
               </div>
               <div style={{ ...card, width: 320, textAlign: 'center', boxShadow: '0 2px 8px #e0e0e0' }}>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0070f3' }}>Get Bank Account</h2>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#E2725B' }}>Get Bank Account</h2>
                 <p style={{ color: '#555', minHeight: 60 }}>Open a bank account in Portugal easily and securely.</p>
                 <button style={{ ...buttonStyle, padding: '12px 24px', borderRadius: 8, fontWeight: 700, fontSize: 16 }}>Get Bank Account</button>
               </div>
@@ -141,7 +141,7 @@ export default function ProfilePage({ user, onHome, onGetNif, onLogout }) {
             </div>
           )}
           <div style={{ textAlign: 'center', marginTop: 40 }}>
-            <button style={{ ...buttonStyle, background: '#fff', color: '#0070f3', border: '1px solid #0070f3', borderRadius: 8, fontWeight: 700, fontSize: 16 }} onClick={onHome}>Back to Home</button>
+            <button style={{ ...buttonStyle, background: '#fff', color: '#E2725B', border: '1px solid #E2725B', borderRadius: 8, fontWeight: 700, fontSize: 16 }} onClick={onHome}>Back to Home</button>
           </div>
         </main>
       </div>

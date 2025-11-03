@@ -257,7 +257,7 @@ export default function BlogPage() {
 }
 
 export const meta = {
-  title: "Portugal Relocation Blog | Expert Guides & Tips | TechAnchor",
+  title: "Portugal Relocation Blog | Expert Guides & Tips | Atlantical",
   description: "Expert guides and tips for relocating to Portugal. Learn about visas, NIF, banking, cost of living, and more from our relocation specialists.",
   keywords: "Portugal relocation blog, move to Portugal tips, Portugal visa guides, expat Portugal, Portugal immigration news"
 };

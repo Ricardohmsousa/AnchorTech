@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../layout/Footer';
 
 const DocumentChecklistPage = () => {
+  const navigate = useNavigate();
   const [selectedVisa, setSelectedVisa] = useState('d7');
   const [checkedItems, setCheckedItems] = useState({});
+
+  // Check if user has submitted email for checklist access
+  useEffect(() => {
+    const hasAccess = localStorage.getItem('checklistEmailSubmitted');
+    if (!hasAccess) {
+      // Redirect to home page if no access
+      navigate('/');
+    }
+  }, [navigate]);
 
   const visaTypes = [
     {
@@ -305,7 +316,7 @@ const DocumentChecklistPage = () => {
       <div style={{ minHeight: '100vh', background: '#ffffff' }}>
         {/* Header */}
         <header style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           padding: '4rem 0',
           marginBottom: '3rem'
@@ -331,7 +342,7 @@ const DocumentChecklistPage = () => {
               borderRadius: '50px',
               padding: '0.5rem 1rem',
               textAlign: 'center',
-              color: '#0070f3',
+              color: '#E2725B',
               fontWeight: '600'
             }}>
               Progress: {getProgress()}% Complete
@@ -375,7 +386,7 @@ const DocumentChecklistPage = () => {
                 style={{
                   padding: '1.5rem',
                   borderRadius: '12px',
-                  border: `2px solid ${selectedVisa === visa.id ? '#0070f3' : '#e5e7eb'}`,
+                  border: `2px solid ${selectedVisa === visa.id ? '#E2725B' : '#e5e7eb'}`,
                   background: selectedVisa === visa.id ? '#f0f9ff' : 'white',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease'
@@ -384,7 +395,7 @@ const DocumentChecklistPage = () => {
                 <h3 style={{
                   fontSize: '1.125rem',
                   fontWeight: '600',
-                  color: selectedVisa === visa.id ? '#0070f3' : '#374151',
+                  color: selectedVisa === visa.id ? '#E2725B' : '#374151',
                   marginBottom: '0.5rem',
                   fontFamily: 'Inter, sans-serif'
                 }}>
@@ -480,8 +491,8 @@ const DocumentChecklistPage = () => {
                 onClick={() => window.print()}
                 style={{
                   background: 'white',
-                  color: '#0070f3',
-                  border: '2px solid #0070f3',
+                  color: '#E2725B',
+                  border: '2px solid #E2725B',
                   padding: '1rem 2rem',
                   borderRadius: '8px',
                   fontSize: '1rem',
@@ -490,12 +501,12 @@ const DocumentChecklistPage = () => {
                   transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = '#0070f3';
+                  e.target.style.background = '#E2725B';
                   e.target.style.color = 'white';
                 }}
                 onMouseLeave={(e) => {
                   e.target.style.background = 'white';
-                  e.target.style.color = '#0070f3';
+                  e.target.style.color = '#E2725B';
                 }}
               >
                 📄 Print Checklist

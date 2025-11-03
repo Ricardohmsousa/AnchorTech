@@ -67,7 +67,7 @@ export default function RegisterPage() {
     <div style={layout}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
         <form onSubmit={handleSubmit} style={{ ...card, minWidth: 340, maxWidth: 400, width: '100%' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 24, color: '#0070f3', textAlign: 'center' }}>Create your account</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 24, color: '#E2725B', textAlign: 'center' }}>Create your account</h1>
           
           <label style={{ fontWeight: 600, color: '#222', marginBottom: 6, display: 'block' }}>Full Name</label>
           <input
@@ -162,7 +162,7 @@ export default function RegisterPage() {
             <span style={{ color: '#444', fontSize: 15 }}>Already have an account? </span>
             <Link 
               to="/login"
-              style={{ color: "#0070f3", textDecoration: "underline", fontWeight: 700, fontSize: 15 }}
+              style={{ color: "#E2725B", textDecoration: "underline", fontWeight: 700, fontSize: 15 }}
             >
               Sign In
             </Link>

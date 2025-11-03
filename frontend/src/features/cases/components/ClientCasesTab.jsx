@@ -41,7 +41,7 @@ function ClientCasesTab({ user, onSelectCase }) {
                 <div style={{ fontWeight: 600 }}>Case #{c.id}</div>
                 <div>Status: {c.status}</div>
               </div>
-              <button style={{ background: '#0070f3', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 16px', fontWeight: 600, cursor: 'pointer' }} onClick={() => onSelectCase(c.id)}>View</button>
+              <button style={{ background: '#E2725B', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 16px', fontWeight: 600, cursor: 'pointer' }} onClick={() => onSelectCase(c.id)}>View</button>
             </li>
           ))}
         </ul>

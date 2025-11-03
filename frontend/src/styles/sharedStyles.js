@@ -26,7 +26,7 @@ export const navLink = {
 };
 
 export const button = {
-  background: '#0070f3',
+  background: '#E2725B',
   color: '#fff',
   border: 'none',
   borderRadius: 8,

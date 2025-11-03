@@ -38,7 +38,7 @@ const AuthGuard = ({ children, redirectTo = '/login' }) => {
             width: '40px', 
             height: '40px', 
             border: '4px solid #f3f3f3', 
-            borderTop: '4px solid #0070f3', 
+            borderTop: '4px solid #E2725B', 
             borderRadius: '50%', 
             animation: 'spin 1s linear infinite',
             margin: '0 auto 16px'

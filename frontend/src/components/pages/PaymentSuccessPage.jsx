@@ -115,7 +115,7 @@ const PaymentSuccessPage = () => {
             marginBottom: '2rem',
             lineHeight: '1.6'
           }}>
-            Thank you for choosing TechAnchor for your Portugal relocation journey!
+            Thank you for choosing Atlantical for your Portugal relocation journey!
           </p>
 
           {/* Purchase Summary */}
@@ -143,7 +143,7 @@ const PaymentSuccessPage = () => {
             }}>
               <div>
                 <div style={{
-                  background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                  background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                   color: 'white',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '4px',
@@ -181,7 +181,7 @@ const PaymentSuccessPage = () => {
             <button
               onClick={() => navigate('/')}
               style={{
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                 color: 'white',
                 border: 'none',
                 padding: '12px 24px',
@@ -207,8 +207,8 @@ const PaymentSuccessPage = () => {
               onClick={() => navigate('/contact')}
               style={{
                 background: 'transparent',
-                color: '#0070f3',
-                border: '2px solid #0070f3',
+                color: '#E2725B',
+                border: '2px solid #E2725B',
                 padding: '12px 24px',
                 borderRadius: '8px',
                 fontSize: '16px',
@@ -217,12 +217,12 @@ const PaymentSuccessPage = () => {
                 transition: 'all 0.2s ease'
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = '#0070f3';
+                e.target.style.background = '#E2725B';
                 e.target.style.color = 'white';
               }}
               onMouseLeave={(e) => {
                 e.target.style.background = 'transparent';
-                e.target.style.color = '#0070f3';
+                e.target.style.color = '#E2725B';
               }}
             >
               Contact Support

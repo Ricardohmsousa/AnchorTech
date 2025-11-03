@@ -21,14 +21,14 @@ export default function ProgressTrackingService() {
           <li>• View your personalized relocation checklist</li>
           <li>• Upload/download documents anytime</li>
         </ul>
-        <p style={{ color: '#0070f3', fontWeight: 600, fontSize: 18 }}>Stay in control of your move—track your progress with TechAnchor.</p>
+        <p style={{ color: '#E2725B', fontWeight: 600, fontSize: 18 }}>Stay in control of your move—track your progress with Atlantical.</p>
       </main>
     </div>
   );
 }
 
 export const meta = {
-  title: "Online Progress Tracking for Relocation | TechAnchor",
-  description: "Track your relocation progress and next steps online, anytime. Access your case status, documents, and checklist with TechAnchor.",
+  title: "Online Progress Tracking for Relocation | Atlantical",
+  description: "Track your relocation progress and next steps online, anytime. Access your case status, documents, and checklist with Atlantical.",
   keywords: "relocation progress tracking, expat dashboard, Portugal move checklist, online relocation tool"
 };

@@ -21,14 +21,14 @@ export default function DocumentHandlingService() {
           <li>• Save time and reduce stress</li>
           <li>• Stay organized throughout your move</li>
         </ul>
-        <p style={{ color: '#0070f3', fontWeight: 600, fontSize: 18 }}>Let us handle the admin—focus on your new life in Portugal!</p>
+        <p style={{ color: '#E2725B', fontWeight: 600, fontSize: 18 }}>Let us handle the admin—focus on your new life in Portugal!</p>
       </main>
     </div>
   );
 }
 
 export const meta = {
-  title: "Document & Appointment Handling for Portugal Relocation | TechAnchor",
+  title: "Document & Appointment Handling for Portugal Relocation | Atlantical",
   description: "We manage your document preparation and schedule all necessary appointments for your move to Portugal. Stay organized and stress-free.",
   keywords: "Portugal relocation documents, appointment booking Portugal, expat paperwork, move to Portugal admin"
 };

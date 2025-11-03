@@ -66,7 +66,7 @@ export default function LoginPage() {
       <div style={layout}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
           <form onSubmit={handlePasswordReset} style={{ ...card, minWidth: 340, maxWidth: 400, width: '100%' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 24, color: '#0070f3', textAlign: 'center' }}>Reset Password</h1>
+            <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 24, color: '#E2725B', textAlign: 'center' }}>Reset Password</h1>
             
             <label style={{ fontWeight: 600, color: '#222', marginBottom: 6, display: 'block' }}>Email</label>
             <input
@@ -102,7 +102,7 @@ export default function LoginPage() {
             <div style={{ textAlign: "center", marginTop: 8 }}>
               <button 
                 type="button" 
-                style={{ background: "none", color: "#0070f3", border: "none", cursor: "pointer", textDecoration: "underline", fontWeight: 700, fontSize: 15 }} 
+                style={{ background: "none", color: "#E2725B", border: "none", cursor: "pointer", textDecoration: "underline", fontWeight: 700, fontSize: 15 }} 
                 onClick={() => {
                   setShowResetForm(false);
                   clearError();
@@ -122,7 +122,7 @@ export default function LoginPage() {
     <div style={layout}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
         <form onSubmit={handleSubmit} style={{ ...card, minWidth: 340, maxWidth: 400, width: '100%' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 24, color: '#0070f3', textAlign: 'center' }}>Sign in to your account</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 24, color: '#E2725B', textAlign: 'center' }}>Sign in to your account</h1>
           
           <label style={{ fontWeight: 600, color: '#222', marginBottom: 6, display: 'block' }}>Email</label>
           <input
@@ -194,7 +194,7 @@ export default function LoginPage() {
           <div style={{ textAlign: "center", marginBottom: 16 }}>
             <button 
               type="button" 
-              style={{ background: "none", color: "#0070f3", border: "none", cursor: "pointer", textDecoration: "underline", fontWeight: 600, fontSize: 14 }} 
+              style={{ background: "none", color: "#E2725B", border: "none", cursor: "pointer", textDecoration: "underline", fontWeight: 600, fontSize: 14 }} 
               onClick={() => {
                 setShowResetForm(true);
                 clearError();
@@ -208,7 +208,7 @@ export default function LoginPage() {
             <span style={{ color: '#444', fontSize: 15 }}>Don't have an account? </span>
             <Link 
               to="/register"
-              style={{ color: "#0070f3", textDecoration: "underline", fontWeight: 700, fontSize: 15 }}
+              style={{ color: "#E2725B", textDecoration: "underline", fontWeight: 700, fontSize: 15 }}
             >
               Register
             </Link>

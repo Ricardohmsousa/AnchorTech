@@ -36,9 +36,9 @@ export default function ContactPage() {
     {
       icon: "📧",
       title: "Email Support",
-      value: "support@techanchor.pt",
+      value: "support@atlantical.pt",
       description: "Get answers within 24 hours",
-      action: () => window.location.href = "mailto:support@techanchor.pt"
+      action: () => window.location.href = "mailto:support@atlantical.pt"
     },
     {
       icon: "📞",
@@ -83,7 +83,7 @@ export default function ContactPage() {
 
   const urgencyLevels = [
     { value: "low", label: "Low - General inquiry", color: "#10b981" },
-    { value: "normal", label: "Normal - Response within 24h", color: "#0070f3" },
+    { value: "normal", label: "Normal - Response within 24h", color: "#E2725B" },
     { value: "high", label: "High - Response within 4h", color: "#f59e0b" },
     { value: "urgent", label: "Urgent - Immediate attention", color: "#ef4444" }
   ];
@@ -126,7 +126,7 @@ export default function ContactPage() {
             marginBottom: '2rem',
             lineHeight: '1.6'
           }}>
-            Thank you for contacting TechAnchor! We've received your message and our team will respond to you within {form.urgency === 'urgent' ? 'the next hour' : form.urgency === 'high' ? '4 hours' : '24 hours'}.
+            Thank you for contacting Atlantical! We've received your message and our team will respond to you within {form.urgency === 'urgent' ? 'the next hour' : form.urgency === 'high' ? '4 hours' : '24 hours'}.
           </p>
           
           <div style={{
@@ -155,7 +155,7 @@ export default function ContactPage() {
             <button
               onClick={() => navigate('/')}
               style={{
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                 color: 'white',
                 border: 'none',
                 padding: '12px 24px',
@@ -172,8 +172,8 @@ export default function ContactPage() {
               onClick={() => window.location.reload()}
               style={{
                 background: 'transparent',
-                color: '#0070f3',
-                border: '2px solid #0070f3',
+                color: '#E2725B',
+                border: '2px solid #E2725B',
                 padding: '12px 24px',
                 borderRadius: '8px',
                 fontSize: '16px',
@@ -201,7 +201,7 @@ export default function ContactPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           padding: '4rem 1rem',
           textAlign: 'center'
@@ -258,9 +258,9 @@ export default function ContactPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              onClick={() => window.location.href = "mailto:support@techanchor.pt"}
+              onClick={() => window.location.href = "mailto:support@atlantical.pt"}
               style={{
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                 color: 'white',
                 padding: '2rem',
                 borderRadius: '16px',
@@ -295,7 +295,7 @@ export default function ContactPage() {
                     marginBottom: '0.25rem',
                     fontSize: '1.125rem'
                   }}>
-                    support@techanchor.pt
+                    support@atlantical.pt
                   </p>
                 </div>
               </div>
@@ -347,7 +347,7 @@ export default function ContactPage() {
                         {method.title}
                       </h3>
                       <p style={{ 
-                        color: '#0070f3', 
+                        color: '#E2725B', 
                         fontWeight: '600', 
                         marginBottom: '0.25rem'
                       }}>
@@ -388,7 +388,7 @@ export default function ContactPage() {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#0070f3',
+                    color: '#E2725B',
                     textAlign: 'left',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
@@ -402,7 +402,7 @@ export default function ContactPage() {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#0070f3',
+                    color: '#E2725B',
                     textAlign: 'left',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
@@ -416,7 +416,7 @@ export default function ContactPage() {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#0070f3',
+                    color: '#E2725B',
                     textAlign: 'left',
                     cursor: 'pointer',
                     fontSize: '0.875rem',
@@ -480,7 +480,7 @@ export default function ContactPage() {
                       fontFamily: 'Inter, sans-serif',
                       transition: 'border-color 0.2s'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                    onFocus={(e) => e.target.style.borderColor = '#E2725B'}
                     onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                   />
                 </div>
@@ -510,7 +510,7 @@ export default function ContactPage() {
                       fontFamily: 'Inter, sans-serif',
                       transition: 'border-color 0.2s'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                    onFocus={(e) => e.target.style.borderColor = '#E2725B'}
                     onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                   />
                 </div>
@@ -543,7 +543,7 @@ export default function ContactPage() {
                       fontFamily: 'Inter, sans-serif',
                       transition: 'border-color 0.2s'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                    onFocus={(e) => e.target.style.borderColor = '#E2725B'}
                     onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                   />
                 </div>
@@ -608,7 +608,7 @@ export default function ContactPage() {
                     fontFamily: 'Inter, sans-serif',
                     transition: 'border-color 0.2s'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                  onFocus={(e) => e.target.style.borderColor = '#E2725B'}
                   onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -684,7 +684,7 @@ export default function ContactPage() {
                     resize: 'vertical',
                     transition: 'border-color 0.2s'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                  onFocus={(e) => e.target.style.borderColor = '#E2725B'}
                   onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                 />
               </div>
@@ -694,7 +694,7 @@ export default function ContactPage() {
                 type="submit" 
                 disabled={loading}
                 style={{ 
-                  background: loading ? '#9ca3af' : 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                  background: loading ? '#9ca3af' : 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                   color: 'white',
                   border: 'none',
                   padding: '16px 32px', 

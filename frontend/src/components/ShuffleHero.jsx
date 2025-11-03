@@ -85,7 +85,7 @@ const ShuffleHero = () => {
             display: 'block',
             marginBottom: '1rem',
             fontSize: '0.875rem',
-            color: '#0070f3',
+            color: '#E2725B',
             fontWeight: '600',
             textTransform: 'uppercase',
             letterSpacing: '0.05em'
@@ -95,7 +95,7 @@ const ShuffleHero = () => {
           <h1 className="shuffle-hero-title">
             Your Gateway to
             <span style={{ 
-              background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+              background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -110,7 +110,7 @@ const ShuffleHero = () => {
           </p>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
             <button style={{
-              background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+              background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
               color: 'white',
               fontWeight: '700',
               padding: '18px 36px',
@@ -120,27 +120,27 @@ const ShuffleHero = () => {
               cursor: 'pointer',
               transition: 'all 0.2s ease',
               transform: 'scale(1)',
-              boxShadow: '0 4px 14px 0 rgba(0, 112, 243, 0.3)',
+              boxShadow: '0 4px 14px 0 rgba(226, 114, 91, 0.3)',
               minWidth: '220px'
             }}
             onClick={() => navigate('/services')}
             onMouseEnter={(e) => {
               e.target.style.transform = 'scale(1.05)';
-              e.target.style.boxShadow = '0 6px 20px 0 rgba(0, 112, 243, 0.4)';
+              e.target.style.boxShadow = '0 6px 20px 0 rgba(226, 114, 91, 0.4)';
             }}
             onMouseLeave={(e) => {
               e.target.style.transform = 'scale(1)';
-              e.target.style.boxShadow = '0 4px 14px 0 rgba(0, 112, 243, 0.3)';
+              e.target.style.boxShadow = '0 4px 14px 0 rgba(226, 114, 91, 0.3)';
             }}>
               🚀 Start Your Journey
             </button>
             <button style={{
-              background: 'rgba(0, 112, 243, 0.1)',
-              color: '#0070f3',
+              background: 'rgba(226, 114, 91, 0.1)',
+              color: '#E2725B',
               fontWeight: '600',
               padding: '18px 36px',
               borderRadius: '16px',
-              border: '2px solid #0070f3',
+              border: '2px solid #E2725B',
               fontSize: '18px',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
@@ -148,12 +148,12 @@ const ShuffleHero = () => {
             }}
             onClick={() => navigate('/contact')}
             onMouseEnter={(e) => {
-              e.target.style.background = '#0070f3';
+              e.target.style.background = '#E2725B';
               e.target.style.color = 'white';
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(0, 112, 243, 0.1)';
-              e.target.style.color = '#0070f3';
+              e.target.style.background = 'rgba(226, 114, 91, 0.1)';
+              e.target.style.color = '#E2725B';
             }}>
               📞 Book Free Call
             </button>

@@ -21,14 +21,14 @@ export default function LegalSupportService() {
           <li>• Registering a business</li>
           <li>• Navigating tax or residency rules</li>
         </ul>
-        <p style={{ color: '#0070f3', fontWeight: 600, fontSize: 18 }}>Move forward with confidence—get legal and admin support from TechAnchor.</p>
+        <p style={{ color: '#E2725B', fontWeight: 600, fontSize: 18 }}>Move forward with confidence—get legal and admin support from Atlantical.</p>
       </main>
     </div>
   );
 }
 
 export const meta = {
-  title: "Legal & Administrative Support in Portugal | TechAnchor",
+  title: "Legal & Administrative Support in Portugal | Atlantical",
   description: "Get expert help with legal and administrative hurdles in Portugal. We connect you with trusted partners and guide you through official processes.",
   keywords: "Portugal legal support, expat legal help, Portugal contracts, administrative support Portugal, move to Portugal legal"
 };

@@ -225,7 +225,7 @@ const CookiePolicyPage = () => {
               </p>
               <div style={{ padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
                 <p style={{ fontSize: '1rem', color: '#1f2937', margin: 0, fontFamily: 'Inter, sans-serif' }}>
-                  <strong>Email:</strong> privacy@techanchor.pt<br />
+                  <strong>Email:</strong> privacy@atlantical.pt<br />
                   <strong>Phone:</strong> +351 123 456 789<br />
                   <strong>Address:</strong> Lisbon, Portugal
                 </p>

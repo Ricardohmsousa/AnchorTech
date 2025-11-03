@@ -91,7 +91,7 @@ const ApplicationPage = () => {
             transition: 'border-color 0.2s ease',
             fontFamily: 'Inter, sans-serif'
           }}
-          onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+          onFocus={(e) => e.target.style.borderColor = '#E2725B'}
           onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
         />
       </div>
@@ -114,7 +114,7 @@ const ApplicationPage = () => {
               outline: 'none',
               transition: 'border-color 0.2s ease'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           />
         </div>
@@ -136,7 +136,7 @@ const ApplicationPage = () => {
               outline: 'none',
               transition: 'border-color 0.2s ease'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           />
         </div>
@@ -160,7 +160,7 @@ const ApplicationPage = () => {
               transition: 'border-color 0.2s ease',
               backgroundColor: 'white'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           >
             <option value="">Select nationality</option>
@@ -195,7 +195,7 @@ const ApplicationPage = () => {
               outline: 'none',
               transition: 'border-color 0.2s ease'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           />
         </div>
@@ -222,7 +222,7 @@ const ApplicationPage = () => {
             transition: 'border-color 0.2s ease',
             backgroundColor: 'white'
           }}
-          onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+          onFocus={(e) => e.target.style.borderColor = '#E2725B'}
           onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
         >
           <option value="">Select visa type</option>
@@ -254,7 +254,7 @@ const ApplicationPage = () => {
               outline: 'none',
               transition: 'border-color 0.2s ease'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           />
         </div>
@@ -276,7 +276,7 @@ const ApplicationPage = () => {
               transition: 'border-color 0.2s ease',
               backgroundColor: 'white'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           >
             <option value="">Select family size</option>
@@ -307,7 +307,7 @@ const ApplicationPage = () => {
             outline: 'none',
             transition: 'border-color 0.2s ease'
           }}
-          onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+          onFocus={(e) => e.target.style.borderColor = '#E2725B'}
           onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
         />
       </div>
@@ -334,7 +334,7 @@ const ApplicationPage = () => {
               transition: 'border-color 0.2s ease',
               backgroundColor: 'white'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           >
             <option value="">Select region</option>
@@ -367,7 +367,7 @@ const ApplicationPage = () => {
               transition: 'border-color 0.2s ease',
               backgroundColor: 'white'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           >
             <option value="">Select housing type</option>
@@ -398,7 +398,7 @@ const ApplicationPage = () => {
               transition: 'border-color 0.2s ease',
               backgroundColor: 'white'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           >
             <option value="">Select work status</option>
@@ -428,7 +428,7 @@ const ApplicationPage = () => {
               transition: 'border-color 0.2s ease',
               backgroundColor: 'white'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+            onFocus={(e) => e.target.style.borderColor = '#E2725B'}
             onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
           >
             <option value="">Select budget range</option>
@@ -563,7 +563,7 @@ const ApplicationPage = () => {
       <div style={{ minHeight: '100vh', background: '#ffffff' }}>
         {/* Header */}
         <header className="app-header" style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           padding: '2rem 0',
           marginBottom: '3rem'
@@ -605,7 +605,7 @@ const ApplicationPage = () => {
                   height: '60px',
                   borderRadius: '50%',
                   background: index <= currentStep 
-                    ? 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)'
+                    ? 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)'
                     : '#e5e7eb',
                   display: 'flex',
                   alignItems: 'center',
@@ -620,7 +620,7 @@ const ApplicationPage = () => {
                 <div className="step-title" style={{
                   fontSize: '0.875rem',
                   fontWeight: '600',
-                  color: index <= currentStep ? '#0070f3' : '#6b7280',
+                  color: index <= currentStep ? '#E2725B' : '#6b7280',
                   marginBottom: '0.25rem'
                 }}>
                   {step.title}
@@ -697,8 +697,8 @@ const ApplicationPage = () => {
             }}
             onMouseEnter={(e) => {
               if (currentStep !== 0) {
-                e.target.style.borderColor = '#0070f3';
-                e.target.style.color = '#0070f3';
+                e.target.style.borderColor = '#E2725B';
+                e.target.style.color = '#E2725B';
               }
             }}
             onMouseLeave={(e) => {
@@ -714,7 +714,7 @@ const ApplicationPage = () => {
           <button
             onClick={currentStep === steps.length - 1 ? () => alert('Application submitted!') : nextStep}
             style={{
-              background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+              background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
               color: 'white',
               border: 'none',
               padding: '0.75rem 2rem',
@@ -726,7 +726,7 @@ const ApplicationPage = () => {
             }}
             onMouseEnter={(e) => {
               e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 8px 20px rgba(0, 112, 243, 0.3)';
+              e.target.style.boxShadow = '0 8px 20px rgba(226, 114, 91, 0.3)';
             }}
             onMouseLeave={(e) => {
               e.target.style.transform = 'translateY(0)';

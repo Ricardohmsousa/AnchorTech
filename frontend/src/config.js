@@ -1,4 +1,4 @@
-// API configuration for TechAnchor frontend
+// API configuration for Atlantical frontend
 
 // Helper function to get environment variable from build-time 
 function getEnvVar(name) {

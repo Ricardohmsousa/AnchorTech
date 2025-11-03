@@ -13,7 +13,7 @@ const testimonials = [
   {
     name: "Maria S.",
     location: "Lisbon, Portugal",
-    quote: "TechAnchor made my move to Portugal seamless. My case manager was always available and the process was so much easier than I expected!",
+    quote: "Atlantical made my move to Portugal seamless. My case manager was always available and the process was so much easier than I expected!",
     rating: 5,
     visa: "D7 Visa",
     src: "https://images.unsplash.com/photo-1494790108755-2616b612b3bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
@@ -37,7 +37,7 @@ const testimonials = [
   {
     name: "Carlos M.",
     location: "Braga, Portugal",
-    quote: "From document preparation to finding housing, TechAnchor handled everything. Now my family and I are living our dream in Portugal.",
+    quote: "From document preparation to finding housing, Atlantical handled everything. Now my family and I are living our dream in Portugal.",
     rating: 5,
     visa: "Family Reunification",
     src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
@@ -55,7 +55,7 @@ const testimonials = [
 const stats = [
   { number: "5,000+", label: "Successful Relocations" },
   { number: "99%", label: "Visa Success Rate" },
-  { number: "3 months", label: "Average Processing Time" },
+  { number: "90 days", label: "Average Processing Time" },
   { number: "24/7", label: "Support Available" }
 ];
 
@@ -142,6 +142,10 @@ export default function HomePage({ user }) {
       setSubmitted(true);
       setIsLoading(false);
       // TODO: Integrate with email service
+      
+      // Store email submission in localStorage to grant access to checklist page
+      localStorage.setItem('checklistEmailSubmitted', 'true');
+      localStorage.setItem('checklistEmail', email);
       
       // Redirect to documents page after 2 seconds
       setTimeout(() => {
@@ -294,7 +298,7 @@ export default function HomePage({ user }) {
         .accent-text {
           font-family: 'Inter', sans-serif;
           font-weight: 600;
-          color: #0070f3;
+          color: #E2725B;
         }
         
         .cta-button {
@@ -339,7 +343,7 @@ export default function HomePage({ user }) {
         }
         
         .cta-button {
-          background: linear-gradient(135deg, #0070f3 0%, #0051cc 100%);
+          background: linear-gradient(135deg, #E2725B 0%, #A94438 100%);
           transition: all 0.3s ease;
           transform: translateY(0);
           position: relative;
@@ -360,12 +364,12 @@ export default function HomePage({ user }) {
         }
         .cta-button:hover {
           transform: translateY(-3px);
-          box-shadow: 0 12px 35px rgba(0, 112, 243, 0.4);
+          box-shadow: 0 12px 35px rgba(226, 114, 91, 0.4);
         }
         
         .secondary-button {
           background: rgba(255, 255, 255, 0.95);
-          color: #0070f3;
+          color: #E2725B;
           border: 2px solid rgba(255, 255, 255, 0.8);
           backdrop-filter: blur(10px);
           transition: all 0.3s ease;
@@ -397,7 +401,7 @@ export default function HomePage({ user }) {
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(135deg, rgba(0, 112, 243, 0.02) 0%, rgba(0, 112, 243, 0.05) 100%);
+          background: linear-gradient(135deg, rgba(226, 114, 91, 0.02) 0%, rgba(226, 114, 91, 0.05) 100%);
           opacity: 0;
           transition: opacity 0.3s ease;
         }
@@ -426,7 +430,7 @@ export default function HomePage({ user }) {
         }
         
         .gradient-text {
-          background: linear-gradient(135deg, #0070f3 0%, #00d4ff 100%);
+          background: linear-gradient(135deg, #E2725B 0%, #A94438 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -683,8 +687,8 @@ export default function HomePage({ user }) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(0, 112, 243, 0.05) 0%, transparent 50%),
-                           radial-gradient(circle at 75% 75%, rgba(0, 212, 255, 0.05) 0%, transparent 50%)`,
+          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(226, 114, 91, 0.05) 0%, transparent 50%),
+                           radial-gradient(circle at 75% 75%, rgba(169, 68, 56, 0.05) 0%, transparent 50%)`,
           pointerEvents: 'none'
         }} />
         
@@ -698,15 +702,15 @@ export default function HomePage({ user }) {
           {/* Badge */}
           <div style={{ marginBottom: '2rem' }}>
             <span style={{ 
-              background: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%)', 
-              color: '#0070f3', 
+              background: 'linear-gradient(135deg, rgba(226, 114, 91, 0.1) 0%, rgba(169, 68, 56, 0.1) 100%)', 
+              color: '#E2725B', 
               padding: '12px 28px', 
               borderRadius: '30px', 
               fontSize: '14px',
               fontWeight: '700',
               textTransform: 'uppercase',
               letterSpacing: '1.5px',
-              border: '1px solid rgba(0, 112, 243, 0.2)',
+              border: '1px solid rgba(226, 114, 91, 0.2)',
               fontFamily: 'Inter, sans-serif',
               display: 'inline-block',
               backdropFilter: 'blur(10px)'
@@ -723,11 +727,7 @@ export default function HomePage({ user }) {
             color: '#1a202c',
             letterSpacing: '-0.03em',
             fontFamily: 'Inter, sans-serif',
-            lineHeight: '1.1',
-            background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
+            lineHeight: '1.1'
           }}>
             The Numbers Tell Our Story
           </h2>
@@ -736,10 +736,8 @@ export default function HomePage({ user }) {
           <p style={{
             fontSize: 'clamp(1rem, 3vw, 1.25rem)',
             color: '#64748b',
-            marginBottom: 'clamp(3rem, 6vw, 5rem)',
             maxWidth: 'min(700px, 90vw)',
-            margin: '0 auto',
-            marginBottom: 'clamp(3rem, 6vw, 5rem)',
+            margin: '0 auto clamp(5rem, 10vw, 8rem) auto',
             fontWeight: '400',
             lineHeight: '1.7',
             fontFamily: 'Inter, sans-serif'
@@ -769,12 +767,12 @@ export default function HomePage({ user }) {
                   border: '1px solid rgba(255, 255, 255, 0.2)'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-8px)';
-                  e.target.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.9)';
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.9)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.8)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.8)';
                 }}
               >
                 {/* Gradient accent line */}
@@ -784,19 +782,19 @@ export default function HomePage({ user }) {
                   left: 0,
                   right: 0,
                   height: '4px',
-                  background: `linear-gradient(135deg, ${i % 2 === 0 ? '#0070f3' : '#00d4ff'} 0%, ${i % 2 === 0 ? '#00d4ff' : '#0070f3'} 100%)`
+                  background: `linear-gradient(135deg, ${i % 2 === 0 ? '#E2725B' : '#A94438'} 0%, ${i % 2 === 0 ? '#A94438' : '#E2725B'} 100%)`
                 }} />
                 
                 {/* Icon */}
                 <div style={{
                   width: '60px',
                   height: '60px',
-                  background: `linear-gradient(135deg, ${i % 2 === 0 ? 'rgba(0, 112, 243, 0.1)' : 'rgba(0, 212, 255, 0.1)'} 0%, ${i % 2 === 0 ? 'rgba(0, 212, 255, 0.1)' : 'rgba(0, 112, 243, 0.1)'} 100%)`,
+                  background: `linear-gradient(135deg, ${i % 2 === 0 ? 'rgba(226, 114, 91, 0.1)' : 'rgba(169, 68, 56, 0.1)'} 0%, ${i % 2 === 0 ? 'rgba(169, 68, 56, 0.1)' : 'rgba(226, 114, 91, 0.1)'} 100%)`,
                   borderRadius: '16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  margin: '0 auto 2rem auto',
+                  margin: '0 auto 1.5rem auto',
                   fontSize: '24px'
                 }}>
                   {i === 0 ? '🎯' : i === 1 ? '📊' : i === 2 ? '⚡' : '🛡️'}
@@ -806,8 +804,8 @@ export default function HomePage({ user }) {
                 <div style={{ 
                   fontSize: 'clamp(2rem, 6vw, 3.5rem)', 
                   fontWeight: '800',
-                  marginBottom: '1rem',
-                  color: '#0070f3',
+                  marginBottom: '0.75rem',
+                  color: '#1a202c',
                   fontFamily: 'Inter, sans-serif',
                   letterSpacing: '-0.02em',
                   lineHeight: '1'
@@ -821,7 +819,8 @@ export default function HomePage({ user }) {
                   fontWeight: '600',
                   color: '#334155',
                   fontFamily: 'Inter, sans-serif',
-                  lineHeight: '1.4'
+                  lineHeight: '1.5',
+                  paddingTop: '0.5rem'
                 }}>
                   {stat.label}
                 </div>
@@ -898,7 +897,7 @@ export default function HomePage({ user }) {
             marginBottom: '1rem',
             color: '#222'
           }}>
-            Why Choose TechAnchor?
+            Why Choose Atlantical?
           </h2>
           <p style={{ 
             fontSize: '1.2rem', 
@@ -969,8 +968,8 @@ export default function HomePage({ user }) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(0, 112, 243, 0.03) 0%, transparent 50%),
-                           radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(226, 114, 91, 0.03) 0%, transparent 50%),
+                           radial-gradient(circle at 80% 20%, rgba(169, 68, 56, 0.03) 0%, transparent 50%),
                            radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.02) 0%, transparent 50%)`,
           pointerEvents: 'none'
         }} />
@@ -985,15 +984,15 @@ export default function HomePage({ user }) {
           <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
             <div style={{ marginBottom: '2rem' }}>
               <span style={{ 
-                background: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%)',
-                color: '#0070f3', 
+                background: 'linear-gradient(135deg, rgba(226, 114, 91, 0.1) 0%, rgba(169, 68, 56, 0.1) 100%)',
+                color: '#E2725B', 
                 padding: '12px 28px',
                 borderRadius: '30px',
                 fontSize: '14px',
                 fontWeight: '700',
                 textTransform: 'uppercase',
                 letterSpacing: '1.5px',
-                border: '1px solid rgba(0, 112, 243, 0.2)',
+                border: '1px solid rgba(226, 114, 91, 0.2)',
                 fontFamily: 'Inter, sans-serif',
                 display: 'inline-block',
                 backdropFilter: 'blur(10px)'
@@ -1008,11 +1007,7 @@ export default function HomePage({ user }) {
               color: '#1a202c',
               lineHeight: '1.1',
               fontFamily: 'Inter, sans-serif',
-              letterSpacing: '-0.03em',
-              background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              letterSpacing: '-0.03em'
             }}>
               Three Simple Steps to Success
             </h2>
@@ -1040,11 +1035,11 @@ export default function HomePage({ user }) {
             {[
               {
                 step: '01',
-                color: '#0070f3',
+                color: '#E2725B',
                 title: 'Strategy & Assessment',
                 description: 'Complete our smart assessment and get a personalized relocation roadmap tailored to your unique situation and goals.',
                 icon: '🎯',
-                bgGradient: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%)',
+                bgGradient: 'linear-gradient(135deg, rgba(226, 114, 91, 0.1) 0%, rgba(169, 68, 56, 0.05) 100%)',
                 features: ['Free consultation', 'Personalized plan', 'Document checklist']
               },
               {
@@ -1081,12 +1076,12 @@ export default function HomePage({ user }) {
                   cursor: 'pointer'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-8px)';
-                  e.target.style.boxShadow = `0 16px 48px ${item.color}25, 0 0 0 1px ${item.color}40`;
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = `0 16px 48px ${item.color}25, 0 0 0 1px ${item.color}40`;
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = `0 8px 32px ${item.color}15, 0 0 0 1px ${item.color}20`;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = `0 8px 32px ${item.color}15, 0 0 0 1px ${item.color}20`;
                 }}
               >
                 {/* Subtle overlay for depth */}
@@ -1268,7 +1263,7 @@ export default function HomePage({ user }) {
             </div>
             <button 
               style={{ 
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                 border: 'none',
                 color: 'white',
                 padding: '18px 36px',
@@ -1278,7 +1273,7 @@ export default function HomePage({ user }) {
                 fontFamily: 'Inter, sans-serif',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                boxShadow: '0 8px 24px rgba(0, 112, 243, 0.3)',
+                boxShadow: '0 8px 24px rgba(226, 114, 91, 0.3)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.75rem'
@@ -1286,11 +1281,11 @@ export default function HomePage({ user }) {
               onClick={handleGetStarted}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px) scale(1.02)';
-                e.target.style.boxShadow = '0 12px 32px rgba(0, 112, 243, 0.4)';
+                e.target.style.boxShadow = '0 12px 32px rgba(226, 114, 91, 0.4)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.transform = 'translateY(0) scale(1)';
-                e.target.style.boxShadow = '0 8px 24px rgba(0, 112, 243, 0.3)';
+                e.target.style.boxShadow = '0 8px 24px rgba(226, 114, 91, 0.3)';
               }}
             >
               Start Your Journey Today
@@ -1310,13 +1305,13 @@ export default function HomePage({ user }) {
         borderRadius: '24px', 
         padding: '4rem 3rem', 
         textAlign: 'center', 
-        boxShadow: '0 8px 30px rgba(0, 112, 243, 0.1)',
-        border: '1px solid rgba(0, 112, 243, 0.1)'
+        boxShadow: '0 8px 30px rgba(226, 114, 91, 0.1)',
+        border: '1px solid rgba(226, 114, 91, 0.1)'
       }}>
         <div style={{ marginBottom: '2rem' }}>
           <span style={{ 
-            background: 'rgba(0, 112, 243, 0.1)', 
-            color: '#0070f3', 
+            background: 'rgba(226, 114, 91, 0.1)', 
+            color: '#E2725B', 
             padding: '8px 16px', 
             borderRadius: '20px', 
             fontSize: '14px',
@@ -1430,7 +1425,7 @@ export default function HomePage({ user }) {
                 borderRadius: '12px',
                 background: isLoading 
                   ? '#94a3b8' 
-                  : 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                  : 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                 border: 'none',
                 whiteSpace: 'nowrap',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
@@ -1482,8 +1477,8 @@ export default function HomePage({ user }) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(0, 112, 243, 0.03) 0%, transparent 50%),
-                           radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(226, 114, 91, 0.03) 0%, transparent 50%),
+                           radial-gradient(circle at 80% 20%, rgba(169, 68, 56, 0.03) 0%, transparent 50%),
                            radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.02) 0%, transparent 50%)`,
           pointerEvents: 'none'
         }} />
@@ -1499,15 +1494,15 @@ export default function HomePage({ user }) {
           {/* Enhanced Badge */}
           <div style={{ marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
             <span style={{ 
-              background: 'linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%)',
-              color: '#0070f3', 
+              background: 'linear-gradient(135deg, rgba(226, 114, 91, 0.1) 0%, rgba(169, 68, 56, 0.1) 100%)',
+              color: '#E2725B', 
               padding: 'clamp(10px, 2vw, 12px) clamp(20px, 4vw, 28px)',
               borderRadius: '30px',
               fontSize: 'clamp(12px, 2.5vw, 14px)',
               fontWeight: '700',
               textTransform: 'uppercase',
               letterSpacing: '1.5px',
-              border: '1px solid rgba(0, 112, 243, 0.2)',
+              border: '1px solid rgba(226, 114, 91, 0.2)',
               fontFamily: 'Inter, sans-serif',
               display: 'inline-block',
               backdropFilter: 'blur(10px)'
@@ -1687,7 +1682,7 @@ export default function HomePage({ user }) {
 
       {/* Final CTA Section */}
       <section style={{ 
-        background: 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)',
+        background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
         padding: '6rem 2rem',
         color: 'white',
         textAlign: 'center'
@@ -1708,7 +1703,7 @@ export default function HomePage({ user }) {
             opacity: 0.9,
             lineHeight: '1.6'
           }}>
-            Join thousands of successful relocators who chose TechAnchor. 
+            Join thousands of successful relocators who chose Atlantical. 
             <br />Your new life in Portugal is just 90 days away.
           </p>
 
@@ -1723,7 +1718,7 @@ export default function HomePage({ user }) {
               className="cta-button"
               style={{ 
                 background: 'white',
-                color: '#1e3a8a',
+                color: '#E2725B',
                 border: 'none',
                 padding: '20px 40px', 
                 fontSize: 18,

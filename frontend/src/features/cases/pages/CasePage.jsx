@@ -96,10 +96,10 @@ function CasePage({ user, caseId: propCaseId }) {
      
       <main style={{ maxWidth: 600, margin: '2rem auto', ...card, padding: 32 }}>
         <button onClick={() => navigate(-1)} style={{ ...buttonStyle, marginBottom: 16, padding: '8px 16px', borderRadius: 6, fontWeight: 600 }}>Back</button>
-        <h2 style={{ color: '#0070f3', fontWeight: 800, marginBottom: 8 }}>Case #{caseData.id}</h2>
+        <h2 style={{ color: '#E2725B', fontWeight: 800, marginBottom: 8 }}>Case #{caseData.id}</h2>
         <div style={{ marginBottom: 16 }}>Status: <b>{caseData.status}</b></div>
         <div style={{ margin: '16px 0' }}>
-          <h3 style={{ color: '#0070f3', fontWeight: 700 }}>Client Info</h3>
+          <h3 style={{ color: '#E2725B', fontWeight: 700 }}>Client Info</h3>
           {userData ? (
             <div>
               <div><b>Username:</b> {userData.username}</div>
@@ -110,7 +110,7 @@ function CasePage({ user, caseId: propCaseId }) {
           )}
         </div>
         <div style={{ margin: '16px 0' }}>
-          <h3 style={{ color: '#0070f3', fontWeight: 700 }}>Documents</h3>
+          <h3 style={{ color: '#E2725B', fontWeight: 700 }}>Documents</h3>
           {files.length === 0 ? (
             <div>No documents uploaded.</div>
           ) : (
@@ -124,9 +124,9 @@ function CasePage({ user, caseId: propCaseId }) {
           )}
         </div>
         <div style={{ margin: '16px 0' }}>
-          <h3 style={{ color: '#0070f3', fontWeight: 700 }}>Actions</h3>
+          <h3 style={{ color: '#E2725B', fontWeight: 700 }}>Actions</h3>
           {user && user.user_type === "collaborator" && caseData.status === "uploaded" && (
-            <button onClick={handleReview} style={{ ...buttonStyle, background: '#0070f3', color: '#fff', padding: '10px 20px', borderRadius: 6, fontWeight: 600 }}>Mark as Reviewed</button>
+            <button onClick={handleReview} style={{ ...buttonStyle, background: '#E2725B', color: '#fff', padding: '10px 20px', borderRadius: 6, fontWeight: 600 }}>Mark as Reviewed</button>
           )}
           {user && user.user_type === "collaborator" && caseData.status === "reviewed" && (
             <button onClick={handleLocalReview} style={{ ...buttonStyle, background: '#ff9800', color: '#fff', padding: '10px 20px', borderRadius: 6, fontWeight: 600, marginLeft: 8 }}>Mark as Reviewed by Local Offices</button>

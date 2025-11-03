@@ -21,14 +21,14 @@ export default function CommunityForumService() {
           <li>• Post questions or join discussions</li>
           <li>• Connect with fellow expats and locals</li>
         </ul>
-        <p style={{ color: '#0070f3', fontWeight: 600, fontSize: 18 }}>Join the TechAnchor community and make your move easier—together!</p>
+        <p style={{ color: '#E2725B', fontWeight: 600, fontSize: 18 }}>Join the Atlantical community and make your move easier—together!</p>
       </main>
     </div>
   );
 }
 
 export const meta = {
-  title: "Community Forum for Expats in Portugal | TechAnchor",
+  title: "Community Forum for Expats in Portugal | Atlantical",
   description: "Connect with other expats and get real-world advice in our community forum. Share experiences, ask questions, and build your support network.",
   keywords: "Portugal expat forum, relocation community, expat support Portugal, move to Portugal advice"
 };

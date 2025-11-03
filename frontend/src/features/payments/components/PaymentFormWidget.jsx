@@ -124,7 +124,7 @@ const CheckoutForm = ({ onSuccess, onError, onCancel }) => {
           disabled={!stripe || loading}
           style={{
             ...buttonStyle,
-            backgroundColor: loading ? '#ccc' : '#0070f3',
+            backgroundColor: loading ? '#ccc' : '#E2725B',
             cursor: loading ? 'not-allowed' : 'pointer'
           }}
         >
@@ -253,7 +253,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
     appearance: {
       theme: 'stripe', // or 'night', 'flat'
       variables: {
-        colorPrimary: '#0070f3',
+        colorPrimary: '#E2725B',
       }
     },
   };

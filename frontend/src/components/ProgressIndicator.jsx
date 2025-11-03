@@ -66,7 +66,7 @@ const ProgressIndicator = ({
                 background: isCompleted
                   ? '#10b981'
                   : isCurrent
-                    ? '#0070f3'
+                    ? '#E2725B'
                     : '#e5e7eb',
                 color: isCompleted || isCurrent ? 'white' : '#666',
                 display: 'flex',
@@ -106,7 +106,7 @@ const ProgressIndicator = ({
                   width: '6px',
                   height: '6px',
                   borderRadius: '50%',
-                  background: '#0070f3'
+                  background: '#E2725B'
                 }}
               />
             )}

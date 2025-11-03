@@ -25,7 +25,7 @@ function NifServicePage() {
   return (
     <div style={layout}>
       <header style={{ padding: '2rem 0', textAlign: 'center', background: '#fff', boxShadow: '0 2px 8px #f0f1f2', position: 'relative' }}>
-        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, margin: 0, color: '#0070f3' }}>Get Your Portuguese NIF</h1>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, margin: 0, color: '#E2725B' }}>Get Your Portuguese NIF</h1>
         <p style={{ color: '#555', fontSize: 18, marginTop: 12, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
           Fast, secure, and remote NIF acquisition for expats, digital nomads, and anyone relocating to Portugal. We handle the bureaucracy so you can focus on your move.
         </p>
@@ -73,7 +73,7 @@ function NifServicePage() {
         <section style={{ ...card, textAlign: 'center' }}>
           <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 12 }}>Ready to Get Started?</h2>
           <p style={{ color: '#555', fontSize: 16, marginBottom: 20 }}>Click below to begin your NIF application. Our team will guide you every step of the way.</p>
-          <button style={{ ...buttonStyle, fontSize: 18, padding: '12px 32px', borderRadius: 8, fontWeight: 700, background: '#0070f3', color: '#fff' }}>
+          <button style={{ ...buttonStyle, fontSize: 18, padding: '12px 32px', borderRadius: 8, fontWeight: 700, background: '#E2725B', color: '#fff' }}>
             Start Application
           </button>
         </section>

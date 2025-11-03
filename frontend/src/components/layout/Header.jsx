@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 // COMMENTED OUT: Firebase Auth
 // import { useAuth } from "../../app/providers/AuthProvider";
 import { navBar, navLink, button as buttonStyle } from "../../styles/sharedStyles";
+import Logo from "../Logo";
 
 export default function Header({ onLogin, onLogout }) {
   // COMMENTED OUT: Firebase Auth
@@ -56,14 +57,6 @@ export default function Header({ onLogin, onLogout }) {
         }}>
           {/* Logo */}
           <div
-            style={{ 
-              fontFamily: 'Lato, sans-serif', 
-              fontWeight: 900, 
-              fontSize: 28, 
-              color: '#0070f3', 
-              letterSpacing: 1, 
-              cursor: 'pointer' 
-            }}
             onClick={handleHomeNavigation}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -74,8 +67,9 @@ export default function Header({ onLogin, onLogout }) {
             tabIndex={0}
             role="button"
             aria-label="Go to home page"
+            style={{ cursor: 'pointer' }}
           >
-            TechAnchor
+            <Logo width={40} height={40} showText={true} />
           </div>
 
           {/* Desktop Navigation */}

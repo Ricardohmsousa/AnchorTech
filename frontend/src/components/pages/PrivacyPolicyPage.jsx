@@ -22,7 +22,7 @@ const PrivacyPolicyPage = () => {
       <div style={{ minHeight: '100vh', background: '#ffffff' }}>
         {/* Header */}
         <header className="privacy-header" style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           padding: '4rem 0',
           marginBottom: '3rem'
@@ -176,7 +176,7 @@ const PrivacyPolicyPage = () => {
               </p>
               <div style={{ marginTop: '1rem', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
                 <p style={{ fontSize: '1rem', color: '#1f2937', margin: 0, fontFamily: 'Inter, sans-serif' }}>
-                  <strong>Email:</strong> privacy@techanchor.pt<br />
+                  <strong>Email:</strong> privacy@atlantical.pt<br />
                   <strong>Phone:</strong> +351 123 456 789<br />
                   <strong>Address:</strong> Lisbon, Portugal
                 </p>

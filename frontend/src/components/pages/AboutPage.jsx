@@ -68,7 +68,7 @@ const AboutPage = () => {
       <div style={{ minHeight: '100vh', background: '#ffffff' }}>
         {/* Hero Section */}
         <section className="about-hero" style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           padding: '5rem 0',
           textAlign: 'center'
@@ -79,7 +79,7 @@ const AboutPage = () => {
               animate={{ opacity: 1, y: 0 }}
               style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '1.5rem', fontFamily: 'Inter, sans-serif' }}
             >
-              About TechAnchor
+              About Atlantical
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 30 }}
@@ -295,7 +295,7 @@ const AboutPage = () => {
               <button
                 onClick={() => navigate('/services')}
                 style={{
-                  background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                  background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                   color: 'white',
                   border: 'none',
                   padding: '1rem 2rem',

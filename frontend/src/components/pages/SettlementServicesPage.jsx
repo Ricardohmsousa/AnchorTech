@@ -348,15 +348,15 @@ const SettlementServicesPage = () => {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
           <div style={{ textAlign: 'center', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0070f3' }}>{service.pricing}</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B' }}>{service.pricing}</div>
             <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Starting Price</div>
           </div>
           <div style={{ textAlign: 'center', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0070f3' }}>{service.duration}</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B' }}>{service.duration}</div>
             <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Timeline</div>
           </div>
           <div style={{ textAlign: 'center', padding: '1rem', background: '#f8fafc', borderRadius: '8px' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0070f3' }}>24/7</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#E2725B' }}>24/7</div>
             <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Support</div>
           </div>
         </div>
@@ -364,7 +364,7 @@ const SettlementServicesPage = () => {
         <button
           onClick={() => handleBookService(service.title)}
           style={{
-            background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+            background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
             color: 'white',
             border: 'none',
             padding: '1rem 2rem',
@@ -420,7 +420,7 @@ const SettlementServicesPage = () => {
       <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
         {/* Header */}
         <header className="services-header" style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           padding: '4rem 0',
           marginBottom: '4rem'
@@ -554,7 +554,7 @@ const SettlementServicesPage = () => {
                   borderRadius: '8px'
                 }}>
                   <div>
-                    <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0070f3' }}>
+                    <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#E2725B' }}>
                       {service.pricing}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
@@ -562,7 +562,7 @@ const SettlementServicesPage = () => {
                     </div>
                   </div>
                   <div style={{
-                    background: '#0070f3',
+                    background: '#E2725B',
                     color: 'white',
                     padding: '0.5rem 1rem',
                     borderRadius: '6px',
@@ -611,7 +611,7 @@ const SettlementServicesPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 style={{
-                  background: pkg.popular ? 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)' : 'white',
+                  background: pkg.popular ? 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)' : 'white',
                   color: pkg.popular ? 'white' : '#1f2937',
                   padding: '2.5rem',
                   borderRadius: '16px',
@@ -693,8 +693,8 @@ const SettlementServicesPage = () => {
                 <button
                   onClick={() => handlePackagePurchase(pkg.name, pkg.price)}
                   style={{
-                    background: pkg.popular ? 'white' : 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
-                    color: pkg.popular ? '#0070f3' : 'white',
+                    background: pkg.popular ? 'white' : 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
+                    color: pkg.popular ? '#E2725B' : 'white',
                     border: 'none',
                     padding: '1rem 2rem',
                     borderRadius: '8px',
@@ -740,7 +740,7 @@ const SettlementServicesPage = () => {
             <button
               onClick={() => navigate('/contact')}
               style={{
-                background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                 color: 'white',
                 border: 'none',
                 padding: '1rem 2rem',

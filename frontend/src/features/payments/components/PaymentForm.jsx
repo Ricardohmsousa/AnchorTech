@@ -255,7 +255,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               transition: 'border-color 0.2s',
               outline: 'none',
             }}
-            onFocus={(e) => (e.target.style.borderColor = '#0070f3')}
+            onFocus={(e) => (e.target.style.borderColor = '#E2725B')}
             onBlur={(e) => (e.target.style.borderColor = '#e0e0e0')}
             required
           />
@@ -288,7 +288,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           }}
           style={{
             padding: '14px 16px',
-            border: `2px solid ${numberFocused ? '#0070f3' : '#e0e0e0'}`,
+            border: `2px solid ${numberFocused ? '#E2725B' : '#e0e0e0'}`,
             borderRadius: 8,
             backgroundColor: '#fff',
             minHeight: 48,
@@ -357,7 +357,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               }}
               style={{
                 padding: '14px 16px',
-                border: `2px solid ${expiryFocused ? '#0070f3' : '#e0e0e0'}`,
+                border: `2px solid ${expiryFocused ? '#E2725B' : '#e0e0e0'}`,
                 borderRadius: 8,
                 backgroundColor: '#fff',
                 minHeight: 48,
@@ -424,7 +424,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
               }}
               style={{
                 padding: '14px 16px',
-                border: `2px solid ${cvcFocused ? '#0070f3' : '#e0e0e0'}`,
+                border: `2px solid ${cvcFocused ? '#E2725B' : '#e0e0e0'}`,
                 borderRadius: 8,
                 backgroundColor: '#fff',
                 minHeight: 48,
@@ -507,7 +507,7 @@ const CheckoutForm = ({ amount, onSuccess, onError, onCancel, loading, setLoadin
           disabled={!stripe || loading || !allCardPartsComplete || !cardholderName.trim()}
           style={{
             ...buttonStyle,
-            backgroundColor: loading ? '#ccc' : '#0070f3',
+            backgroundColor: loading ? '#ccc' : '#E2725B',
             cursor: loading ? 'not-allowed' : 'pointer',
           }}
         >

@@ -204,7 +204,7 @@ export default function BankAccountService() {
               <div style={{ fontSize: '16px', color: '#666' }}>Successful Bank Account Opens</div>
             </div>
             <div>
-              <div style={{ fontSize: '2.5rem', fontWeight: '900', color: '#0070f3' }}>5</div>
+              <div style={{ fontSize: '2.5rem', fontWeight: '900', color: '#E2725B' }}>5</div>
               <div style={{ fontSize: '16px', color: '#666' }}>Trusted Banking Partners</div>
             </div>
             <div>
@@ -549,7 +549,7 @@ export default function BankAccountService() {
             marginBottom: '3rem',
             lineHeight: '1.6'
           }}>
-            Join hundreds who chose TechAnchor for their Portuguese banking. 
+            Join hundreds who chose Atlantical for their Portuguese banking. 
             Expert guidance, trusted partners, secure process.
           </p>
           
@@ -703,7 +703,7 @@ export default function BankAccountService() {
 }
 
 export const meta = {
-  title: "Open a Portuguese Bank Account | TechAnchor",
+  title: "Open a Portuguese Bank Account | Atlantical",
   description: "Open a bank account in Portugal easily and securely. Get expert support and connect with trusted banking partners.",
   keywords: "Portugal bank account, open bank account Portugal, expat banking, move to Portugal bank"
 };

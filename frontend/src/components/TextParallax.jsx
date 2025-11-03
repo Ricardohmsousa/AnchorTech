@@ -360,7 +360,7 @@ const ContentSection = ({ title, content, buttonText = "Learn More", onClick }) 
         <div style={{
           width: '60px',
           height: '3px',
-          background: 'linear-gradient(135deg, #0070f3 0%, #00d4ff 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           borderRadius: '2px',
           marginBottom: '1.5rem'
         }} />
@@ -385,7 +385,7 @@ const ContentSection = ({ title, content, buttonText = "Learn More", onClick }) 
         
         {/* Enhanced Button */}
         <button style={{
-          background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+          background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
           color: 'white',
           fontWeight: '700',
           padding: '16px 32px',
@@ -395,7 +395,7 @@ const ContentSection = ({ title, content, buttonText = "Learn More", onClick }) 
           cursor: 'pointer',
           transition: 'all 0.3s ease',
           transform: 'scale(1)',
-          boxShadow: '0 6px 20px rgba(0, 112, 243, 0.3)',
+          boxShadow: '0 6px 20px rgba(226, 114, 91, 0.3)',
           fontFamily: 'Inter, sans-serif',
           letterSpacing: '0.025em',
           display: 'inline-flex',

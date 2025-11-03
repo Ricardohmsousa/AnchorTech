@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../Logo';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -86,34 +87,8 @@ const Footer = () => {
             {/* Company Info */}
             <div className="footer-company">
               {/* Logo */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                marginBottom: '1.75rem'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #0070f3 0%, #00d4ff 100%)',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold',
-                  color: 'white'
-                }}>
-                  ⚓
-                </div>
-                <span style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '800',
-                  color: '#1a202c',
-                  fontFamily: 'Inter, sans-serif'
-                }}>
-                  TechAnchor
-                </span>
+              <div style={{ marginBottom: '1.75rem' }}>
+                <Logo width={40} height={40} showText={true} />
               </div>
 
               <p style={{
@@ -155,7 +130,7 @@ const Footer = () => {
                       transition: 'all 0.2s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = '#0070f3';
+                      e.target.style.background = '#E2725B';
                       e.target.style.transform = 'translateY(-2px)';
                     }}
                     onMouseLeave={(e) => {
@@ -218,7 +193,7 @@ const Footer = () => {
                         cursor: 'pointer',
                         textAlign: 'left'
                       }}
-                      onMouseEnter={(e) => e.target.style.color = '#0070f3'}
+                      onMouseEnter={(e) => e.target.style.color = '#E2725B'}
                       onMouseLeave={(e) => e.target.style.color = '#1f2937'}
                     >
                       {item.text}
@@ -277,7 +252,7 @@ const Footer = () => {
                         cursor: item.action !== 'none' ? 'pointer' : 'default',
                         textAlign: 'left'
                       }}
-                      onMouseEnter={(e) => item.action !== 'none' && (e.target.style.color = '#0070f3')}
+                      onMouseEnter={(e) => item.action !== 'none' && (e.target.style.color = '#E2725B')}
                       onMouseLeave={(e) => item.action !== 'none' && (e.target.style.color = '#1f2937')}
                     >
                       {item.text}
@@ -315,7 +290,7 @@ const Footer = () => {
                     outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                  onFocus={(e) => e.target.style.borderColor = '#E2725B'}
                   onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                 />
                 
@@ -324,7 +299,7 @@ const Footer = () => {
                   style={{
                     width: '100%',
                     padding: '1rem',
-                    background: 'linear-gradient(135deg, #0070f3 0%, #0051cc 100%)',
+                    background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
                     color: 'white',
                     border: 'none',
                     borderRadius: '0.5rem',
@@ -336,7 +311,7 @@ const Footer = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.transform = 'translateY(-2px)';
-                    e.target.style.boxShadow = '0 8px 20px rgba(0, 112, 243, 0.3)';
+                    e.target.style.boxShadow = '0 8px 20px rgba(226, 114, 91, 0.3)';
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.transform = 'translateY(0)';
@@ -375,7 +350,7 @@ const Footer = () => {
                 margin: 0,
                 fontFamily: 'Inter, sans-serif'
               }}>
-                © 2024 TechAnchor. All rights reserved.
+                © 2024 Atlantical. All rights reserved.
               </p>
               
               <div style={{
@@ -402,7 +377,7 @@ const Footer = () => {
                       padding: 0,
                       cursor: 'pointer'
                     }}
-                    onMouseEnter={(e) => e.target.style.color = '#0070f3'}
+                    onMouseEnter={(e) => e.target.style.color = '#E2725B'}
                     onMouseLeave={(e) => e.target.style.color = '#9ca3af'}
                   >
                     {item.text}

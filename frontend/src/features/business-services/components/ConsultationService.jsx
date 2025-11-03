@@ -21,14 +21,14 @@ export default function ConsultationService() {
           <li>• Answers to all your relocation questions</li>
           <li>• Follow-up summary and checklist</li>
         </ul>
-        <p style={{ color: '#0070f3', fontWeight: 600, fontSize: 18 }}>Book your consultation today and start your journey to Portugal with confidence!</p>
+        <p style={{ color: '#E2725B', fontWeight: 600, fontSize: 18 }}>Book your consultation today and start your journey to Portugal with confidence!</p>
       </main>
     </div>
   );
 }
 
 export const meta = {
-  title: "Personal Consultation for Portugal Relocation | TechAnchor",
+  title: "Personal Consultation for Portugal Relocation | Atlantical",
   description: "Book a one-on-one consultation with our relocation experts. Get tailored advice, answers to your questions, and a step-by-step plan for moving to Portugal.",
   keywords: "Portugal relocation consultation, expat advice, move to Portugal, relocation expert, Portugal immigration help"
 };

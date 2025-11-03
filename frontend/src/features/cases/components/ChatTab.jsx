@@ -122,7 +122,7 @@ const ChatTab = ({ user }) => {
   if (cases.length === 0) {
     return (
       <div style={layout}>
-        <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#0070f3', marginBottom: '2rem' }}>Messages</h2>
+        <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#E2725B', marginBottom: '2rem' }}>Messages</h2>
         <p>
           {user.user_type === 'collaborator' 
             ? 'No cases assigned to you yet. Messages will appear here once you have assigned cases.'
@@ -135,7 +135,7 @@ const ChatTab = ({ user }) => {
 
   return (
     <div style={layout}>
-      <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#0070f3', marginBottom: '2rem' }}>Messages</h2>
+      <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#E2725B', marginBottom: '2rem' }}>Messages</h2>
       
       <div style={chatStyles.chatContainer}>
         {/* Cases List */}
