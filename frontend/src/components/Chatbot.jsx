@@ -209,29 +209,83 @@ const Chatbot = () => {
 
   return (
     <>
+      <style>{`
+        @keyframes pulse {
+          0%, 100% {
+            box-shadow: 0 4px 20px rgba(226, 114, 91, 0.4);
+          }
+          50% {
+            box-shadow: 0 4px 30px rgba(226, 114, 91, 0.6);
+          }
+        }
+
+        .chatbot-window {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          width: 380px;
+          height: 600px;
+          max-height: calc(100vh - 4rem);
+          background: white;
+          border-radius: 16px;
+          box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+          display: flex;
+          flex-direction: column;
+          z-index: 1000;
+          overflow: hidden;
+          font-family: 'Inter', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+          .chatbot-window {
+            bottom: 0;
+            right: 0;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            max-height: 100vh;
+            border-radius: 0;
+          }
+        }
+
+        .chatbot-button {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #E2725B 0%, #A94438 100%);
+          border: none;
+          color: white;
+          cursor: pointer;
+          box-shadow: 0 4px 20px rgba(226, 114, 91, 0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.75rem;
+          transition: all 0.3s ease;
+          z-index: 1000;
+          animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+          .chatbot-button {
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 56px;
+            height: 56px;
+            font-size: 1.5rem;
+          }
+        }
+      `}</style>
+
       {/* Chat Button */}
       {!isOpen && (
         <button
+          className="chatbot-button"
           onClick={() => setIsOpen(true)}
-          style={{
-            position: 'fixed',
-            bottom: '2rem',
-            right: '2rem',
-            width: '60px',
-            height: '60px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #E2725B 0%, #A94438 100%)',
-            border: 'none',
-            boxShadow: '0 4px 20px rgba(226, 114, 91, 0.4)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '1.75rem',
-            transition: 'all 0.3s ease',
-            zIndex: 1000,
-            animation: 'pulse 2s infinite'
-          }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.1)';
             e.currentTarget.style.boxShadow = '0 6px 30px rgba(226, 114, 91, 0.5)';
@@ -247,24 +301,7 @@ const Chatbot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '2rem',
-            right: '2rem',
-            width: '380px',
-            height: '600px',
-            maxHeight: 'calc(100vh - 4rem)',
-            background: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 8px 40px rgba(0, 0, 0, 0.15)',
-            display: 'flex',
-            flexDirection: 'column',
-            zIndex: 1000,
-            overflow: 'hidden',
-            fontFamily: 'Inter, sans-serif'
-          }}
-        >
+        <div className="chatbot-window">
           {/* Header */}
           <div
             style={{
@@ -528,17 +565,6 @@ const Chatbot = () => {
           )}
         </div>
       )}
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% {
-            box-shadow: 0 4px 20px rgba(226, 114, 91, 0.4);
-          }
-          50% {
-            box-shadow: 0 4px 30px rgba(226, 114, 91, 0.6);
-          }
-        }
-      `}</style>
     </>
   );
 };
