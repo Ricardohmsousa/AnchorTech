@@ -80,6 +80,12 @@ const CheckoutForm = ({ onSuccess, onError, onCancel }) => {
         <PaymentElement 
           options={{
             layout: 'tabs',
+            fields: {
+              billingDetails: {
+                email: 'auto',
+                name: 'auto'
+              }
+            }
           }}
           onChange={(event) => {
             if (event.error) {
@@ -139,6 +145,9 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
   const [clientSecret, setClientSecret] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [emailCollected, setEmailCollected] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   // Helper to get JWT token
   const getAuthHeaders = () => {
@@ -149,8 +158,30 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
     return {};
   };
 
-  // Create PaymentIntent when component mounts
+  // Validate email
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  // Handle email submission
+  const handleEmailSubmit = (e) => {
+    e.preventDefault();
+    if (!customerEmail) {
+      setEmailError('Please enter your email address');
+      return;
+    }
+    if (!isValidEmail(customerEmail)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+    setEmailError('');
+    setEmailCollected(true);
+  };
+
+  // Create PaymentIntent when email is collected
   useEffect(() => {
+    if (!emailCollected) return;
+    
     const createPaymentIntent = async () => {
       try {
         console.log('🔄 Creating PaymentIntent for amount:', amount);
@@ -163,7 +194,8 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
           },
           body: JSON.stringify({
             amount: amount,
-            service_type: 'nif_application'
+            service_type: 'nif_application',
+            customer_email: customerEmail
           })
         });
 
@@ -185,7 +217,7 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
     };
 
     createPaymentIntent();
-  }, [amount]);
+  }, [amount, emailCollected, customerEmail]);
 
   // Check if Stripe is configured
   if (!stripePromise) {
@@ -203,6 +235,90 @@ const PaymentForm = ({ amount, onSuccess, onError, onCancel }) => {
         <button onClick={onCancel} style={{...buttonStyle, backgroundColor: '#6c757d'}}>
           Go Back
         </button>
+      </div>
+    );
+  }
+
+  // Show email collection form before payment
+  if (!emailCollected) {
+    return (
+      <div style={{ 
+        padding: 24, 
+        border: '1px solid #e0e0e0', 
+        borderRadius: 8, 
+        backgroundColor: 'white',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <h2 style={{ color: '#333', marginBottom: 8 }}>Enter Your Email</h2>
+          <p style={{ color: '#666', margin: 0 }}>
+            We'll send your receipt and service details to this email
+          </p>
+        </div>
+        
+        <form onSubmit={handleEmailSubmit}>
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: 8, 
+              color: '#333',
+              fontSize: 14,
+              fontWeight: 600
+            }}>
+              Email Address *
+            </label>
+            <input
+              type="email"
+              value={customerEmail}
+              onChange={(e) => {
+                setCustomerEmail(e.target.value);
+                setEmailError('');
+              }}
+              placeholder="your@email.com"
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                fontSize: '16px',
+                boxSizing: 'border-box'
+              }}
+              required
+            />
+            {emailError && (
+              <div style={{ 
+                color: '#d32f2f', 
+                fontSize: 14, 
+                marginTop: 8 
+              }}>
+                {emailError}
+              </div>
+            )}
+          </div>
+          
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+            <button
+              type="button"
+              onClick={onCancel}
+              style={{
+                ...buttonStyle,
+                backgroundColor: '#6c757d',
+                border: '1px solid #6c757d'
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              style={{
+                ...buttonStyle,
+                backgroundColor: '#E2725B'
+              }}
+            >
+              Continue to Payment
+            </button>
+          </div>
+        </form>
       </div>
     );
   }

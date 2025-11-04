@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Request
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Request, Header
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -25,6 +25,11 @@ else:
     print("[STRIPE] ERROR: No Stripe secret key found in environment variables!")
     print("[STRIPE] Please set STRIPE_SECRET_KEY environment variable")
 
+# JWT secret and config
+JWT_SECRET = os.environ.get("JWT_SECRET", "dev_secret_key_change_me")
+JWT_ALGORITHM = "HS256"
+JWT_EXP_DELTA_SECONDS = 3600
+
 security = HTTPBearer()
 
 def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
@@ -43,12 +48,15 @@ def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(securit
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
 
-app = FastAPI()
+def verify_jwt_token_manual(token: str):
+    """Verify JWT token without raising exceptions. Returns payload or None."""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload
+    except:
+        return None
 
-# JWT secret and config
-JWT_SECRET = os.environ.get("JWT_SECRET", "dev_secret_key_change_me")
-JWT_ALGORITHM = "HS256"
-JWT_EXP_DELTA_SECONDS = 3600
+app = FastAPI()
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -422,18 +430,32 @@ def get_user(user_id: str, token_data: dict = Depends(verify_jwt_token)):
 
 # Payment endpoints
 @app.post("/create-payment-intent")
-def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dict = Depends(verify_jwt_token)):
+def create_payment_intent(
+    payment_request: PaymentIntentRequest, 
+    authorization: Optional[str] = Header(None)
+):
     try:
         # Check if Stripe is properly configured
         if not stripe.api_key:
             raise HTTPException(status_code=500, detail="Payment system not configured - missing Stripe key")
         
+        # Try to get user_id from token if provided (optional)
+        user_id = None
+        if authorization and authorization.startswith("Bearer "):
+            try:
+                token = authorization.split(" ")[1]
+                token_data = verify_jwt_token_manual(token)
+                user_id = token_data.get("user_id")
+            except:
+                pass  # Continue without user_id if token is invalid
+        
         # Enhanced metadata for the payment intent
         metadata = {
-            'service_type': payment_request.service_type,
-            'user_id': token_data["user_id"]
+            'service_type': payment_request.service_type
         }
         
+        if user_id:
+            metadata['user_id'] = user_id
         if payment_request.package_name:
             metadata['package_name'] = payment_request.package_name
         if payment_request.package_id:
@@ -451,14 +473,16 @@ def create_payment_intent(payment_request: PaymentIntentRequest, token_data: dic
         )
         
         # Create initial purchase record in Firestore (status: pending)
-        purchase_id = create_purchase_record(
-            user_id=token_data["user_id"],
-            payment_intent_data=intent,
-            payment_request=payment_request.dict()
-        )
-        
-        if not purchase_id:
-            print(f"Warning: Failed to create purchase record for payment intent {intent.id}")
+        # Use user_id if available, otherwise use customer_email as identifier
+        if user_id or payment_request.customer_email:
+            purchase_id = create_purchase_record(
+                user_id=user_id or f"guest_{payment_request.customer_email}",
+                payment_intent_data=intent,
+                payment_request=payment_request.dict()
+            )
+            
+            if not purchase_id:
+                print(f"Warning: Failed to create purchase record for payment intent {intent.id}")
         
         return {"client_secret": intent.client_secret, "payment_intent_id": intent.id}
     except stripe.error.StripeError as e:
