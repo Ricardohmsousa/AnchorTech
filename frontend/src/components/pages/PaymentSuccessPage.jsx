@@ -70,7 +70,7 @@ const PaymentSuccessPage = () => {
     <>
       <div style={{ 
         minHeight: '100vh', 
-        background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+        background: 'linear-gradient(135deg, #fef3f0 0%, #fde8e3 100%)',
         padding: '2rem 1rem'
       }}>
       <motion.div
@@ -88,7 +88,7 @@ const PaymentSuccessPage = () => {
           borderRadius: '16px',
           padding: '3rem 2rem',
           textAlign: 'center',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+          boxShadow: '0 10px 40px rgba(226, 114, 91, 0.15)',
           marginBottom: '2rem'
         }}>
           <motion.div
@@ -103,7 +103,7 @@ const PaymentSuccessPage = () => {
           <h1 style={{
             fontSize: '2.5rem',
             fontWeight: '700',
-            color: '#059669',
+            color: '#E2725B',
             marginBottom: '1rem'
           }}>
             Payment Successful!
@@ -165,7 +165,7 @@ const PaymentSuccessPage = () => {
               <div style={{
                 fontSize: '1.5rem',
                 fontWeight: '700',
-                color: '#059669'
+                color: '#E2725B'
               }}>
                 €{(paymentData.amount / 100).toFixed(2)}
               </div>
@@ -193,7 +193,7 @@ const PaymentSuccessPage = () => {
               }}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 20px rgba(0, 112, 243, 0.3)';
+                e.target.style.boxShadow = '0 8px 20px rgba(226, 114, 91, 0.4)';
               }}
               onMouseLeave={(e) => {
                 e.target.style.transform = 'translateY(0)';
@@ -298,20 +298,21 @@ const PaymentSuccessPage = () => {
           <div style={{
             marginTop: '2rem',
             padding: '1.5rem',
-            background: 'linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%)',
+            background: 'linear-gradient(135deg, #fef3f0 0%, #fde8e3 100%)',
             borderRadius: '12px',
+            border: '2px solid #E2725B',
             textAlign: 'center'
           }}>
             <h3 style={{
               fontSize: '1.125rem',
               fontWeight: '600',
-              color: '#0277bd',
+              color: '#A94438',
               marginBottom: '0.5rem'
             }}>
               📞 Need immediate assistance?
             </h3>
             <p style={{
-              color: '#0277bd',
+              color: '#8B3A30',
               margin: 0
             }}>
               Our support team is available 24/7 to help with any questions about your purchase or next steps.
