@@ -133,7 +133,7 @@ const CookieConsent = () => {
         .cookie-icon {
           width: 48px;
           height: 48px;
-          background: linear-gradient(135deg, #0070f3 0%, #00d4ff 100%);
+          background: linear-gradient(135deg, #E2725B 0%, #A94438 100%);
           border-radius: 12px;
           display: flex;
           align-items: center;
@@ -158,14 +158,14 @@ const CookieConsent = () => {
         }
 
         .cookie-link {
-          color: #0070f3;
+          color: #E2725B;
           text-decoration: none;
           font-weight: 500;
           transition: color 0.2s ease;
         }
 
         .cookie-link:hover {
-          color: #0051cc;
+          color: #A94438;
           text-decoration: underline;
         }
 
@@ -193,13 +193,13 @@ const CookieConsent = () => {
         }
 
         .cookie-button-primary {
-          background: linear-gradient(135deg, #0070f3 0%, #0051cc 100%);
+          background: linear-gradient(135deg, #E2725B 0%, #A94438 100%);
           color: white;
         }
 
         .cookie-button-primary:hover {
           transform: translateY(-1px);
-          box-shadow: 0 6px 20px rgba(0, 112, 243, 0.3);
+          box-shadow: 0 6px 20px rgba(226, 114, 91, 0.3);
         }
 
         .cookie-button-secondary {
@@ -215,12 +215,12 @@ const CookieConsent = () => {
 
         .cookie-button-tertiary {
           background: transparent;
-          color: #0070f3;
-          border: 1px solid #0070f3;
+          color: #E2725B;
+          border: 1px solid #E2725B;
         }
 
         .cookie-button-tertiary:hover {
-          background: #0070f3;
+          background: #E2725B;
           color: white;
         }
 
@@ -299,7 +299,7 @@ const CookieConsent = () => {
         }
 
         .toggle-switch input:checked + .toggle-slider {
-          background-color: #0070f3;
+          background-color: #E2725B;
         }
 
         .toggle-switch input:checked + .toggle-slider:before {
@@ -314,7 +314,7 @@ const CookieConsent = () => {
         .back-button {
           background: none;
           border: none;
-          color: #0070f3;
+          color: #E2725B;
           font-size: 0.875rem;
           cursor: pointer;
           padding: 0;
